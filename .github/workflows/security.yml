@@ -1,0 +1,91 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.txt"
+      - "**.toml"
+      - "**.cfg"
+      - "uv.lock"
+      - ".safety-policy.yml"
+      - ".github/workflows/security.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**.txt"
+      - "**.toml"
+      - "**.cfg"
+      - "uv.lock"
+      - ".safety-policy.yml"
+      - ".github/workflows/security.yml"
+  schedule:
+    - cron: "0 6 * * *"   # Daily at 06:00 UTC — catch newly published CVEs
+  workflow_dispatch:       # Allow manual runs from the Actions tab
+
+permissions:
+  contents: read
+  security-events: write  # Required for uploading SARIF to GitHub Security tab
+
+jobs:
+  safety-scan:
+    name: Safety Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - name: Set up Python
+        run: uv python install 3.11
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Create reports directory
+        run: mkdir -p reports
+
+      - name: Run Safety scan
+        id: safety
+        run: |
+          uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
+            --policy-file .safety-policy.yml \
+            --save-as json reports/safety-report.json \
+            --save-as html reports/safety-report.html \
+            --output screen
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+
+      - name: Upload scan reports
+        if: always()   # upload even when vulnerabilities are found
+        uses: actions/upload-artifact@v4
+        with:
+          name: safety-reports-${{ github.run_number }}
+          path: reports/
+          retention-days: 90
+
+      - name: Annotate PR with vulnerability summary
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          echo "## ❌ Safety Vulnerability Scan Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "One or more vulnerabilities were detected that exceed the policy threshold." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Review the uploaded \`safety-reports\` artifact for details.**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To fix automatically:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "just scan-fix" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Write success summary
+        if: success()
+        run: |
+          echo "## ✅ Safety Vulnerability Scan Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "No vulnerabilities found above the policy threshold." >> $GITHUB_STEP_SUMMARY
