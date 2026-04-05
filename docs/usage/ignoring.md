@@ -1,55 +1,82 @@
 # Ignoring Vulnerabilities
 
-Sometimes a vulnerability is not exploitable in your specific deployment context. Safety provides two ways to suppress it.
+In Safety v3, vulnerability ignores are configured via the **policy file** (v3 schema). The old `--ignore` CLI flag is no longer available in `safety scan`.
 
 ---
 
-## One-off Ignore (CLI flag)
+## Using the Policy File
+
+Generate a default policy file:
 
 ```bash
-safety check --ignore 36546 -r requirements.txt
-```
-
-!!! warning
-    Always document *why* a vulnerability is ignored. Use a policy file for persistent ignores.
-
----
-
-## Persistent Ignores (Policy File)
-
-For team-wide, version-controlled ignores, use a `.safety-policy.yml` file.
-
-```bash
-# Generate a default policy file
 safety generate policy_file
+# Creates .safety-policy.yml in the current directory
 ```
 
-Then add your ignores:
+Then configure ignores under `installation.allow.vulnerabilities`:
 
 ```yaml
 # .safety-policy.yml
-version: "2.0"
+version: '3.0'
 
-security:
-  ignore-vulnerabilities:
-    36546:
-      reason: "Not exploitable — our deployment does not follow HTTP redirects"
-      expires: "2025-06-30"
+installation:
+  default-action: allow
+  allow:
+    vulnerabilities:
+      CVE-2018-18074:
+        reason: "Not exploitable — our app does not follow HTTP redirects"
+        # Re-evaluate periodically; remove when package is upgraded
 ```
 
 Apply the policy:
 
 ```bash
-safety check --policy-file .safety-policy.yml -r requirements.txt
+safety scan --policy-file .safety-policy.yml
 ```
 
-See [Policy Files](policy-files.md) for the full schema.
+---
+
+## Auto-Ignore in Reports
+
+You can suppress categories of results from the report (they still scan, just not shown):
+
+```yaml
+report:
+  dependency-vulnerabilities:
+    auto-ignore-in-report:
+      python:
+        environment-results: true      # ignore env-level results
+        unpinned-requirements: true    # ignore unpinned packages
+      cvss-severity:
+        - low                          # suppress Low severity from report
+```
+
+---
+
+## Blocking vs Warning
+
+Safety v3 lets you set per-severity **block** or **warn** behaviour:
+
+```yaml
+installation:
+  deny:
+    vulnerabilities:
+      warning-on-any-of:
+        cvss-severity:
+          - low
+          - medium
+      block-on-any-of:
+        cvss-severity:
+          - high
+          - critical
+```
 
 ---
 
 ## Best Practices
 
-- [ ] Always add a `reason` explaining why the CVE is not exploitable
-- [ ] Always set an `expires` date to force a re-evaluation
-- [ ] Review ignored CVEs in every security audit
-- [ ] Never ignore `critical` severity CVEs without an approved security exception
+- [ ] Always add a `reason` comment for every ignored CVE
+- [ ] Set a calendar reminder to re-evaluate ignored CVEs after package upgrades
+- [ ] Never allow `critical` severity without a security team approval
+- [ ] Commit `.safety-policy.yml` to version control for team-wide consistency
+- [ ] Run `safety validate policy_file` after every policy change

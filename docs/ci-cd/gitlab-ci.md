@@ -1,6 +1,6 @@
 # GitLab CI
 
-## Basic Job
+## Basic Job (Safety v3)
 
 ```yaml
 # .gitlab-ci.yml
@@ -8,11 +8,10 @@ safety-scan:
   stage: test
   image: python:3.11-slim
   script:
-    - pip install safety
-    - pip install -r requirements.txt
-    - safety check -r requirements.txt --full-report
+    - pip install "safety>=3.0"
+    - safety --key $SAFETY_API_KEY --stage cicd scan
   variables:
-    SAFETY_API_KEY: $SAFETY_API_KEY   # Set in GitLab CI/CD variables
+    SAFETY_API_KEY: $SAFETY_API_KEY   # Set in GitLab CI/CD Variables
 ```
 
 ---
@@ -24,15 +23,16 @@ safety-scan:
   stage: test
   image: python:3.11-slim
   script:
-    - pip install safety
-    - pip install -r requirements.txt
-    - safety check -r requirements.txt --json 2>/dev/null | tee safety-report.json
+    - pip install "safety>=3.0"
+    - safety --key $SAFETY_API_KEY --stage cicd scan --save-as json safety-report.json
   artifacts:
     name: safety-report
     paths:
       - safety-report.json
     when: always
     expire_in: 30 days
+  variables:
+    SAFETY_API_KEY: $SAFETY_API_KEY
 ```
 
 ---
@@ -44,9 +44,10 @@ safety-scan:
   stage: test
   image: python:3.11-slim
   script:
-    - pip install safety
-    - pip install -r requirements.txt
-    - safety check --policy-file .safety-policy.yml -r requirements.txt
+    - pip install "safety>=3.0"
+    - safety --key $SAFETY_API_KEY --stage cicd scan --policy-file .safety-policy.yml
+  variables:
+    SAFETY_API_KEY: $SAFETY_API_KEY
 ```
 
 ---
@@ -61,7 +62,31 @@ safety-scan:
     - pip install uv
     - uv sync --group dev
   script:
-    - uv run safety check -r requirements.txt
+    - uv run safety --key $SAFETY_API_KEY --stage cicd scan
+  variables:
+    SAFETY_API_KEY: $SAFETY_API_KEY
+```
+
+---
+
+## Multi-format Reports
+
+```yaml
+safety-scan:
+  stage: test
+  image: python:3.11-slim
+  script:
+    - pip install "safety>=3.0"
+    - |
+      safety --key $SAFETY_API_KEY --stage cicd scan \
+        --save-as json safety-report.json \
+        --save-as html safety-report.html
+  artifacts:
+    paths:
+      - safety-report.json
+      - safety-report.html
+    when: always
+    expire_in: 30 days
 ```
 
 ---
@@ -69,5 +94,5 @@ safety-scan:
 ## Setting the API Key Variable
 
 1. Navigate to **Settings → CI/CD → Variables**
-2. Add variable: `SAFETY_API_KEY` (mark as **Masked**)
-3. Reference it in your job with `$SAFETY_API_KEY`
+2. Add variable: `SAFETY_API_KEY` (mark as **Masked** and **Protected**)
+3. Get your API key from [platform.safetycli.com](https://platform.safetycli.com)

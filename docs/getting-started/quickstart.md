@@ -1,35 +1,41 @@
 # Quick Start
 
-## 1. Scan Your Active Environment
+## 1. Authenticate
 
-```bash
-safety check
-```
+=== "Development (browser login)"
 
-Safety reads all packages installed in the current Python environment and checks them against the vulnerability database.
-
----
-
-## 2. Scan a Requirements File
-
-```bash
-safety check -r requirements.txt
-```
-
-!!! tip "Multiple files"
     ```bash
-    safety check -r requirements.txt -r requirements-dev.txt
+    safety auth login
+    # Opens platform.safetycli.com in your browser
+    ```
+
+=== "CI/CD (API key)"
+
+    ```bash
+    export SAFETY_API_KEY=your-key-here
     ```
 
 ---
 
-## 3. Pipe from `pip freeze`
+## 2. Scan Your Project
 
 ```bash
-pip freeze | safety check --stdin
+# Scan the current directory (default)
+safety scan
+
+# Scan a specific directory
+safety scan --target /path/to/project
 ```
 
-Useful in Docker builds or ephemeral environments where you don't have a `requirements.txt`.
+Safety v3 scans your **entire project directory** — it auto-discovers `requirements.txt`, `pyproject.toml`, `Pipfile`, and other dependency files.
+
+---
+
+## 3. Detailed Output
+
+```bash
+safety scan --detailed-output
+```
 
 ---
 
@@ -38,31 +44,39 @@ Useful in Docker builds or ephemeral environments where you don't have a `requir
 **No vulnerabilities found:**
 
 ```
-+===========================================================================+
-| REPORT                                                                    |
-| checked 42 packages, using free DB (updated once a month)                 |
-+===========================================================================+
-| No known security vulnerabilities found.                                  |
-+===========================================================================+
+  Safety Report
+  ─────────────
+  Scanned 0 vulnerabilities in 42 packages.
+  No known security vulnerabilities found.
 ```
 
-**Vulnerability detected:**
+**Vulnerability detected (screen output):**
 
 ```
-+============================+===========+==========================+=======+
-| package                    | installed | affected                | ID    |
-+============================+===========+==========================+=======+
-| requests                   | 2.19.1    | <2.20.0                 | 36546 |
-+============================+===========+==========================+=======+
+  Safety Report
+  ─────────────
+  → requests 2.19.1
+    CVE-2018-18074 (CVSS 9.8 Critical)
+    Affected: <2.20.0
+    Fix: Upgrade to requests>=2.20.0
 ```
 
-See [Output Formats](../usage/output-formats.md) for JSON and bare output options.
+See [Output Formats](../usage/output-formats.md) for JSON, HTML, and SPDX options.
 
 ---
 
-## 5. Fix Vulnerabilities
+## 5. Auto-Fix Vulnerabilities
 
-Update the offending package to a safe version:
+Safety v3 can patch your `requirements.txt` files automatically:
+
+```bash
+safety scan --apply-fixes
+```
+
+!!! note
+    `--apply-fixes` currently supports `requirements.txt` files only.
+
+Or upgrade manually:
 
 ```bash
 pip install --upgrade requests
@@ -70,4 +84,7 @@ pip install --upgrade requests
 uv add "requests>=2.20.0"
 ```
 
-Then re-run the scan to confirm the issue is resolved.
+Then re-run the scan to confirm the issue is resolved:
+
+```bash
+safety scan

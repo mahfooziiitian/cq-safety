@@ -1,16 +1,51 @@
 # Troubleshooting
 
-## "No packages found in environment"
+## Authentication Errors
 
-You may be running Safety outside a virtual environment.
+### "Not authenticated" in development
 
 ```bash
-# Activate your virtual environment first
-source .venv/bin/activate
-safety check
+# Log in once using browser auth
+safety auth login
 
-# Or scan a requirements file directly (no active env needed)
-safety check -r requirements.txt
+# Verify status
+safety auth status
+```
+
+For headless environments (remote SSH, Docker):
+
+```bash
+safety auth login --headless
+# Prints a URL — paste it into a browser on another machine
+```
+
+### "API key required" in CI/CD
+
+The `cicd` and `production` stages require `--key` or `SAFETY_API_KEY`:
+
+```bash
+export SAFETY_API_KEY=your-key-here
+safety --key $SAFETY_API_KEY --stage cicd scan
+```
+
+Get an API key from [platform.safetycli.com](https://platform.safetycli.com).
+
+---
+
+## "No packages found in environment"
+
+Safety v3 scans the **project directory** (not just the active environment). Make sure you're pointing at the right path:
+
+```bash
+safety scan --target /path/to/project
+```
+
+If no dependency files are found, add them explicitly via the policy file:
+
+```yaml
+scanning-settings:
+  include-files:
+    - requirements-prod.txt
 ```
 
 ---
@@ -21,81 +56,80 @@ Safety cannot reach the remote database.
 
 **Check internet access:**
 ```bash
-curl -I https://pyup.io
+curl -I https://platform.safetycli.com
 ```
 
-**Use a cached local copy:**
+**Use a proxy:**
 ```bash
-# First run (online) — cache the DB
-safety check --cache -r requirements.txt
-
-# Subsequent runs — use the cache
-safety check --cache -r requirements.txt
-```
-
-**Use a local DB snapshot (fully offline):**
-```bash
-safety check --db /path/to/local-safety-db -r requirements.txt
+safety configure --proxy-host 192.168.0.1 --proxy-port 8080
+safety --stage cicd scan
 ```
 
 ---
 
-## Scan Returns False Positives
+## Policy File Validation Errors
 
-A vulnerability may not apply to your deployment context.
-
-1. Note the vulnerability ID from the report (e.g., `36546`)
-2. Add it to your policy file with a reason and expiry:
-
-```yaml
-security:
-  ignore-vulnerabilities:
-    36546:
-      reason: "Not reachable — our app does not follow HTTP redirects"
-      expires: "2025-06-30"
-```
-
-3. Re-run with the policy file:
+If `safety scan` fails with a policy error:
 
 ```bash
-safety check --policy-file .safety-policy.yml -r requirements.txt
+# Validate the policy file before scanning
+safety validate policy_file
+
+# Or validate a file at a specific path
+safety validate policy_file --path .safety-policy.yml
 ```
+
+Common issues:
+- Using old **v2 schema** (`version: "2.0"`) — regenerate with `safety generate policy_file`
+- Incorrect indentation in YAML
+- Invalid CVE ID format in `allow.vulnerabilities`
 
 ---
 
-## Safety is Slow in CI
+## Scan is Slow in CI
 
-Enable local caching to avoid re-fetching the database on every run:
-
-```bash
-safety check --cache -r requirements.txt
-```
-
-In GitHub Actions, cache the Safety DB between runs:
+Cache Safety's data between runs in GitHub Actions:
 
 ```yaml
-- name: Cache Safety DB
+- name: Cache Safety data
   uses: actions/cache@v4
   with:
     path: ~/.safety
-    key: safety-db-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
-
-- name: Run Safety check
-  run: safety check --cache -r requirements.txt
+    key: safety-${{ runner.os }}-${{ hashFiles('**/requirements*.txt') }}
 ```
 
 ---
 
 ## Wrong Python Environment Scanned
 
-Safety scans the Python environment it is installed in. If you have multiple environments:
+Safety v3 scans the project directory, not an environment. If you want to restrict the scan to a specific requirements file, set `include-files` in your policy:
+
+```yaml
+scanning-settings:
+  include-files:
+    - requirements.txt
+  exclude:
+    - tests/
+```
+
+---
+
+## Auto-Fix Didn't Work
+
+`--apply-fixes` only supports `requirements.txt` files. It will not modify:
+
+- `pyproject.toml`
+- `Pipfile` / `Pipfile.lock`
+- `setup.cfg` / `setup.py`
+
+For those, update manually:
 
 ```bash
-# Use the explicit venv Python
-.venv/bin/safety check
+# pip
+pip install --upgrade <package>
 
-# Or with uv
-uv run safety check
+# uv
+uv add "<package>>=<safe-version>"
 ```
 
 ---
@@ -104,8 +138,11 @@ uv run safety check
 
 ```bash
 safety --help
-safety check --help
+safety scan --help
+safety auth --help
 ```
 
-- [Safety documentation](https://docs.pyup.io/docs/safety-2-cli-commands-and-options)
+- [Safety CLI 3 documentation](https://docs.safetycli.com)
+- [Safety Platform](https://platform.safetycli.com)
 - [Safety GitHub Issues](https://github.com/pyupio/safety/issues)
+- Support: support@safetycli.com

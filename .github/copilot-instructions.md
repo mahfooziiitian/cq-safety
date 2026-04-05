@@ -30,16 +30,19 @@ This repository is a **Python code-quality project** focused on the [Safety](htt
 - Follow [PEP 8](https://peps.python.org/pep-0008/) for style
 - Use type hints on all function signatures
 - Prefer `pathlib.Path` over `os.path`
-- Use `subprocess.run(..., check=True)` when shelling out to `safety`
+- Use `subprocess.run(..., check=False)` when shelling out to `safety scan` (exit code 1 means vulnerabilities found, not a crash)
 - Never hardcode API keys; read from environment variables (`os.environ`)
 
 ### Security-specific
 
 - Always pin dependencies to exact versions in example `requirements.txt` snippets
-- When writing scripts that invoke `safety`, always handle non-zero exit codes explicitly
-- Prefer `--json` output when parsing Safety results programmatically
-- Demonstrate the use of `.safety-policy.yml` for ignoring vulnerabilities with documented reasons and expiry dates
-- Never suggest `--ignore` without a comment explaining the rationale
+- Use `safety scan` — **never** suggest the deprecated `safety check`
+- Use `--stage cicd` and `--key $SAFETY_API_KEY` in all CI/CD examples
+- Use `safety auth login` for development examples (not API key)
+- Prefer `--save-as json report.json` when parsing Safety results programmatically
+- Demonstrate the use of `.safety-policy.yml` **v3 schema** (`version: '3.0'`) for ignoring vulnerabilities with documented reasons
+- Never suggest ignoring CVEs without a `reason` comment in the policy file
+- Always validate policy files with `safety validate policy_file`
 
 ### Documentation
 
@@ -56,17 +59,26 @@ This repository is a **Python code-quality project** focused on the [Safety](htt
 # Install dev dependencies
 uv sync --group dev
 
-# Scan the current environment
-uv run safety check
+# Authenticate (development, one-time)
+uv run safety auth login
 
-# Scan a requirements file
-uv run safety check -r requirements.txt
+# Scan the project directory
+uv run safety scan
 
-# Full report with CVE details
-uv run safety check --full-report
+# CI/CD scan with API key
+uv run safety --key $SAFETY_API_KEY --stage cicd scan
 
-# JSON output for tooling
-uv run safety check --json
+# Scan with policy file
+uv run safety scan --policy-file .safety-policy.yml
+
+# Save JSON report
+uv run safety --key $SAFETY_API_KEY --stage cicd scan --save-as json report.json
+
+# Auto-fix requirements.txt
+uv run safety scan --apply-fixes
+
+# Validate policy file
+uv run safety validate policy_file
 ```
 
 ---
@@ -75,11 +87,12 @@ uv run safety check --json
 
 When asked to help with this project, prefer:
 
-1. **Writing Safety CLI examples** — use `uv run safety ...` to stay consistent with the `uv`-based workflow
-2. **CI/CD snippets** — default to GitHub Actions using `actions/setup-python@v5` and `uv` for setup
-3. **Policy file generation** — produce `.safety-policy.yml` with `version: "2.0"`, severity thresholds, and expiry dates on all ignored CVEs
-4. **Parsing Safety JSON output** — use `json.loads()` in Python; each item is `[package, affected_range, installed, advisory, vuln_id]`
-5. **Adding new tutorial sections** — follow the existing heading and table style in `README.md`
+1. **Writing Safety CLI examples** — use `uv run safety scan ...` (NOT `safety check` — it's deprecated)
+2. **Auth examples** — `safety auth login` for dev, `safety --key $SAFETY_API_KEY --stage cicd scan` for CI
+3. **CI/CD snippets** — default to GitHub Actions using `actions/setup-python@v5` and `uv` for setup
+4. **Policy file generation** — produce `.safety-policy.yml` with `version: '3.0'` schema; use `installation.allow.vulnerabilities` for ignores with `reason` comments
+5. **Parsing Safety JSON output** — parse `result.stdout` from `safety scan --output json`; top-level key is `vulnerabilities`, each entry has `package_name`, `installed_version`, `vulnerability_id`, `severity.cvss_v3`
+6. **Adding new tutorial sections** — follow the existing heading and table style in `README.md`
 
 ---
 
@@ -87,9 +100,10 @@ When asked to help with this project, prefer:
 
 - Do **not** suggest `pip install` for managing project deps — use `uv add` / `uv sync`
 - Do **not** commit real API keys or secrets
-- Do **not** suggest ignoring a CVE without an `expires` field and `reason` in the policy file
-- Do **not** use `os.system()` — use `subprocess.run()` with `check=True`
-- Do **not** write Python 2-compatible code
+- Do **not** use `safety check` — it is **deprecated** in Safety v3; use `safety scan`
+- Do **not** use old v2 policy schema (`version: "2.0"`) — use v3 schema (`version: '3.0'`)
+- Do **not** suggest `--ignore <id>` flag — it does not exist in `safety scan`; use policy file `installation.allow.vulnerabilities` instead
+- Do **not** use `os.system()` — use `subprocess.run()` with `check=False` (exit 1 = vulns found)
 
 ---
 
