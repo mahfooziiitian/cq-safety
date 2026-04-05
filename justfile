@@ -1,79 +1,81 @@
 # justfile — task runner for cq-safety
-# Install just: https://just.systems/man/en/chapter_4.html
-#
-# Usage:
-#   just          → list all recipes
-#   just scan     → run a development scan
-#   just scan-ci  → run a CI/CD scan (requires SAFETY_API_KEY)
+# Install just: https://just.systems
+# Usage: just [recipe]
 
-set dotenv-load := true   # auto-load .env if present
+set dotenv-load := true
 set shell := ["bash", "-cu"]
 
 policy  := ".safety-policy.yml"
 reports := "reports"
 
-# ── Default: list recipes ──────────────────────────────────────────────────────
+# List all available recipes
 [private]
 default:
     @just --list
 
-# ── Setup ─────────────────────────────────────────────────────────────────────
+# ── Setup ──────────────────────────────────────────────────────────────────────
 
 # Install all dependencies including dev group
 install:
     uv sync --group dev
 
-# ── Scanning ──────────────────────────────────────────────────────────────────
+# ── Scanning ───────────────────────────────────────────────────────────────────
 
 # Scan installed packages (full report)
 scan:
-    uv run safety check --full-report
+    uv run safety check --full-report --policy-file {{ policy }}
 
-# Scan requirements.txt for CI/CD using SAFETY_API_KEY (set in .env or environment)
+# Scan a specific requirements file
+scan-file file:
+    uv run safety check -r {{ file }} --full-report --policy-file {{ policy }}
+
+# Scan for CI/CD, save JSON report (requires SAFETY_API_KEY in env or .env)
 scan-ci:
     #!/usr/bin/env bash
     set -euo pipefail
-    : "${SAFETY_API_KEY:?SAFETY_API_KEY must be set for CI scans}"
+    : "${SAFETY_API_KEY:?SAFETY_API_KEY must be set}"
     mkdir -p {{ reports }}
-    uv run safety check -r requirements.txt \
+    uv run safety check \
         --key "$SAFETY_API_KEY" \
         --policy-file {{ policy }} \
+        --full-report \
         --json > {{ reports }}/safety-report.json
 
 # Scan and output JSON to stdout
 scan-json:
-    uv run safety check --json
+    uv run safety check --json --policy-file {{ policy }}
 
-# ── Policy ────────────────────────────────────────────────────────────────────
+# ── Policy ─────────────────────────────────────────────────────────────────────
 
-# Generate a fresh Safety v2 policy file
+# Generate a default Safety v2 policy file
 policy-generate:
     uv run safety generate policy_file
 
-# ── Reports ───────────────────────────────────────────────────────────────────
+# ── Reports ────────────────────────────────────────────────────────────────────
 
-# Generate a full vulnerability report for requirements.txt
+# Generate a full-text report saved to reports/safety-report.txt
 report:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p {{ reports }}
-    uv run safety check --full-report -r requirements.txt
+    uv run safety check --full-report --policy-file {{ policy }} \
+        > {{ reports }}/safety-report.txt
 
-# ── Docs ──────────────────────────────────────────────────────────────────────
+# ── Docs ───────────────────────────────────────────────────────────────────────
 
-# Build the MkDocs documentation site
+# Build the MkDocs documentation site (strict mode)
 docs:
     uv run mkdocs build --strict
 
 # Serve docs locally with live-reload at http://127.0.0.1:8000
 docs-serve:
-    uv run mkdocs serve --livereload
+    uv run mkdocs serve
 
 # Remove the generated docs site directory
 docs-clean:
     rm -rf site/
 
-# ── Maintenance ───────────────────────────────────────────────────────────────
+# ── Maintenance ────────────────────────────────────────────────────────────────
 
 # Update all dependencies to latest compatible versions
 update:

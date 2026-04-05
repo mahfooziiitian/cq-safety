@@ -14,5 +14,5 @@ dev = [
     "mkdocstrings[python]>=1.0.3",
     "safety<3.0.0",
     "setuptools<80.0",
-    "wheel<0.47.0",
+    "wheel>=0.46.2",
 ]
