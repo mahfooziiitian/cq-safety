@@ -23,8 +23,7 @@ on:
     - cron: "0 6 * * *"   # Daily at 06:00 UTC — catch newly published CVEs
   workflow_dispatch:       # Allow manual runs from the Actions tab
 
-env:
-  SAFETY_API_KEY: 707b8c27-c96c-4357-8e8e-6511895b31f5
+
 permissions:
   contents: read
   security-events: write  # Required for uploading SARIF to GitHub Security tab

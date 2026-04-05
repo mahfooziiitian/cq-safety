@@ -7,9 +7,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-env:
-  SAFETY_API_KEY: 707b8c27-c96c-4357-8e8e-6511895b31f5
-
 permissions:
   contents: read
 
