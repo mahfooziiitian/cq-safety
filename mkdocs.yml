@@ -1,0 +1,68 @@
+site_name: cq-safety
+site_description: Python dependency vulnerability scanning with Safety
+site_author: cq-safety contributors
+site_url: https://github.com/mahfooz-code/cq-safety
+repo_url: https://github.com/mahfooz-code/cq-safety
+repo_name: cq-safety
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - tables
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+  - Usage:
+    - Scanning Options: usage/scanning.md
+    - Output Formats: usage/output-formats.md
+    - Ignoring Vulnerabilities: usage/ignoring.md
+    - Policy Files: usage/policy-files.md
+  - CI/CD Integration:
+    - GitHub Actions: ci-cd/github-actions.md
+    - GitLab CI: ci-cd/gitlab-ci.md
+    - Pre-commit Hook: ci-cd/pre-commit.md
+  - Reference:
+    - CLI Reference: reference/cli.md
+    - Exit Codes: reference/exit-codes.md
+    - Troubleshooting: reference/troubleshooting.md
