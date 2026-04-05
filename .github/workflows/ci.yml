@@ -13,7 +13,7 @@ permissions:
 jobs:
   # ── Lint & validate ─────────────────────────────────────────────────────────
   validate:
-    name: Validate Policy & Config
+    name: Validate Config & Docs
     runs-on: ubuntu-latest
 
     steps:
@@ -30,9 +30,6 @@ jobs:
 
       - name: Install dependencies
         run: uv sync --group dev
-
-      - name: Validate Safety policy file
-        run: uv run safety validate policy_file
 
       - name: Build MkDocs (strict)
         run: uv run mkdocs build --strict
@@ -61,13 +58,12 @@ jobs:
       - name: Create reports directory
         run: mkdir -p reports
 
-      - name: Run Safety scan
+      - name: Run Safety check
         run: |
-          uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
-            --policy-file .safety-policy.yml \
-            --save-as json reports/safety-report.json \
-            --save-as html reports/safety-report.html \
-            --output screen
+          uv run safety check \
+            --key "$SAFETY_API_KEY" \
+            -r requirements.txt \
+            --json > reports/safety-report.json
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 

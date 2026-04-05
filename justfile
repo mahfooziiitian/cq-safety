@@ -23,92 +23,41 @@ default:
 install:
     uv sync --group dev
 
-# Authenticate with Safety Platform (browser login, development)
-auth:
-    uv run safety auth login
-
-# Authenticate without a browser (headless / SSH)
-auth-headless:
-    uv run safety auth login --headless
-
-# Show current Safety authentication status
-auth-status:
-    uv run safety auth status
-
-# Log out of the current Safety session
-auth-logout:
-    uv run safety auth logout
-
 # ── Scanning ──────────────────────────────────────────────────────────────────
 
-# Scan the project directory (development auth, verbose output)
+# Scan installed packages (full report)
 scan:
-    uv run safety scan --detailed-output
+    uv run safety check --full-report
 
-# Scan a specific target directory
-scan-target target:
-    uv run safety scan --target {{ target }} --detailed-output
-
-# Scan for CI/CD using SAFETY_API_KEY (set in .env or environment)
+# Scan requirements.txt for CI/CD using SAFETY_API_KEY (set in .env or environment)
 scan-ci:
     #!/usr/bin/env bash
     set -euo pipefail
     : "${SAFETY_API_KEY:?SAFETY_API_KEY must be set for CI scans}"
     mkdir -p {{ reports }}
-    uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
+    uv run safety check -r requirements.txt \
+        --key "$SAFETY_API_KEY" \
         --policy-file {{ policy }} \
-        --save-as json {{ reports }}/safety-report.json \
-        --save-as html {{ reports }}/safety-report.html
-
-# Scan for production using SAFETY_API_KEY
-scan-prod:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    : "${SAFETY_API_KEY:?SAFETY_API_KEY must be set for production scans}"
-    mkdir -p {{ reports }}
-    uv run safety --key "$SAFETY_API_KEY" --stage production scan \
-        --policy-file {{ policy }} \
-        --save-as json {{ reports }}/safety-report-prod.json \
-        --save-as spdx {{ reports }}/sbom.spdx
-
-# Scan and auto-fix requirements.txt files
-scan-fix:
-    uv run safety scan --apply-fixes
+        --json > {{ reports }}/safety-report.json
 
 # Scan and output JSON to stdout
 scan-json:
-    uv run safety scan --output json
+    uv run safety check --json
 
 # ── Policy ────────────────────────────────────────────────────────────────────
 
-# Generate a fresh Safety v3 policy file
+# Generate a fresh Safety v2 policy file
 policy-generate:
     uv run safety generate policy_file
 
-# Validate the Safety policy file
-policy-validate:
-    uv run safety validate policy_file
-
 # ── Reports ───────────────────────────────────────────────────────────────────
 
-# Generate JSON + HTML vulnerability reports in ./reports/
+# Generate a full vulnerability report for requirements.txt
 report:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p {{ reports }}
-    uv run safety scan \
-        --save-as json {{ reports }}/safety-report.json \
-        --save-as html {{ reports }}/safety-report.html \
-        --output screen
-
-# Generate an SPDX SBOM (requires SAFETY_API_KEY)
-sbom:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    : "${SAFETY_API_KEY:?SAFETY_API_KEY must be set for SBOM generation}"
-    mkdir -p {{ reports }}
-    uv run safety --key "$SAFETY_API_KEY" --stage production scan \
-        --save-as spdx {{ reports }}/sbom.spdx
+    uv run safety check --full-report -r requirements.txt
 
 # ── Docs ──────────────────────────────────────────────────────────────────────
 

@@ -1,12 +1,8 @@
 # cq-safety
 
-**Python dependency vulnerability scanning with Safety CLI 3.**
+**Python dependency vulnerability scanning with Safety v2.**
 
-[Safety CLI 3](https://docs.safetycli.com) checks your Python packages against a curated database of known CVEs, helping you catch vulnerable dependencies before they reach production.
-
-!!! warning "Safety v3 — Breaking Changes"
-    `safety check` is **deprecated** as of Safety 3 and was unsupported after 1 May 2024.
-    The new primary command is **`safety scan`**. All docs here target Safety ≥ 3.0.
+[Safety](https://pyup.io/safety/) checks your Python packages against a curated database of known CVEs, helping you catch vulnerable dependencies before they reach production.
 
 ---
 
@@ -18,13 +14,11 @@
 | Feature | Description |
 |---|---|
 | 🔍 **CVE scanning** | Checks packages against the Safety vulnerability database |
-| 📁 **Project directory scan** | Scans your entire project tree, not just one file |
-| 🔧 **Policy files v3** | Version 3.0 schema with fail thresholds, auto-ignore, and firewall rules |
-| 🔐 **Auth-based access** | Browser-based OAuth login or API key for CI/CD |
+| 📄 **Requirements file scan** | `safety check -r requirements.txt` |
+| 🔧 **Policy files v2** | Version 2.0 schema with severity thresholds and ignore lists |
+| 🔑 **API key access** | API key for CI/CD and commercial daily DB updates |
 | 🚀 **CI/CD ready** | Native support for GitHub Actions, GitLab CI, and pre-commit |
-| 📊 **Multiple output formats** | JSON, HTML, SPDX, text, and screen output |
-| 🔨 **Auto-fix** | `--apply-fixes` updates requirements.txt to safe versions |
-| 🔥 **Safety Firewall** | [Beta] Block malicious packages at install time |
+| 📊 **Multiple output formats** | JSON, bare, full-report, short-report |
 
 ---
 
@@ -32,29 +26,32 @@
 
 ```bash
 # Install Safety
-pip install "safety>=3.0"
+pip install safety
 
-# Authenticate (development — one-time setup)
-safety auth login
+# Scan installed packages
+safety check
 
-# Scan your project directory
-safety scan
+# Scan a requirements file
+safety check -r requirements.txt
 
-# Scan with JSON output
-safety scan --output json
+# Scan from pip freeze
+pip freeze | safety check --stdin
+
+# JSON output
+safety check --json
 
 # CI/CD scan with API key
-safety --key $SAFETY_API_KEY --stage cicd scan
+safety check --key $SAFETY_API_KEY -r requirements.txt
 ```
 
 ---
 
 ## This Project
 
-This repository (`cq-safety`) is a **code-quality reference project** for the Safety CLI 3 tool. It provides:
+This repository (`cq-safety`) is a **code-quality reference project** for the Safety v2 tool. It provides:
 
 - A full tutorial covering installation through CI/CD integration
 - Reusable GitHub Actions and GitLab CI snippets
-- Policy file v3 templates for enterprise workflows
+- Policy file v2 templates for enterprise workflows
 
 Use the navigation to explore the docs.

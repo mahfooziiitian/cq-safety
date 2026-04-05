@@ -1,85 +1,89 @@
 # Scanning Options
 
-!!! warning "Safety v3 — `safety check` is deprecated"
-    Use `safety scan` for all new workflows. `safety check` is unsupported beyond 1 May 2024.
+## Primary Command: `safety check`
+
+```bash
+safety check [OPTIONS]
+```
 
 ---
 
-## Primary Command: `safety scan`
-
-```bash
-safety [GLOBAL-OPTIONS] scan [OPTIONS]
-```
-
-### Global Options
+## Full Flag Reference
 
 | Flag | Description |
 |------|-------------|
-| `--stage development` | Label scan as development (default, uses browser auth) |
-| `--stage cicd` | Label scan as CI/CD (requires API key) |
-| `--stage production` | Label scan as production (requires API key) |
-| `--key <api-key>` | API key for CI/CD or production scans |
-| `--proxy-host` | Proxy hostname |
-| `--proxy-port` | Proxy port |
-| `--proxy-protocol` | Proxy protocol (default: https) |
-
-### Scan Options
-
-| Flag | Description |
-|------|-------------|
-| `--target <path>` | Project directory to scan (default: current directory) |
-| `--output <format>` | Output format: `screen`, `json`, `html`, `text`, `spdx` |
-| `--detailed-output` | Verbose report (screen output only) |
-| `--save-as <format> <file>` | Save results to a file in addition to regular output |
-| `--policy-file <path>` | Apply a local v3 policy file |
-| `--apply-fixes` | Auto-update requirements.txt files to safe versions |
-| `--filter <key>` | Filter JSON output by top-level key |
+| `-r <file>` | Check packages listed in a requirements file (repeatable) |
+| `--stdin` | Read package list from stdin (e.g., `pip freeze | safety check --stdin`) |
+| `--full-report` | Show full advisory text for each vulnerability |
+| `--short-report` | Show a short, one-line summary per vulnerability |
+| `--bare` | Output only vulnerable package names (one per line) |
+| `--json` | Output results in JSON format (array of arrays) |
+| `--ignore <id>` | Ignore a vulnerability by ID (repeatable) |
+| `--key <api-key>` | API key for daily DB updates |
+| `--db <path>` | Use a local vulnerability database directory |
+| `--cache` | Cache the vulnerability database locally (speeds up CI) |
+| `--policy-file <path>` | Apply a local v2 policy file |
+| `--proxy-host <host>` | HTTP proxy hostname |
+| `--proxy-port <port>` | HTTP proxy port |
+| `--proxy-protocol <proto>` | Proxy protocol (default: https) |
 
 ---
 
 ## Common Scan Patterns
 
-### Scan current project directory (dev)
+### Scan installed packages
 ```bash
-safety auth login     # one-time setup
-safety scan
+safety check
 ```
 
-### Scan a specific directory
+### Scan a requirements file
 ```bash
-safety scan --target /path/to/project
+safety check -r requirements.txt
 ```
 
-### Scan with verbose details
+### Scan multiple files
 ```bash
-safety scan --detailed-output
+safety check -r requirements.txt -r requirements-dev.txt
+```
+
+### Scan from pip freeze
+```bash
+pip freeze | safety check --stdin
+```
+
+### Full report with advisory text
+```bash
+safety check --full-report -r requirements.txt
 ```
 
 ### CI/CD scan with API key
 ```bash
-safety --key $SAFETY_API_KEY --stage cicd scan
+safety check --key $SAFETY_API_KEY -r requirements.txt
 ```
 
-### Save results to JSON
+### JSON output
 ```bash
-safety scan --save-as json safety-report.json
+safety check --json -r requirements.txt
 ```
 
-### Save results to multiple formats
+### Ignore a specific CVE
 ```bash
-safety scan \
-  --save-as json safety-report.json \
-  --output screen
+safety check --ignore 36546 -r requirements.txt
 ```
 
-### Auto-fix vulnerable requirements.txt
+### Use a local vulnerability database
 ```bash
-safety scan --apply-fixes
+safety check --db /path/to/safety-db -r requirements.txt
 ```
 
-### Scan with a custom policy
+### Cache the database for faster CI
 ```bash
-safety scan --policy-file .safety-policy.yml
+safety check --cache -r requirements.txt
+```
+
+### Scan with a policy file
+```bash
+safety check --policy-file .safety-policy.yml -r requirements.txt
 ```
 
 ---
@@ -89,21 +93,6 @@ safety scan --policy-file .safety-policy.yml
 If your project uses `uv`, prefix commands with `uv run`:
 
 ```bash
-uv run safety scan
-uv run safety --key $SAFETY_API_KEY --stage cicd scan
+uv run safety check -r requirements.txt
+uv run safety check --key $SAFETY_API_KEY --json -r requirements.txt
 ```
-
----
-
-## Legacy: `safety check` (Deprecated)
-
-!!! danger "Deprecated — do not use in new projects"
-    `safety check` was removed from active support after 1 May 2024. Migrate to `safety scan`.
-
-    ```bash
-    # OLD — deprecated
-    safety check -r requirements.txt
-
-    # NEW — Safety v3
-    safety scan --target .
-    ```

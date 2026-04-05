@@ -1,5 +1,5 @@
 site_name: cq-safety
-site_description: Python dependency vulnerability scanning with Safety CLI 3
+site_description: Python dependency vulnerability scanning with Safety v2
 site_author: cq-safety contributors
 site_url: https://github.com/mahfooz-code/cq-safety
 repo_url: https://github.com/mahfooz-code/cq-safety

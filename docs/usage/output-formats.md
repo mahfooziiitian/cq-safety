@@ -1,52 +1,77 @@
 # Output Formats
 
-Safety v3 supports five output formats via the `--output` flag.
+Safety v2 supports four output formats.
 
 ---
 
-## Screen (Default)
+## Default (Human-readable Table)
 
 ```bash
-safety scan
-safety scan --detailed-output   # verbose
+safety check -r requirements.txt
 ```
 
-Best for local development and manual review. `--detailed-output` adds full CVE advisory text.
+Output:
+
+```
++==============================================================================+
+| REPORT                                                                       |
+| checked 42 packages, using free DB (updated once a month)                   |
++============================+===========+==========================+==========+
+| package                    | installed | affected                 | ID       |
++============================+===========+==========================+==========+
+| requests                   | 2.19.1    | <2.20.0                  | 36546    |
++============================+===========+==========================+==========+
+```
+
+---
+
+## Full Report
+
+```bash
+safety check --full-report -r requirements.txt
+```
+
+Includes the full advisory text for each vulnerability.
+
+---
+
+## Short Report
+
+```bash
+safety check --short-report -r requirements.txt
+```
+
+Shows a condensed one-line summary per vulnerability.
 
 ---
 
 ## JSON
 
 ```bash
-safety scan --output json
+safety check --json -r requirements.txt
 # or save to a file
-safety scan --save-as json safety-report.json
+safety check --json -r requirements.txt > safety-report.json
 ```
 
-Best for CI/CD pipelines, SIEM tools, and dashboards.
+Best for CI/CD pipelines and programmatic processing.
 
-Example output structure:
+v2 JSON output is a **list of lists**. Each inner list has the structure:
+
+```
+[package_name, affected_range, installed_version, advisory_text, vuln_id]
+```
+
+Example:
 ```json
-{
-  "metadata": {
-    "safety_command": "scan",
-    "stage": "development",
-    "scan_type": "project"
-  },
-  "vulnerabilities": [
-    {
-      "package_name": "requests",
-      "installed_version": "2.19.1",
-      "affected_versions": "<2.20.0",
-      "vulnerability_id": "CVE-2018-18074",
-      "severity": {
-        "cvss_v3": { "base_score": 9.8, "base_severity": "CRITICAL" }
-      },
-      "advisory": "Requests before 2.20.0 sends Authorization headers on redirect...",
-      "fixed_versions": ["2.20.0"]
-    }
+[
+  [
+    "requests",
+    "<2.20.0",
+    "2.19.1",
+    "Requests before 2.20.0 sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect...",
+    "36546"
   ]
-}
+]
 ```
 
 ### Parsing in Python
@@ -56,58 +81,27 @@ import json
 import subprocess
 
 result = subprocess.run(
-    ["safety", "scan", "--output", "json"],
+    ["safety", "check", "--json", "-r", "requirements.txt"],
     capture_output=True,
     text=True,
     check=False,   # exit code 1 on vulnerabilities — handle manually
 )
-report = json.loads(result.stdout)
-for vuln in report.get("vulnerabilities", []):
-    print(
-        f"{vuln['package_name']} {vuln['installed_version']} "
-        f"— {vuln['vulnerability_id']} "
-        f"({vuln['severity']['cvss_v3']['base_severity']})"
-    )
+vulnerabilities = json.loads(result.stdout)
+for vuln in vulnerabilities:
+    package_name, affected_range, installed_version, advisory, vuln_id = vuln
+    print(f"{package_name} {installed_version} — {vuln_id} (affected: {affected_range})")
 ```
 
 ---
 
-## HTML
+## Bare
 
 ```bash
-safety scan --save-as html safety-report.html
+safety check --bare -r requirements.txt
 ```
 
-Generates a human-readable HTML report. Useful for sharing with non-technical stakeholders.
-
----
-
-## Text
+Outputs only the names of vulnerable packages, one per line. Useful for piping into other tools:
 
 ```bash
-safety scan --output text
-safety scan --save-as text safety-report.txt
-```
-
-Plain-text format suitable for log files and audit trails.
-
----
-
-## SPDX
-
-```bash
-safety scan --save-as spdx safety-report.spdx
-```
-
-[Software Package Data Exchange](https://spdx.dev/) format for software bill of materials (SBOM) workflows.
-
----
-
-## Saving and Displaying Simultaneously
-
-Use `--save-as` to write a file **and** display screen output at the same time:
-
-```bash
-# Display on screen AND save JSON
-safety scan --save-as json safety-report.json --output screen
+safety check --bare -r requirements.txt | xargs echo "Vulnerable:"
 ```

@@ -1,6 +1,6 @@
-# Safety Policy Files (v3)
+# Safety Policy Files (v2)
 
-Safety v3 uses a completely redesigned **version 3.0** policy schema. The old v2 schema is **not compatible**.
+Safety v2 uses a **version 2.0** policy schema to configure severity thresholds, ignored CVEs, and unpinned-requirements behaviour.
 
 ---
 
@@ -9,124 +9,80 @@ Safety v3 uses a completely redesigned **version 3.0** policy schema. The old v2
 ```bash
 safety generate policy_file
 # Creates .safety-policy.yml in the current directory
+```
 
-# Validate a policy file
-safety validate policy_file
+Review an existing JSON report:
+
+```bash
+safety review --file reports/safety-report.json
 ```
 
 ---
 
-## Full v3 Policy File Reference
+## Full v2 Policy File Reference
 
 ```yaml
 # .safety-policy.yml
-version: '3.0'
+version: "2.0"
 
-# ── Scanning settings ─────────────────────────────────────────────────────────
-scanning-settings:
-  max-depth: 6              # How deep to recurse into the project tree
-  exclude:                  # Paths to exclude from scanning
-    - tests/
-    - docs/
-  include-files:            # Explicitly include additional requirement files
-    - requirements-prod.txt
-  system:
-    targets: []             # OS-level package targets (advanced)
+security:
+  # Severity levels that trigger a scan failure (exit code 1)
+  cvss-severity:
+    - high
+    - critical
+    - medium
 
-# ── Report settings ───────────────────────────────────────────────────────────
-report:
-  dependency-vulnerabilities:
-    enabled: true
-    auto-ignore-in-report:
-      python:
-        environment-results: true      # Hide env-level scan results from report
-        unpinned-requirements: true    # Hide unpinned package warnings
-      cvss-severity:
-        - low                          # Suppress low-severity from report output
+  # Treat vulnerabilities with unknown CVSS score as a failure
+  ignore-cvss-unknown-severity: false
 
-# ── Fail thresholds ───────────────────────────────────────────────────────────
-fail-scan-with-exit-code:
-  dependency-vulnerabilities:
-    enabled: true
-    fail-on-any-of:
-      cvss-severity:
-        - high
-        - critical
-        - medium
-      exploitability:
-        - high
-        - critical
-        - medium
+  # Vulnerabilities to ignore — always document reason and expiry
+  ignore-vulnerabilities:
+    36546:
+      reason: "Not exploitable — no HTTP redirects in our deployment"
+      expires: "2025-06-30"
+    40291:
+      reason: "Mitigated by WAF — awaiting upstream patch"
+      expires: "2025-09-01"
 
-# ── Auto security updates ─────────────────────────────────────────────────────
-security-updates:
-  dependency-vulnerabilities:
-    auto-security-updates-limit:
-      - patch           # Only apply patch-level auto-fixes (not minor/major)
-
-# ── Package installation firewall ─────────────────────────────────────────────
-installation:
-  default-action: allow   # allow or deny by default
-  audit-logging:
-    enabled: true
-
-  allow:
-    packages: []          # Explicitly allow-listed package names
-    vulnerabilities:
-      CVE-2018-18074:
-        reason: "Not exploitable — no HTTP-to-HTTPS redirects in our stack"
-
-  deny:
-    packages: {}          # Block specific packages entirely
-    vulnerabilities:
-      warning-on-any-of:
-        cvss-severity:
-          - low
-          - medium
-      block-on-any-of:
-        cvss-severity:
-          - high
-          - critical
+# Treat unpinned requirements as an error
+ignore-unpinned-requirements: false
 ```
 
 ---
 
 ## Schema Reference
 
-### `scanning-settings`
+### `version`
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| `max-depth` | int | `6` | Directory recursion depth |
-| `exclude` | list | `[]` | Paths to exclude |
-| `include-files` | list | `[]` | Extra files to scan |
+Must be `"2.0"` for the v2 schema.
 
-### `report.dependency-vulnerabilities.auto-ignore-in-report`
+### `security.cvss-severity`
 
-| Key | Type | Description |
-|-----|------|-------------|
-| `python.environment-results` | bool | Suppress environment-level results |
-| `python.unpinned-requirements` | bool | Suppress unpinned package warnings |
-| `cvss-severity` | list | Severity levels to hide from report |
-
-### `fail-scan-with-exit-code.dependency-vulnerabilities.fail-on-any-of`
-
-| Key | Values |
-|-----|--------|
-| `cvss-severity` | `critical`, `high`, `medium`, `low` |
-| `exploitability` | `critical`, `high`, `medium`, `low` |
-
-### `security-updates.dependency-vulnerabilities.auto-security-updates-limit`
+List of CVSS severity levels that cause a non-zero exit code.
 
 | Value | Description |
 |-------|-------------|
-| `patch` | Allow only patch version bumps |
-| `minor` | Allow patch and minor version bumps |
-| `major` | Allow any version bump |
+| `critical` | CVSS score 9.0–10.0 |
+| `high` | CVSS score 7.0–8.9 |
+| `medium` | CVSS score 4.0–6.9 |
+| `low` | CVSS score 0.1–3.9 |
 
-### `installation.allow.vulnerabilities`
+### `security.ignore-cvss-unknown-severity`
 
-Map of CVE IDs to ignore entries. Include a `reason` comment for auditability.
+When `true`, vulnerabilities with no CVSS score are not treated as failures.
+
+### `security.ignore-vulnerabilities`
+
+Map of vulnerability IDs to ignore entries.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `reason` | Recommended | Why this CVE is safe to ignore |
+| `expires` | Recommended | ISO 8601 date after which the ignore should be reviewed |
+
+### `ignore-unpinned-requirements`
+
+When `false` (default), Safety reports unpinned packages as a warning.
 
 ---
 
@@ -134,14 +90,14 @@ Map of CVE IDs to ignore entries. Include a `reason` comment for auditability.
 
 ```bash
 # Apply during a scan
-safety scan --policy-file .safety-policy.yml
+safety check --policy-file .safety-policy.yml -r requirements.txt
 
-# Validate the policy syntax
-safety validate policy_file
+# Generate a fresh policy file
+safety generate policy_file
 
-# Validate a policy at a specific path
-safety validate policy_file --path /path/to/.safety-policy.yml
+# Review a saved JSON report
+safety review --file reports/safety-report.json
 ```
 
 !!! tip
-    Commit `.safety-policy.yml` to version control. Safety Platform policies will override local policy files if you're using the Safety Platform integration.
+    Commit `.safety-policy.yml` to version control so all team members and CI/CD pipelines use consistent ignore rules.

@@ -7,19 +7,19 @@
 
 ---
 
-## Install Safety CLI 3
+## Install Safety v2
 
 === "pip"
 
     ```bash
-    pip install "safety>=3.0"
+    pip install safety
     ```
 
 === "uv (recommended)"
 
     ```bash
     # Add as a dev dependency
-    uv add --dev "safety>=3.0"
+    uv add --dev safety
 
     # Sync the environment
     uv sync
@@ -37,42 +37,30 @@
 
 ```bash
 safety --version
-# safety, version 3.7.x
+# safety, version 2.x.x
 ```
 
 ---
 
-## Authentication
+## API Key Setup
 
-Safety v3 introduces two authentication modes:
+Safety v2 uses an API key for CI/CD access and to unlock daily database updates.
 
-### Development (browser-based OAuth)
+### Get an API Key
 
-For local development, authenticate once with your Safety Platform account:
+Register for a free account and get your API key at [pyup.io/account/api-key/](https://pyup.io/account/api-key/).
 
-```bash
-safety auth login
-# Opens https://platform.safetycli.com in your browser
+- **Free tier**: database updated monthly
+- **Commercial tier**: database updated daily
 
-# Check status
-safety auth status
-
-# Log out
-safety auth logout
-```
-
-Register for a free account at [platform.safetycli.com](https://platform.safetycli.com).
-
-### CI/CD (API key)
-
-For automated pipelines, use an API key passed as a global flag or environment variable:
+### Configure the API Key
 
 ```bash
-# Environment variable (recommended)
+# Set as environment variable (recommended)
 export SAFETY_API_KEY=your-key-here
 
-# Or pass directly
-safety --key your-key-here --stage cicd scan
+# Or pass directly on the command line
+safety check --key your-key-here -r requirements.txt
 ```
 
 !!! tip
@@ -80,23 +68,6 @@ safety --key your-key-here --stage cicd scan
 
 ---
 
-## Lifecycle Stages
+## No Browser Login
 
-Safety v3 introduces a `--stage` global flag to label scans:
-
-| Stage | Use Case | Auth Required |
-|---|---|---|
-| `development` | Local dev (default) | `safety auth login` |
-| `cicd` | CI/CD pipelines | `--key` or `SAFETY_API_KEY` |
-| `production` | Production systems | `--key` or `SAFETY_API_KEY` |
-
-```bash
-# Development scan (uses browser auth)
-safety scan
-
-# CI/CD scan (uses API key)
-safety --key $SAFETY_API_KEY --stage cicd scan
-
-# Production scan
-safety --key $SAFETY_API_KEY --stage production scan
-```
+Safety v2 does **not** use browser-based authentication. Authentication is via API key only.

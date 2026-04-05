@@ -1,301 +1,230 @@
-# Safety CLI 3 — Python Dependency Vulnerability Scanner
+# cq-safety
 
-A tutorial and reference guide for using [Safety CLI 3](https://docs.safetycli.com) to detect known security vulnerabilities in Python dependencies.
-
-> **Safety v3** replaces `safety check` with `safety scan` and introduces browser-based authentication, a new policy schema (v3.0), auto-fix support, and multi-format output.
+A complete tutorial and reference for **Safety v2** — the `safety check` era of Python dependency vulnerability scanning.
 
 ---
 
 ## Table of Contents
 
-1. [What is Safety?](#what-is-safety)
+1. [What is Safety](#what-is-safety)
 2. [Installation](#installation)
-3. [Authentication](#authentication)
-4. [Quick Start](#quick-start)
-5. [How Safety Works](#how-safety-works)
-6. [Scanning Options](#scanning-options)
-7. [Understanding the Output](#understanding-the-output)
-8. [Output Formats](#output-formats)
-9. [Auto-Fix Vulnerabilities](#auto-fix-vulnerabilities)
-10. [Ignoring Vulnerabilities](#ignoring-vulnerabilities)
-11. [CI/CD Integration](#cicd-integration)
-12. [Safety Policy Files v3](#safety-policy-files-v3)
-13. [API Key & Safety Platform](#api-key--safety-platform)
-14. [Common Workflows](#common-workflows)
-15. [Exit Codes](#exit-codes)
-16. [Deprecated Commands](#deprecated-commands)
-17. [Troubleshooting](#troubleshooting)
+3. [Quick Start](#quick-start)
+4. [How Safety Works](#how-safety-works)
+5. [Scanning Options](#scanning-options)
+6. [Understanding the Output](#understanding-the-output)
+7. [Output Formats](#output-formats)
+8. [Ignoring Vulnerabilities](#ignoring-vulnerabilities)
+9. [CI/CD Integration](#cicd-integration)
+10. [Safety Policy Files v2](#safety-policy-files-v2)
+11. [API Key & Safety DB](#api-key--safety-db)
+12. [Common Workflows](#common-workflows)
+13. [Exit Codes](#exit-codes)
+14. [Troubleshooting](#troubleshooting)
 
 ---
 
-## What is Safety?
+## What is Safety
 
-Safety CLI 3 is an open-source command-line tool and Python library that checks your project's dependencies against a curated database of known security vulnerabilities (CVEs). It integrates with `pip`, `requirements.txt`, `Pipfile`, and `pyproject.toml` workflows.
+[Safety](https://pyup.io/safety/) is a Python dependency vulnerability scanner. It checks your installed packages (or a `requirements.txt` file) against a curated database of known CVEs and security advisories.
 
-**Key features in v3:**
-- `safety scan` — project-directory-based scanning (replaces `safety check`)
-- Browser-based OAuth login (`safety auth login`) for development
-- API key support for CI/CD and production stages (`--stage cicd`)
-- New policy schema v3.0 with fail thresholds, firewall rules, and auto-ignore
-- Auto-fix support (`--apply-fixes`) for requirements.txt files
-- Multiple output formats: JSON, HTML, SPDX, text, screen
+Safety v2 (`safety check`) is the stable, widely-used release that integrates cleanly with existing Python tooling and CI/CD pipelines using API key authentication.
 
 ---
 
 ## Installation
 
+### pip
+
 ```bash
-# Recommended: install in your project's virtual environment
-pip install "safety>=3.0"
+pip install safety
+```
 
-# With uv (recommended for projects)
-uv add --dev "safety>=3.0"
+### uv (recommended)
 
-# Verify installation
+```bash
+uv add --dev safety
+uv sync
+```
+
+### pipx (global tool)
+
+```bash
+pipx install safety
+```
+
+### Verify
+
+```bash
 safety --version
-# safety, version 3.7.x
 ```
-
-> **Python support:** Safety v3 requires Python 3.7+.
-
----
-
-## Authentication
-
-Safety v3 introduces two authentication modes depending on your context.
-
-### Development (browser-based OAuth)
-
-```bash
-# Authenticate once — opens platform.safetycli.com in your browser
-safety auth login
-
-# For headless/SSH environments
-safety auth login --headless
-
-# Check auth status
-safety auth status
-
-# Log out
-safety auth logout
-```
-
-Register for a free account at [platform.safetycli.com](https://platform.safetycli.com).
-
-### CI/CD & Production (API key)
-
-```bash
-# Set via environment variable (recommended)
-export SAFETY_API_KEY=your-key-here
-
-# Or pass directly as a global flag
-safety --key $SAFETY_API_KEY --stage cicd scan
-```
-
-### Lifecycle Stages
-
-| Stage | Auth Method | Use Case |
-|-------|------------|----------|
-| `development` | `safety auth login` | Local development (default) |
-| `cicd` | `--key` / `SAFETY_API_KEY` | CI/CD pipelines |
-| `production` | `--key` / `SAFETY_API_KEY` | Production systems |
 
 ---
 
 ## Quick Start
 
 ```bash
-# 1. Authenticate (first time)
-safety auth login
+# Scan installed packages
+safety check
 
-# 2. Scan the current project directory
-safety scan
+# Scan a requirements file
+safety check -r requirements.txt
 
-# 3. Verbose output
-safety scan --detailed-output
+# Scan from pip freeze
+pip freeze | safety check --stdin
 
-# 4. CI/CD scan with API key
-safety --key $SAFETY_API_KEY --stage cicd scan
+# Full report with advisory text
+safety check --full-report -r requirements.txt
+
+# JSON output
+safety check --json -r requirements.txt
 ```
 
 ---
 
 ## How Safety Works
 
-1. Safety scans your project directory tree (auto-discovers dependency files)
-2. It queries the Safety vulnerability database (via Safety Platform)
-3. Each package version is checked against known CVE entries
-4. Results are reported with severity scores, CVE IDs, affected ranges, and fix versions
+1. Safety reads your installed packages (or a requirements file)
+2. It queries the [Safety vulnerability database](https://pyup.io/safety/) for known CVEs affecting those packages
+3. It reports any matches and exits with code `1` if vulnerabilities are found
 
-```
-Project directory  →  Auto-discover deps  →  Safety DB lookup  →  Vulnerability report
-```
+The free database is updated monthly. With a commercial API key, the database is updated daily.
 
 ---
 
 ## Scanning Options
 
-### Global Flags (before the subcommand)
+```
+safety check [OPTIONS]
+```
 
 | Flag | Description |
 |------|-------------|
-| `--stage <stage>` | `development` (default), `cicd`, `production` |
-| `--key <api-key>` | API key for cicd/production scans |
-| `--proxy-host` / `--proxy-port` / `--proxy-protocol` | HTTP proxy settings |
-
-### `safety scan` Flags
-
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--target <path>` | `.` | Project directory to scan |
-| `--output <format>` | `screen` | `screen`, `json`, `html`, `text`, `spdx` |
-| `--detailed-output` | off | Verbose report (screen only) |
-| `--save-as <format> <file>` | — | Save results to a file (repeatable) |
-| `--policy-file <path>` | — | Apply a local v3 policy file |
-| `--apply-fixes` | off | Auto-patch requirements.txt files |
-| `--filter <key>` | — | Filter JSON output by key |
-
-### Examples
-
-```bash
-# Scan current directory
-safety scan
-
-# Scan a specific directory
-safety scan --target /path/to/project
-
-# CI/CD scan, save JSON report
-safety --key $SAFETY_API_KEY --stage cicd scan --save-as json report.json
-
-# Scan with policy file
-safety scan --policy-file .safety-policy.yml
-
-# Auto-fix requirements.txt
-safety scan --apply-fixes
-```
+| `-r <file>` | Check packages listed in a requirements file (repeatable) |
+| `--stdin` | Read package list from stdin |
+| `--full-report` | Show full advisory text per vulnerability |
+| `--short-report` | Show a condensed one-line summary |
+| `--bare` | Output only vulnerable package names |
+| `--json` | Output as JSON array of arrays |
+| `--ignore <id>` | Ignore a vulnerability by ID (repeatable) |
+| `--key <api-key>` | Use API key for daily DB updates |
+| `--db <path>` | Use a local vulnerability database |
+| `--cache` | Cache the DB locally (speeds up CI) |
+| `--policy-file <path>` | Apply a local v2 policy file |
+| `--proxy-host <host>` | HTTP proxy hostname |
+| `--proxy-port <port>` | HTTP proxy port |
+| `--proxy-protocol <proto>` | Proxy protocol (default: https) |
 
 ---
 
 ## Understanding the Output
 
-**No vulnerabilities found:**
-
 ```
-  Safety Report
-  ─────────────
-  Scanned 0 vulnerabilities in 42 packages.
-  No known security vulnerabilities found.
-```
-
-**Vulnerability detected (screen output):**
-
-```
-  Safety Report
-  ─────────────
-  → requests 2.19.1
-    CVE-2018-18074 (CVSS 9.8 Critical)
-    Affected: <2.20.0
-    Fix: Upgrade to requests>=2.20.0
++==============================================================================+
+| REPORT                                                                       |
+| checked 42 packages, using free DB (updated once a month)                   |
++============================+===========+==========================+==========+
+| package                    | installed | affected                 | ID       |
++============================+===========+==========================+==========+
+| requests                   | 2.19.1    | <2.20.0                  | 36546    |
++============================+===========+==========================+==========+
 ```
 
-**Fields explained:**
-- **package + version** — the vulnerable package and installed version
-- **CVE ID** — standard vulnerability identifier
-- **CVSS score + severity** — Common Vulnerability Scoring System rating
-- **Affected** — version range that is vulnerable
-- **Fix** — minimum safe version to upgrade to
+| Column | Description |
+|--------|-------------|
+| `package` | The vulnerable package name |
+| `installed` | The version you have installed |
+| `affected` | The version range that is vulnerable |
+| `ID` | Safety vulnerability ID |
 
 ---
 
 ## Output Formats
 
-### Default (screen)
+### Default (human-readable table)
 
 ```bash
-safety scan
-safety scan --detailed-output    # full advisory text
+safety check -r requirements.txt
 ```
 
-### JSON
+### Full report
 
 ```bash
-safety scan --output json
-safety scan --save-as json safety-report.json
+safety check --full-report -r requirements.txt
 ```
 
-### HTML
+### Short report
 
 ```bash
-safety scan --save-as html safety-report.html
+safety check --short-report -r requirements.txt
 ```
 
-### SPDX (SBOM)
+### JSON (array of arrays)
 
 ```bash
-safety scan --save-as spdx safety-report.spdx
+safety check --json -r requirements.txt > safety-report.json
 ```
 
-### Save multiple formats simultaneously
+v2 JSON structure: `[package_name, affected_range, installed_version, advisory_text, vuln_id]`
 
-```bash
-safety scan \
-  --save-as json safety-report.json \
-  --save-as html safety-report.html \
-  --output screen
+```json
+[
+  ["requests", "<2.20.0", "2.19.1", "Advisory text...", "36546"]
+]
 ```
 
-### Parsing JSON in Python
+Parsing in Python:
 
 ```python
 import json, subprocess
 
 result = subprocess.run(
-    ["safety", "scan", "--output", "json"],
+    ["safety", "check", "--json", "-r", "requirements.txt"],
     capture_output=True, text=True, check=False,
 )
-report = json.loads(result.stdout)
-for vuln in report.get("vulnerabilities", []):
-    print(
-        f"{vuln['package_name']} {vuln['installed_version']} "
-        f"— {vuln['vulnerability_id']} "
-        f"({vuln['severity']['cvss_v3']['base_severity']})"
-    )
+for pkg, affected, installed, advisory, vid in json.loads(result.stdout):
+    print(f"{pkg} {installed} — {vid} (affected: {affected})")
 ```
 
----
-
-## Auto-Fix Vulnerabilities
-
-Safety v3 can automatically update vulnerable packages in `requirements.txt` files:
+### Bare
 
 ```bash
-safety scan --apply-fixes
+safety check --bare -r requirements.txt
 ```
 
-> **Note:** `--apply-fixes` currently supports `requirements.txt` files only. `pyproject.toml`, `Pipfile`, and `setup.cfg` require manual updates.
+Outputs only vulnerable package names, one per line.
 
 ---
 
 ## Ignoring Vulnerabilities
 
-In Safety v3, ignores are configured in the **policy file** (v3 schema). The old `--ignore` CLI flag is not available in `safety scan`.
+### Via CLI flag
+
+```bash
+safety check --ignore 36546 -r requirements.txt
+safety check --ignore 36546 --ignore 40291 -r requirements.txt
+```
+
+### Via policy file
 
 ```yaml
 # .safety-policy.yml
-installation:
-  allow:
-    vulnerabilities:
-      CVE-2018-18074:
-        reason: "Not exploitable — no HTTP redirects in our deployment"
-```
+version: "2.0"
 
-Apply the policy:
+security:
+  cvss-severity:
+    - high
+    - critical
+  ignore-vulnerabilities:
+    36546:
+      reason: "Not exploitable — no HTTP redirects in our deployment"
+      expires: "2025-06-30"
+
+ignore-unpinned-requirements: false
+```
 
 ```bash
-safety scan --policy-file .safety-policy.yml
+safety check --policy-file .safety-policy.yml -r requirements.txt
 ```
-
-> ⚠️ Always document *why* a CVE is being allowed and review it after each dependency upgrade.
 
 ---
 
@@ -304,190 +233,139 @@ safety scan --policy-file .safety-policy.yml
 ### GitHub Actions
 
 ```yaml
-# .github/workflows/security.yml
-name: Security Scan
-
-on: [push, pull_request]
-
-jobs:
-  safety:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-      - run: pip install "safety>=3.0"
-      - name: Run Safety scan
-        run: safety --key $SAFETY_API_KEY --stage cicd scan
-        env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+- name: Run Safety check
+  run: safety check --key $SAFETY_API_KEY -r requirements.txt
+  env:
+    SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 ```
 
 ### GitLab CI
 
 ```yaml
-safety-scan:
+safety-check:
   stage: test
   image: python:3.11-slim
   script:
-    - pip install "safety>=3.0"
-    - safety --key $SAFETY_API_KEY --stage cicd scan --save-as json safety-report.json
-  artifacts:
-    paths: [safety-report.json]
-    when: always
+    - pip install safety
+    - safety check --key $SAFETY_API_KEY -r requirements.txt
+  variables:
+    SAFETY_API_KEY: $SAFETY_API_KEY
 ```
 
-### Pre-commit Hook
+### pre-commit
 
 ```yaml
-# .pre-commit-config.yaml
 repos:
-  - repo: local
+  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+    rev: v1.3.3
     hooks:
-      - id: safety-scan
-        name: Safety vulnerability scan
-        language: system
-        entry: safety
-        args: ["scan", "--detailed-output"]
-        pass_filenames: false
-        always_run: true
+      - id: python-safety-dependencies-check
+        args: ["--short-report"]
+```
+
+### Makefile
+
+```makefile
+.PHONY: scan
+scan:
+safety check --full-report -r requirements.txt
+
+.PHONY: scan-ci
+scan-ci:
+safety check --key $(SAFETY_API_KEY) --json -r requirements.txt > reports/safety-report.json
 ```
 
 ---
 
-## Safety Policy Files v3
+## Safety Policy Files v2
 
-Generate a default v3 policy file:
+```yaml
+version: "2.0"
+
+security:
+  # Severity levels that cause exit code 1
+  cvss-severity:
+    - high
+    - critical
+    - medium
+
+  # Whether unknown CVSS scores cause a failure
+  ignore-cvss-unknown-severity: false
+
+  # CVEs to ignore (document reason + expiry)
+  ignore-vulnerabilities:
+    36546:
+      reason: "Not exploitable — no HTTP redirects in our deployment"
+      expires: "2025-06-30"
+
+# Treat unpinned requirements as an error
+ignore-unpinned-requirements: false
+```
+
+Generate a policy file:
 
 ```bash
 safety generate policy_file
-# Creates .safety-policy.yml
 ```
 
-Validate a policy file:
+Review a report:
 
 ```bash
-safety validate policy_file
-```
-
-### Full Policy Example
-
-```yaml
-version: '3.0'
-
-scanning-settings:
-  max-depth: 6
-  exclude:
-    - tests/
-    - docs/
-  include-files:
-    - requirements-prod.txt
-
-report:
-  dependency-vulnerabilities:
-    enabled: true
-    auto-ignore-in-report:
-      python:
-        environment-results: true
-        unpinned-requirements: true
-      cvss-severity:
-        - low
-
-fail-scan-with-exit-code:
-  dependency-vulnerabilities:
-    enabled: true
-    fail-on-any-of:
-      cvss-severity:
-        - high
-        - critical
-        - medium
-      exploitability:
-        - high
-        - critical
-        - medium
-
-security-updates:
-  dependency-vulnerabilities:
-    auto-security-updates-limit:
-      - patch
-
-installation:
-  default-action: allow
-  audit-logging:
-    enabled: true
-  allow:
-    packages: []
-    vulnerabilities:
-      CVE-2018-18074:
-        reason: "Not exploitable — no HTTP-to-HTTPS redirects in our stack"
-  deny:
-    packages: {}
-    vulnerabilities:
-      warning-on-any-of:
-        cvss-severity: [low, medium]
-      block-on-any-of:
-        cvss-severity: [high, critical]
+safety review --file reports/safety-report.json
 ```
 
 ---
 
-## API Key & Safety Platform
+## API Key & Safety DB
 
-| Auth Method | Use Case |
-|------------|----------|
-| `safety auth login` | Development — browser OAuth, free |
-| `SAFETY_API_KEY` env var | CI/CD and production — API key |
+| Tier | DB update frequency | How to get |
+|------|---------------------|------------|
+| Free | Monthly | No key needed |
+| Commercial | Daily | [pyup.io/account/api-key/](https://pyup.io/account/api-key/) |
 
-Get an API key at [platform.safetycli.com](https://platform.safetycli.com).
+Using the API key:
+
+```bash
+# Environment variable (recommended)
+export SAFETY_API_KEY=your-key-here
+safety check -r requirements.txt
+
+# Or pass directly
+safety check --key your-key-here -r requirements.txt
+```
 
 ---
 
 ## Common Workflows
 
-### Workflow 1: Developer daily scan
+### 1. Check a requirements file
 
 ```bash
-safety auth login          # once
-safety scan --detailed-output
+safety check -r requirements.txt
 ```
 
-### Workflow 2: CI/CD pipeline scan with JSON artifact
+### 2. CI/CD with JSON report
 
 ```bash
-safety --key $SAFETY_API_KEY --stage cicd scan \
-  --policy-file .safety-policy.yml \
-  --save-as json safety-report.json
+safety check --key $SAFETY_API_KEY -r requirements.txt --json > reports/safety-report.json
 ```
 
-### Workflow 3: Auto-fix before committing
+### 3. Scan with policy file
 
 ```bash
-safety scan --apply-fixes
-git diff requirements.txt    # review changes
-git add requirements.txt && git commit -m "chore: upgrade vulnerable packages"
+safety check --policy-file .safety-policy.yml -r requirements.txt
 ```
 
-### Workflow 4: SBOM generation
+### 4. Cache database in CI
 
 ```bash
-safety --key $SAFETY_API_KEY --stage production scan \
-  --save-as spdx sbom.spdx
+safety check --cache -r requirements.txt
 ```
 
-### Workflow 5: Fail build on High/Critical only
-
-```yaml
-# .safety-policy.yml
-fail-scan-with-exit-code:
-  dependency-vulnerabilities:
-    enabled: true
-    fail-on-any-of:
-      cvss-severity: [high, critical]
-```
+### 5. Use a local (offline) database
 
 ```bash
-safety --key $SAFETY_API_KEY --stage cicd scan --policy-file .safety-policy.yml
+safety check --db /path/to/safety-db -r requirements.txt
 ```
 
 ---
@@ -496,53 +374,22 @@ safety --key $SAFETY_API_KEY --stage cicd scan --policy-file .safety-policy.yml
 
 | Code | Meaning |
 |------|---------|
-| `0` | ✅ No vulnerabilities found (or none above policy threshold) |
-| `1` | ❌ Vulnerabilities found above policy threshold |
+| `0` | ✅ No vulnerabilities found |
+| `1` | ❌ One or more vulnerabilities found |
 | `64` | ⚠️ Command-line usage error |
 | `65` | ⚠️ No packages found to scan |
-| `66` | ⚠️ Database fetch error |
-
----
-
-## Deprecated Commands
-
-| Command | Status | Use Instead |
-|---------|--------|-------------|
-| `safety check` | ❌ Deprecated (unsupported after 1 May 2024) | `safety scan` |
-| `safety license` | ❌ Deprecated | `safety scan` |
-| `safety alert` | ❌ Deprecated | Safety Platform integrations |
+| `66` | ⚠️ Failed to fetch the vulnerability database |
 
 ---
 
 ## Troubleshooting
 
-### Not authenticated
-```bash
-safety auth login           # development
-# or
-export SAFETY_API_KEY=...   # CI/CD
-```
+**Wrong environment scanned** → Pass `-r requirements.txt` explicitly.
 
-### No packages found
-```bash
-safety scan --target /path/to/your/project
-```
+**DB fetch failure** → Use `--cache` or `--db /path/to/local-db`.
 
-### Policy file errors
-```bash
-safety validate policy_file   # check syntax
-safety generate policy_file   # regenerate fresh v3 template
-```
+**False positive** → Use `--ignore <id>` or add to policy file with `reason` + `expires`.
 
-### Auto-fix didn't update everything
-`--apply-fixes` only patches `requirements.txt`. Update `pyproject.toml` / `Pipfile` manually.
+**Slow CI** → Use `--cache` to reuse the downloaded database.
 
----
-
-## Additional Resources
-
-- [Safety CLI 3 documentation](https://docs.safetycli.com)
-- [Safety Platform](https://platform.safetycli.com)
-- [Safety GitHub](https://github.com/pyupio/safety)
-- [OWASP A06: Vulnerable and Outdated Components](https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/)
-- Support: support@safetycli.com
+**API key not working** → Verify at [pyup.io/account/api-key/](https://pyup.io/account/api-key/); pass as `--key` flag.
