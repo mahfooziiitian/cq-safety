@@ -1,6 +1,6 @@
 # Safety Policy Files (v2)
 
-Safety v2 uses a **version 2.0** policy schema to configure severity thresholds, ignored CVEs, and unpinned-requirements behaviour.
+Safety v2 uses a **version 2.0** policy schema to configure severity thresholds, ignored CVEs, and scan behaviour.
 
 ---
 
@@ -23,19 +23,21 @@ safety review --file reports/safety-report.json
 
 ```yaml
 # .safety-policy.yml
+# Docs: https://docs.pyup.io/docs/safety-20-policy-files
 version: "2.0"
 
 security:
-  # Severity levels that trigger a scan failure (exit code 1)
-  cvss-severity:
-    - high
-    - critical
-    - medium
+  # Ignore vulnerabilities with CVSS score below this number (0–10).
+  # 0  = report everything (default)
+  # 4  = ignore Low; report Medium, High, Critical
+  # 7  = ignore Low & Medium; report High & Critical
+  # 9  = ignore all except Critical
+  ignore-cvss-severity-below: 0
 
-  # Treat vulnerabilities with unknown CVSS score as a failure
-  ignore-cvss-unknown-severity: false
+  # Treat vulnerabilities with unknown CVSS score as failures
+  ignore-cvss-unknown-severity: False
 
-  # Vulnerabilities to ignore — always document reason and expiry
+  # Vulnerabilities to ignore — always include reason and expiry
   ignore-vulnerabilities:
     36546:
       reason: "Not exploitable — no HTTP redirects in our deployment"
@@ -44,8 +46,9 @@ security:
       reason: "Mitigated by WAF — awaiting upstream patch"
       expires: "2025-09-01"
 
-# Treat unpinned requirements as an error
-ignore-unpinned-requirements: false
+  # Set True to suppress non-zero exit codes when vulnerabilities are found.
+  # Keep False in CI so pipelines fail on vulnerabilities.
+  continue-on-vulnerability-error: False
 ```
 
 ---
@@ -56,33 +59,35 @@ ignore-unpinned-requirements: false
 
 Must be `"2.0"` for the v2 schema.
 
-### `security.cvss-severity`
+### `security.ignore-cvss-severity-below`
 
-List of CVSS severity levels that cause a non-zero exit code.
+A numeric threshold (float, 0–10). Vulnerabilities with a CVSS score **below** this value are ignored.
 
-| Value | Description |
-|-------|-------------|
-| `critical` | CVSS score 9.0–10.0 |
-| `high` | CVSS score 7.0–8.9 |
-| `medium` | CVSS score 4.0–6.9 |
-| `low` | CVSS score 0.1–3.9 |
+| Value | Effect |
+|-------|--------|
+| `0` | Report everything (default) |
+| `4.0` | Ignore Low; report Medium, High, Critical |
+| `7.0` | Ignore Low & Medium; report High & Critical |
+| `9.0` | Report Critical only |
 
 ### `security.ignore-cvss-unknown-severity`
 
-When `true`, vulnerabilities with no CVSS score are not treated as failures.
+`False` — treat unknown-CVSS vulnerabilities as failures (recommended)  
+`True` — silently skip vulnerabilities with no CVSS score
 
 ### `security.ignore-vulnerabilities`
 
-Map of vulnerability IDs to ignore entries.
+Map of Safety vulnerability IDs to ignore entries.
 
 | Field | Required | Description |
 |-------|----------|-------------|
 | `reason` | Recommended | Why this CVE is safe to ignore |
-| `expires` | Recommended | ISO 8601 date after which the ignore should be reviewed |
+| `expires` | Recommended | ISO 8601 date (`YYYY-MM-DD`) after which the ignore should be reviewed |
 
-### `ignore-unpinned-requirements`
+### `security.continue-on-vulnerability-error`
 
-When `false` (default), Safety reports unpinned packages as a warning.
+`False` — exit with code `1` when vulnerabilities are found (recommended for CI)  
+`True` — always exit `0` even when vulnerabilities are found
 
 ---
 

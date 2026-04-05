@@ -11,13 +11,13 @@ Safety v2 uses the following exit codes, making it easy to integrate into shell 
 | `66` | ⚠️ Failed to fetch the vulnerability database |
 
 !!! tip "Controlling what causes a non-zero exit"
-    Use `security.cvss-severity` in your `.safety-policy.yml` to control which severity levels trigger a failure exit code.
+    Use `security.ignore-cvss-severity-below` in your `.safety-policy.yml` to ignore low-severity findings.
     ```yaml
     version: "2.0"
     security:
-      cvss-severity:
-        - high
-        - critical
+      ignore-cvss-severity-below: 7  # Only fail on High (7+) and Critical (9+)
+      ignore-cvss-unknown-severity: False
+      continue-on-vulnerability-error: False
     ```
 
 ---

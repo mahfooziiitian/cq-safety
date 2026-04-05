@@ -1,11 +1,25 @@
-version: "2.0"
+# Safety Security Policy File
+# Docs: https://docs.pyup.io/docs/safety-20-policy-files
+# Run `safety check --policy-file .safety-policy.yml` to use this file.
 
 security:
-  cvss-severity:
-    - high
-    - critical
-    - medium
-  ignore-cvss-unknown-severity: false
-  ignore-vulnerabilities: {}
+    # Ignore vulnerabilities with CVSS score below this threshold (0–10).
+    # 0  = report everything (default)
+    # 4  = ignore Low; report Medium, High, Critical
+    # 7  = ignore Low & Medium; report High & Critical
+    # 9  = ignore all except Critical
+    ignore-cvss-severity-below: 0
 
-ignore-unpinned-requirements: false
+    # Treat vulnerabilities with unknown CVSS score as failures.
+    ignore-cvss-unknown-severity: False
+
+    # List specific vulnerability IDs to ignore.
+    # Always include a reason and an expiry date.
+    ignore-vulnerabilities:
+        # 36546:
+        #     reason: Not exploitable — no HTTP redirects in our deployment
+        #     expires: '2025-06-30'
+
+    # Set to True to suppress non-zero exit codes when vulnerabilities are found.
+    # Keep False in CI so pipelines fail on vulnerabilities.
+    continue-on-vulnerability-error: False

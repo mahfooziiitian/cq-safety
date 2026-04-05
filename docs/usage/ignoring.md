@@ -35,16 +35,13 @@ Then configure ignores under `security.ignore-vulnerabilities`:
 version: "2.0"
 
 security:
-  cvss-severity:
-    - high
-    - critical
-  ignore-cvss-unknown-severity: false
+  ignore-cvss-severity-below: 0        # 0=all, 4=medium+, 7=high+, 9=critical only
+  ignore-cvss-unknown-severity: False
   ignore-vulnerabilities:
     36546:
       reason: "Not exploitable — our app does not follow HTTP redirects"
       expires: "2025-06-30"
-
-ignore-unpinned-requirements: false
+  continue-on-vulnerability-error: False
 ```
 
 Apply the policy:

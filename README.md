@@ -211,15 +211,13 @@ safety check --ignore 36546 --ignore 40291 -r requirements.txt
 version: "2.0"
 
 security:
-  cvss-severity:
-    - high
-    - critical
+  ignore-cvss-severity-below: 7   # 7=ignore Low & Medium; fail on High & Critical
+  ignore-cvss-unknown-severity: False
   ignore-vulnerabilities:
     36546:
       reason: "Not exploitable — no HTTP redirects in our deployment"
       expires: "2025-06-30"
-
-ignore-unpinned-requirements: false
+  continue-on-vulnerability-error: False
 ```
 
 ```bash
@@ -283,23 +281,21 @@ safety check --key $(SAFETY_API_KEY) --json -r requirements.txt > reports/safety
 version: "2.0"
 
 security:
-  # Severity levels that cause exit code 1
-  cvss-severity:
-    - high
-    - critical
-    - medium
+  # Ignore vulnerabilities with CVSS score below this number (0–10)
+  # 0=all, 4=medium+, 7=high+, 9=critical only
+  ignore-cvss-severity-below: 0
 
-  # Whether unknown CVSS scores cause a failure
-  ignore-cvss-unknown-severity: false
+  # Treat unknown CVSS scores as failures
+  ignore-cvss-unknown-severity: False
 
-  # CVEs to ignore (document reason + expiry)
+  # CVEs to ignore (always include reason + expiry)
   ignore-vulnerabilities:
     36546:
       reason: "Not exploitable — no HTTP redirects in our deployment"
       expires: "2025-06-30"
 
-# Treat unpinned requirements as an error
-ignore-unpinned-requirements: false
+  # Keep False so CI fails on vulnerabilities
+  continue-on-vulnerability-error: False
 ```
 
 Generate a policy file:
