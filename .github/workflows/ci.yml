@@ -62,8 +62,9 @@ jobs:
         run: |
           uv run safety check \
             --key "$SAFETY_API_KEY" \
-            -r requirements.txt \
-            --json > reports/safety-report.json
+            --policy-file .safety-policy.yml \
+            --full-report \
+            --save-json reports/safety-report.json
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 

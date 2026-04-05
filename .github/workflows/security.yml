@@ -53,15 +53,12 @@ jobs:
       - name: Run Safety check
         id: safety
         run: |
+          # Scan the installed environment (no requirements.txt — project uses pyproject.toml + uv)
           uv run safety check \
             --key "$SAFETY_API_KEY" \
-            -r requirements.txt \
             --policy-file .safety-policy.yml \
-            --full-report
-          uv run safety check \
-            --key "$SAFETY_API_KEY" \
-            -r requirements.txt \
-            --json > reports/safety-report.json
+            --full-report \
+            --save-json reports/safety-report.json
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 
@@ -84,7 +81,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "To investigate:" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
-          echo "safety check --full-report -r requirements.txt" >> $GITHUB_STEP_SUMMARY
+          echo "make scan" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Write success summary
