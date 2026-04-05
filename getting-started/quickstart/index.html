@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#quick-start" class="md-skip">
+        <a href="#quickstart" class="md-skip">
           Skip to content
         </a>
       
@@ -546,10 +546,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-install-safety" class="md-nav__link">
+  <a href="#step-1-authenticate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Install Safety
+        Step 1 — Authenticate
       
     </span>
   </a>
@@ -557,10 +557,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-run-safety-check" class="md-nav__link">
+  <a href="#step-2-run-your-first-scan" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Run safety check
+        Step 2 — Run Your First Scan
       
     </span>
   </a>
@@ -568,10 +568,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-check-a-requirements-file" class="md-nav__link">
+  <a href="#step-3-detailed-output" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Check a Requirements File
+        Step 3 — Detailed Output
       
     </span>
   </a>
@@ -579,10 +579,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-read-the-output" class="md-nav__link">
+  <a href="#step-4-read-the-output" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Read the Output
+        Step 4 — Read the Output
       
     </span>
   </a>
@@ -590,13 +590,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-fix-vulnerabilities" class="md-nav__link">
+  <a href="#step-5-auto-fix-or-manual-fix" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Fix Vulnerabilities
+        Step 5 — Auto-Fix or Manual Fix
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Step 5 — Auto-Fix or Manual Fix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-fix-recommended-for-patch-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-fix (recommended for patch updates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual fix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1106,10 +1134,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-install-safety" class="md-nav__link">
+  <a href="#step-1-authenticate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Install Safety
+        Step 1 — Authenticate
       
     </span>
   </a>
@@ -1117,10 +1145,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-run-safety-check" class="md-nav__link">
+  <a href="#step-2-run-your-first-scan" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Run safety check
+        Step 2 — Run Your First Scan
       
     </span>
   </a>
@@ -1128,10 +1156,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-check-a-requirements-file" class="md-nav__link">
+  <a href="#step-3-detailed-output" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Check a Requirements File
+        Step 3 — Detailed Output
       
     </span>
   </a>
@@ -1139,10 +1167,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-read-the-output" class="md-nav__link">
+  <a href="#step-4-read-the-output" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Read the Output
+        Step 4 — Read the Output
       
     </span>
   </a>
@@ -1150,13 +1178,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-fix-vulnerabilities" class="md-nav__link">
+  <a href="#step-5-auto-fix-or-manual-fix" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Fix Vulnerabilities
+        Step 5 — Auto-Fix or Manual Fix
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Step 5 — Auto-Fix or Manual Fix">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#auto-fix-recommended-for-patch-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auto-fix (recommended for patch updates)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-fix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual fix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1180,57 +1236,79 @@
   
 
 
-<h1 id="quick-start">Quick Start</h1>
-<h2 id="1-install-safety">1. Install Safety</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>safety
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># or with uv:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>uv<span class="w"> </span>add<span class="w"> </span>--dev<span class="w"> </span>safety
+<h1 id="quickstart">Quickstart</h1>
+<p>Get up and running with Safety CLI 3 in five steps.</p>
+<hr />
+<h2 id="step-1-authenticate">Step 1 — Authenticate</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>login
+</code></pre></div>
+<p>This opens a browser tab to <a href="https://platform.safetycli.com">platform.safetycli.com</a>. Log in with your account. The CLI stores a local token.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Verify authentication succeeded</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>safety<span class="w"> </span>auth<span class="w"> </span>status
 </code></pre></div>
 <hr />
-<h2 id="2-run-safety-check">2. Run <code>safety check</code></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Scan currently installed packages</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>safety<span class="w"> </span>check
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Scan a requirements file</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Scan from pip freeze output</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>pip<span class="w"> </span>freeze<span class="w"> </span><span class="p">|</span><span class="w"> </span>safety<span class="w"> </span>check<span class="w"> </span>--stdin
+<h2 id="step-2-run-your-first-scan">Step 2 — Run Your First Scan</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>safety<span class="w"> </span>scan
 </code></pre></div>
-<p>Safety checks your packages against a curated database of known CVEs.</p>
+<p>Safety inventories all packages in the current Python environment and checks them against the Safety Vulnerability Database.</p>
 <hr />
-<h2 id="3-check-a-requirements-file">3. Check a Requirements File</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<h2 id="step-3-detailed-output">Step 3 — Detailed Output</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--detailed-output
 </code></pre></div>
-<p>You can pass multiple files:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>-r<span class="w"> </span>requirements-dev.txt
-</code></pre></div>
+<p>Shows the full description, CVE IDs, CVSS scores, affected versions, and fix recommendations for each finding.</p>
 <hr />
-<h2 id="4-read-the-output">4. Read the Output</h2>
-<p><strong>No vulnerabilities found:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>No known security vulnerabilities found.
-</code></pre></div>
-<p><strong>Vulnerability detected:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>+==============================================================================+
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>| REPORT                                                                       |
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>| checked 42 packages, using free DB (updated once a month)                   |
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>+============================+===========+==========================+==========+
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>| package                    | installed | affected                 | ID       |
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>+============================+===========+==========================+==========+
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>| requests                   | 2.19.1    | &lt;2.20.0                  | 36546    |
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>+============================+===========+==========================+==========+
-</code></pre></div>
-<p>See <a href="../../usage/output-formats/">Output Formats</a> for JSON and bare options.</p>
+<h2 id="step-4-read-the-output">Step 4 — Read the Output</h2>
+<p>The scan output shows:</p>
+<ul>
+<li><strong>Package name</strong> and installed version</li>
+<li><strong>Vulnerability ID</strong> (CVE or Safety ID)</li>
+<li><strong>CVSS severity</strong> (critical / high / medium / low / info)</li>
+<li><strong>Fixed version</strong> (the minimum safe version)</li>
+<li><strong>Description</strong> (with <code>--detailed-output</code>)</li>
+</ul>
+<p><strong>Exit codes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>No actionable vulnerabilities</td>
+</tr>
+<tr>
+<td><code>64</code></td>
+<td>Vulnerabilities found above policy threshold</td>
+</tr>
+<tr>
+<td><code>65</code></td>
+<td>Configuration or policy error</td>
+</tr>
+<tr>
+<td><code>66</code></td>
+<td>Database unreachable</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="5-fix-vulnerabilities">5. Fix Vulnerabilities</h2>
-<p>Upgrade the vulnerable package:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>requests
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># or with uv:</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;requests&gt;=2.20.0&quot;</span>
+<h2 id="step-5-auto-fix-or-manual-fix">Step 5 — Auto-Fix or Manual Fix</h2>
+<h3 id="auto-fix-recommended-for-patch-updates">Auto-fix (recommended for patch updates)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--apply-fixes
 </code></pre></div>
-<p>Then re-run the scan to confirm the issue is resolved:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<p>Safety updates <code>pyproject.toml</code> or <code>requirements.txt</code> to the minimum safe version. Then regenerate your lock file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>uv<span class="w"> </span>lock
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># or</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>pip-compile
 </code></pre></div>
+<h3 id="manual-fix">Manual fix</h3>
+<p>Update the vulnerable package in your dependency file and regenerate the lock:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;somepackage&gt;=2.1.0&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>uv<span class="w"> </span>lock
+</code></pre></div>
+<p>Review and commit the changes.</p>
 
 
 

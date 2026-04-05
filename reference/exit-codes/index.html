@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -981,10 +981,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#shell-script-example" class="md-nav__link">
+  <a href="#codes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Shell Script Example
+        Codes
       
     </span>
   </a>
@@ -992,10 +992,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#makefile-integration" class="md-nav__link">
+  <a href="#policy-controlled-thresholds" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Makefile Integration
+        Policy-Controlled Thresholds
       
     </span>
   </a>
@@ -1003,10 +1003,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#github-actions-fail-on-vulnerabilities" class="md-nav__link">
+  <a href="#shell-script-examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GitHub Actions — Fail on Vulnerabilities
+        Shell Script Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shell Script Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fail-on-critical-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fail on critical only
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#makefile-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Makefile Examples
       
     </span>
   </a>
@@ -1084,10 +1123,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#shell-script-example" class="md-nav__link">
+  <a href="#codes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Shell Script Example
+        Codes
       
     </span>
   </a>
@@ -1095,10 +1134,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#makefile-integration" class="md-nav__link">
+  <a href="#policy-controlled-thresholds" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Makefile Integration
+        Policy-Controlled Thresholds
       
     </span>
   </a>
@@ -1106,10 +1145,49 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#github-actions-fail-on-vulnerabilities" class="md-nav__link">
+  <a href="#shell-script-examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        GitHub Actions — Fail on Vulnerabilities
+        Shell Script Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shell Script Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fail-on-critical-only" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fail on critical only
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#makefile-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Makefile Examples
       
     </span>
   </a>
@@ -1137,82 +1215,107 @@
 
 
 <h1 id="exit-codes">Exit Codes</h1>
-<p>Safety v2 uses the following exit codes, making it easy to integrate into shell scripts and CI/CD pipelines.</p>
+<p>Safety CLI 3 uses specific exit codes to communicate scan results to calling processes.</p>
+<h2 id="codes">Codes</h2>
 <table>
 <thead>
 <tr>
 <th>Code</th>
+<th>Name</th>
 <th>Meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>0</code></td>
-<td>✅ No vulnerabilities found</td>
+<td>Success</td>
+<td>Scan passed — no actionable vulnerabilities above threshold</td>
 </tr>
 <tr>
 <td><code>1</code></td>
-<td>❌ One or more vulnerabilities found</td>
+<td>Error</td>
+<td>Unexpected error occurred</td>
 </tr>
 <tr>
 <td><code>64</code></td>
-<td>⚠️ Command-line usage error</td>
+<td>Vulnerabilities found</td>
+<td>One or more vulnerabilities exceed the policy threshold</td>
 </tr>
 <tr>
 <td><code>65</code></td>
-<td>⚠️ No packages found to scan</td>
+<td>Configuration error</td>
+<td>Policy file or scan configuration is invalid</td>
 </tr>
 <tr>
 <td><code>66</code></td>
-<td>⚠️ Failed to fetch the vulnerability database</td>
+<td>Database unreachable</td>
+<td>Unable to connect to the Safety vulnerability database</td>
 </tr>
 </tbody>
 </table>
-<div class="admonition tip">
-<p class="admonition-title">Controlling what causes a non-zero exit</p>
-<p>Use <code>security.ignore-cvss-severity-below</code> in your <code>.safety-policy.yml</code> to ignore low-severity findings.
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.0&quot;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">security</span><span class="p">:</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">ignore-cvss-severity-below</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7</span><span class="w">  </span><span class="c1"># Only fail on High (7+) and Critical (9+)</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span><span class="nt">ignore-cvss-unknown-severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">continue-on-vulnerability-error</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
-</code></pre></div></p>
-</div>
 <hr />
-<h2 id="shell-script-example">Shell Script Example</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="ch">#!/bin/bash</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">set</span><span class="w"> </span>-e
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>safety<span class="w"> </span>check<span class="w"> </span>--key<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SAFETY_API_KEY</span><span class="s2">&quot;</span><span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>--policy-file<span class="w"> </span>.safety-policy.yml
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nv">EXIT_CODE</span><span class="o">=</span><span class="nv">$?</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">case</span><span class="w"> </span><span class="nv">$EXIT_CODE</span><span class="w"> </span><span class="k">in</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">  </span><span class="m">0</span><span class="o">)</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ No vulnerabilities found.&quot;</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">;;</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="m">1</span><span class="o">)</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ Vulnerabilities detected — aborting deployment.&quot;</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="p">;;</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">  </span><span class="m">66</span><span class="o">)</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  Could not reach Safety DB. Check network connectivity.&quot;</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="p">;;</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="k">esac</span>
+<h2 id="policy-controlled-thresholds">Policy-Controlled Thresholds</h2>
+<p>The <code>fail-scan-with-exit-code</code> section in your policy file controls when exit code <code>64</code> is triggered:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">fail-scan-with-exit-code</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">fail-on-any-of</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">      </span><span class="nt">cvss-severity</span><span class="p">:</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span><span class="nt">exploitability</span><span class="p">:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+</code></pre></div>
+<p>To allow the scan to always succeed (for reporting-only pipelines):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">fail-scan-with-exit-code</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div>
 <hr />
-<h2 id="makefile-integration">Makefile Integration</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">security</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nf">security</span><span class="o">:</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="err">@safety</span><span class="w"> </span><span class="err">check</span><span class="w"> </span><span class="err">--key</span><span class="w"> </span><span class="s2">&quot;$(SAFETY_API_KEY)&quot;</span><span class="w"> </span><span class="err">-r</span><span class="w"> </span><span class="err">requirements.txt</span><span class="w"> </span><span class="err">||</span><span class="w"> </span><span class="err">(echo</span><span class="w"> </span><span class="s2">&quot;Security check failed&quot;</span><span class="err">;</span><span class="w"> </span><span class="err">exit</span><span class="w"> </span><span class="err">1)</span>
+<h2 id="shell-script-examples">Shell Script Examples</h2>
+<h3 id="basic-check">Basic check</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>safety<span class="w"> </span>scan
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nv">EXIT_CODE</span><span class="o">=</span><span class="nv">$?</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="k">case</span><span class="w"> </span><span class="nv">$EXIT_CODE</span><span class="w"> </span><span class="k">in</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="m">0</span><span class="o">)</span><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ No vulnerabilities found&quot;</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="m">64</span><span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ Vulnerabilities found — review required&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">64</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="m">65</span><span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  Policy error — check .safety-policy.yml&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">65</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="m">66</span><span class="o">)</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;⚠️  Database unreachable — check connectivity&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">66</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span>*<span class="o">)</span><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;❌ Unexpected error (exit code: </span><span class="nv">$EXIT_CODE</span><span class="s2">)&quot;</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="nv">$EXIT_CODE</span><span class="w"> </span><span class="p">;;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="k">esac</span>
+</code></pre></div>
+<h3 id="fail-on-critical-only">Fail on critical only</h3>
+<p>Set your policy to only fail on critical:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">fail-scan-with-exit-code</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">fail-on-any-of</span><span class="p">:</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">cvss-severity</span><span class="p">:</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--policy-file<span class="w"> </span>.safety-policy-critical-only.yml<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="nv">$?</span>
 </code></pre></div>
 <hr />
-<h2 id="github-actions-fail-on-vulnerabilities">GitHub Actions — Fail on Vulnerabilities</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Safety check</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safety check --key $SAFETY_API_KEY -r requirements.txt</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">env</span><span class="p">:</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">SAFETY_API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.SAFETY_API_KEY }}</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="c1"># Step fails automatically when exit code is non-zero</span>
+<h2 id="makefile-examples">Makefile Examples</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nf">scan</span><span class="o">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="err">uv</span><span class="w"> </span><span class="err">run</span><span class="w"> </span><span class="err">safety</span><span class="w"> </span><span class="err">scan</span><span class="w"> </span><span class="err">--detailed-output</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nf">scan-ci</span><span class="o">:</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="err">uv</span><span class="w"> </span><span class="err">run</span><span class="w"> </span><span class="err">safety</span><span class="w"> </span><span class="err">--key</span><span class="w"> </span><span class="k">$(</span><span class="nv">SAFETY_API_KEY</span><span class="k">)</span><span class="w"> </span><span class="err">--stage</span><span class="w"> </span><span class="err">cicd</span><span class="w"> </span><span class="err">scan</span><span class="w"> </span><span class="err">\</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="err">--policy-file</span><span class="w"> </span><span class="err">.safety-policy.yml</span><span class="w"> </span><span class="err">\</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="err">--save-as</span><span class="w"> </span><span class="err">json</span><span class="w"> </span><span class="err">reports/safety-report.json</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="nf">scan-strict</span><span class="o">:</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="err">@uv</span><span class="w"> </span><span class="err">run</span><span class="w"> </span><span class="err">safety</span><span class="w"> </span><span class="err">scan</span><span class="w"> </span><span class="err">--policy-file</span><span class="w"> </span><span class="err">.safety-policy-strict.yml;</span><span class="w"> </span><span class="err">\</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="nv">CODE</span><span class="o">=</span><span class="nv">$$</span>?<span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="cp">if [ $$CODE -eq 64 ]; then \</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="cp">echo &quot;Vulnerabilities found — check reports/&quot;; \</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="cp">exit 64; \</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="cp">fi</span>
 </code></pre></div>
 
 

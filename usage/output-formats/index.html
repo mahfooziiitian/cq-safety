@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -663,10 +663,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#default-human-readable-table" class="md-nav__link">
+  <a href="#formats" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Default (Human-readable Table)
+        Formats
       
     </span>
   </a>
@@ -674,10 +674,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#full-report" class="md-nav__link">
+  <a href="#screen-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Full Report
+        Screen Format
       
     </span>
   </a>
@@ -685,33 +685,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#short-report" class="md-nav__link">
+  <a href="#json-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Short Report
+        JSON Format
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#json" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        JSON
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="JSON">
+    <nav class="md-nav" aria-label="JSON Format">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#parsing-in-python" class="md-nav__link">
+  <a href="#v3-json-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parsing in Python
+        v3 JSON structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-parsing-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python parsing example
       
     </span>
   </a>
@@ -724,10 +724,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bare" class="md-nav__link">
+  <a href="#html-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bare
+        HTML Format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#text-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Text Format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spdx-format-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SPDX Format (SBOM)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-multiple-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saving Multiple Formats
       
     </span>
   </a>
@@ -1123,10 +1156,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#default-human-readable-table" class="md-nav__link">
+  <a href="#formats" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Default (Human-readable Table)
+        Formats
       
     </span>
   </a>
@@ -1134,10 +1167,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#full-report" class="md-nav__link">
+  <a href="#screen-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Full Report
+        Screen Format
       
     </span>
   </a>
@@ -1145,33 +1178,33 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#short-report" class="md-nav__link">
+  <a href="#json-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Short Report
+        JSON Format
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#json" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        JSON
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="JSON">
+    <nav class="md-nav" aria-label="JSON Format">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#parsing-in-python" class="md-nav__link">
+  <a href="#v3-json-structure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Parsing in Python
+        v3 JSON structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-parsing-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python parsing example
       
     </span>
   </a>
@@ -1184,10 +1217,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bare" class="md-nav__link">
+  <a href="#html-format" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bare
+        HTML Format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#text-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Text Format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spdx-format-sbom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SPDX Format (SBOM)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#saving-multiple-formats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Saving Multiple Formats
       
     </span>
   </a>
@@ -1215,74 +1281,124 @@
 
 
 <h1 id="output-formats">Output Formats</h1>
-<p>Safety v2 supports four output formats.</p>
+<p>Safety CLI 3 supports five output formats, specified with <code>--output</code>:</p>
 <hr />
-<h2 id="default-human-readable-table">Default (Human-readable Table)</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</code></pre></div>
-<p>Output:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>+==============================================================================+
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>| REPORT                                                                       |
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>| checked 42 packages, using free DB (updated once a month)                   |
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>+============================+===========+==========================+==========+
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>| package                    | installed | affected                 | ID       |
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>+============================+===========+==========================+==========+
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>| requests                   | 2.19.1    | &lt;2.20.0                  | 36546    |
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>+============================+===========+==========================+==========+
-</code></pre></div>
+<h2 id="formats">Formats</h2>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Flag</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>screen</code></td>
+<td><code>--output screen</code></td>
+<td>Human-readable terminal output (default)</td>
+</tr>
+<tr>
+<td><code>json</code></td>
+<td><code>--output json</code></td>
+<td>Machine-readable, CI pipelines, scripting</td>
+</tr>
+<tr>
+<td><code>html</code></td>
+<td><code>--output html</code></td>
+<td>Reports for stakeholders and archiving</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>--output text</code></td>
+<td>Plain text logs and email reports</td>
+</tr>
+<tr>
+<td><code>spdx</code></td>
+<td><code>--output spdx</code></td>
+<td>Software Bill of Materials (SBOM)</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="full-report">Full Report</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--full-report<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</code></pre></div>
-<p>Includes the full advisory text for each vulnerability.</p>
-<hr />
-<h2 id="short-report">Short Report</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--short-report<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</code></pre></div>
-<p>Shows a condensed one-line summary per vulnerability.</p>
-<hr />
-<h2 id="json">JSON</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--json<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># or save to a file</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>safety<span class="w"> </span>check<span class="w"> </span>--json<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>&gt;<span class="w"> </span>safety-report.json
-</code></pre></div>
-<p>Best for CI/CD pipelines and programmatic processing.</p>
-<p>v2 JSON output is a <strong>list of lists</strong>. Each inner list has the structure:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>[package_name, affected_range, installed_version, advisory_text, vuln_id]
-</code></pre></div>
-<p>Example:
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">[</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="p">[</span>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="s2">&quot;requests&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="s2">&quot;&lt;2.20.0&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="s2">&quot;2.19.1&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="s2">&quot;Requests before 2.20.0 sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect...&quot;</span><span class="p">,</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="s2">&quot;36546&quot;</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="p">]</span>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="p">]</span>
-</code></pre></div></p>
-<h3 id="parsing-in-python">Parsing in Python</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="p">[</span><span class="s2">&quot;safety&quot;</span><span class="p">,</span> <span class="s2">&quot;check&quot;</span><span class="p">,</span> <span class="s2">&quot;--json&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="s2">&quot;requirements.txt&quot;</span><span class="p">],</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>    <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>   <span class="c1"># exit code 1 on vulnerabilities — handle manually</span>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="p">)</span>
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="n">vulnerabilities</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="k">for</span> <span class="n">vuln</span> <span class="ow">in</span> <span class="n">vulnerabilities</span><span class="p">:</span>
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="n">package_name</span><span class="p">,</span> <span class="n">affected_range</span><span class="p">,</span> <span class="n">installed_version</span><span class="p">,</span> <span class="n">advisory</span><span class="p">,</span> <span class="n">vuln_id</span> <span class="o">=</span> <span class="n">vuln</span>
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">package_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">installed_version</span><span class="si">}</span><span class="s2"> — </span><span class="si">{</span><span class="n">vuln_id</span><span class="si">}</span><span class="s2"> (affected: </span><span class="si">{</span><span class="n">affected_range</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<h2 id="screen-format">Screen Format</h2>
+<p>The default output format. Renders a structured, coloured report in the terminal:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>screen
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># or simply:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>safety<span class="w"> </span>scan
 </code></pre></div>
 <hr />
-<h2 id="bare">Bare</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--bare<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<h2 id="json-format">JSON Format</h2>
+<p>Outputs a JSON object to stdout:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>json
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>json<span class="w"> </span>&gt;<span class="w"> </span>reports/safety.json
 </code></pre></div>
-<p>Outputs only the names of vulnerable packages, one per line. Useful for piping into other tools:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--bare<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Vulnerable:&quot;</span>
+<h3 id="v3-json-structure">v3 JSON structure</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">&quot;vulnerabilities&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">&quot;package_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;requests&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="nt">&quot;installed_version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2.28.0&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">      </span><span class="nt">&quot;vulnerability_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;CVE-2023-32681&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">&quot;severity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="nt">&quot;cvss_v3&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">6.1</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="p">},</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">      </span><span class="nt">&quot;fixed_versions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;2.31.0&quot;</span><span class="p">],</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="nt">&quot;advisory&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Requests has a vulnerability...&quot;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="p">],</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nt">&quot;scan_metadata&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="nt">&quot;scan_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;abc123&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2024-01-15T10:00:00Z&quot;</span><span class="p">,</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">    </span><span class="nt">&quot;packages_scanned&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="nt">&quot;vulnerabilities_found&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="p">}</span>
 </code></pre></div>
+<h3 id="python-parsing-example">Python parsing example</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="p">[</span><span class="s2">&quot;safety&quot;</span><span class="p">,</span> <span class="s2">&quot;scan&quot;</span><span class="p">,</span> <span class="s2">&quot;--output&quot;</span><span class="p">,</span> <span class="s2">&quot;json&quot;</span><span class="p">],</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="k">for</span> <span class="n">vuln</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vulnerabilities&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">vuln</span><span class="p">[</span><span class="s1">&#39;package_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">vuln</span><span class="p">[</span><span class="s1">&#39;installed_version&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  CVE: </span><span class="si">{</span><span class="n">vuln</span><span class="p">[</span><span class="s1">&#39;vulnerability_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  CVSS: </span><span class="si">{</span><span class="n">vuln</span><span class="p">[</span><span class="s1">&#39;severity&#39;</span><span class="p">][</span><span class="s1">&#39;cvss_v3&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Fix: upgrade to </span><span class="si">{</span><span class="n">vuln</span><span class="p">[</span><span class="s1">&#39;fixed_versions&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="html-format">HTML Format</h2>
+<p>Generates a self-contained HTML report:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>html<span class="w"> </span>--save-as<span class="w"> </span>html<span class="w"> </span>reports/safety.html
+</code></pre></div>
+<p>Open <code>reports/safety.html</code> in a browser to view the interactive report.</p>
+<hr />
+<h2 id="text-format">Text Format</h2>
+<p>Plain text output suitable for logs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>text
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>text<span class="w"> </span>&gt;&gt;<span class="w"> </span>security.log
+</code></pre></div>
+<hr />
+<h2 id="spdx-format-sbom">SPDX Format (SBOM)</h2>
+<p>Generates an <a href="https://spdx.dev/">SPDX</a> Software Bill of Materials:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>spdx
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>spdx<span class="w"> </span>--save-as<span class="w"> </span>spdx<span class="w"> </span>reports/sbom.spdx
+</code></pre></div>
+<hr />
+<h2 id="saving-multiple-formats">Saving Multiple Formats</h2>
+<p>Use <code>--save-as</code> (repeatable) to save multiple formats simultaneously while still controlling what is displayed to stdout with <code>--output</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>safety<span class="w"> </span>scan<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span>--save-as<span class="w"> </span>json<span class="w"> </span>reports/safety.json<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span>--save-as<span class="w"> </span>html<span class="w"> </span>reports/safety.html<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span>--output<span class="w"> </span>screen
+</code></pre></div>
+<p>This saves a JSON report and HTML report to files, while printing the screen format to stdout.</p>
 
 
 

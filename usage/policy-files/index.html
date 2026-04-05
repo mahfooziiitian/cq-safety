@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#safety-policy-files-v2" class="md-skip">
+        <a href="#policy-files" class="md-skip">
           Skip to content
         </a>
       
@@ -719,10 +719,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#generate-a-policy-file" class="md-nav__link">
+  <a href="#generate-and-validate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Generate a Policy File
+        Generate and Validate
       
     </span>
   </a>
@@ -730,10 +730,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#full-v2-policy-file-reference" class="md-nav__link">
+  <a href="#full-v3-schema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Full v2 Policy File Reference
+        Full v3 Schema
       
     </span>
   </a>
@@ -741,22 +741,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#schema-reference" class="md-nav__link">
+  <a href="#key-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Schema Reference
+        Key Reference
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Schema Reference">
+    <nav class="md-nav" aria-label="Key Reference">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#version" class="md-nav__link">
+  <a href="#scanning-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        version
+        scanning-settings
       
     </span>
   </a>
@@ -764,10 +764,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securityignore-cvss-severity-below" class="md-nav__link">
+  <a href="#reportdependency-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.ignore-cvss-severity-below
+        report.dependency-vulnerabilities
       
     </span>
   </a>
@@ -775,10 +775,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securityignore-cvss-unknown-severity" class="md-nav__link">
+  <a href="#fail-scan-with-exit-codedependency-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.ignore-cvss-unknown-severity
+        fail-scan-with-exit-code.dependency-vulnerabilities
       
     </span>
   </a>
@@ -786,10 +786,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securityignore-vulnerabilities" class="md-nav__link">
+  <a href="#security-updatesdependency-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.ignore-vulnerabilities
+        security-updates.dependency-vulnerabilities
       
     </span>
   </a>
@@ -797,10 +797,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securitycontinue-on-vulnerability-error" class="md-nav__link">
+  <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.continue-on-vulnerability-error
+        installation
       
     </span>
   </a>
@@ -813,10 +813,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-the-policy-file" class="md-nav__link">
+  <a href="#example-strict-production-policy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Using the Policy File
+        Example: Strict Production Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v2-v3-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2 → v3 Migration
       
     </span>
   </a>
@@ -1156,10 +1167,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#generate-a-policy-file" class="md-nav__link">
+  <a href="#generate-and-validate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Generate a Policy File
+        Generate and Validate
       
     </span>
   </a>
@@ -1167,10 +1178,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#full-v2-policy-file-reference" class="md-nav__link">
+  <a href="#full-v3-schema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Full v2 Policy File Reference
+        Full v3 Schema
       
     </span>
   </a>
@@ -1178,22 +1189,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#schema-reference" class="md-nav__link">
+  <a href="#key-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Schema Reference
+        Key Reference
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Schema Reference">
+    <nav class="md-nav" aria-label="Key Reference">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#version" class="md-nav__link">
+  <a href="#scanning-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        version
+        scanning-settings
       
     </span>
   </a>
@@ -1201,10 +1212,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securityignore-cvss-severity-below" class="md-nav__link">
+  <a href="#reportdependency-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.ignore-cvss-severity-below
+        report.dependency-vulnerabilities
       
     </span>
   </a>
@@ -1212,10 +1223,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securityignore-cvss-unknown-severity" class="md-nav__link">
+  <a href="#fail-scan-with-exit-codedependency-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.ignore-cvss-unknown-severity
+        fail-scan-with-exit-code.dependency-vulnerabilities
       
     </span>
   </a>
@@ -1223,10 +1234,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securityignore-vulnerabilities" class="md-nav__link">
+  <a href="#security-updatesdependency-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.ignore-vulnerabilities
+        security-updates.dependency-vulnerabilities
       
     </span>
   </a>
@@ -1234,10 +1245,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#securitycontinue-on-vulnerability-error" class="md-nav__link">
+  <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        security.continue-on-vulnerability-error
+        installation
       
     </span>
   </a>
@@ -1250,10 +1261,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#using-the-policy-file" class="md-nav__link">
+  <a href="#example-strict-production-policy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Using the Policy File
+        Example: Strict Production Policy
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#v2-v3-migration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v2 → v3 Migration
       
     </span>
   </a>
@@ -1280,122 +1302,284 @@
   
 
 
-<h1 id="safety-policy-files-v2">Safety Policy Files (v2)</h1>
-<p>Safety v2 uses a <strong>version 2.0</strong> policy schema to configure severity thresholds, ignored CVEs, and scan behaviour.</p>
+<h1 id="policy-files">Policy Files</h1>
+<p>Safety CLI 3 uses a YAML policy file (default: <code>.safety-policy.yml</code>) to configure scan behaviour, reporting, and failure thresholds.</p>
 <hr />
-<h2 id="generate-a-policy-file">Generate a Policy File</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>generate<span class="w"> </span>policy_file
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Creates .safety-policy.yml in the current directory</span>
-</code></pre></div>
-<p>Review an existing JSON report:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>safety<span class="w"> </span>review<span class="w"> </span>--file<span class="w"> </span>reports/safety-report.json
-</code></pre></div>
-<hr />
-<h2 id="full-v2-policy-file-reference">Full v2 Policy File Reference</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># .safety-policy.yml</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># Docs: https://docs.pyup.io/docs/safety-20-policy-files</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.0&quot;</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="nt">security</span><span class="p">:</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span><span class="c1"># Ignore vulnerabilities with CVSS score below this number (0–10).</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="c1"># 0  = report everything (default)</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">  </span><span class="c1"># 4  = ignore Low; report Medium, High, Critical</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="c1"># 7  = ignore Low &amp; Medium; report High &amp; Critical</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="c1"># 9  = ignore all except Critical</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">ignore-cvss-severity-below</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="c1"># Treat vulnerabilities with unknown CVSS score as failures</span>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nt">ignore-cvss-unknown-severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">  </span><span class="c1"># Vulnerabilities to ignore — always include reason and expiry</span>
-<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">  </span><span class="nt">ignore-vulnerabilities</span><span class="p">:</span>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="nt">36546</span><span class="p">:</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Not</span><span class="nv"> </span><span class="s">exploitable</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">no</span><span class="nv"> </span><span class="s">HTTP</span><span class="nv"> </span><span class="s">redirects</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">deployment&quot;</span>
-<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">      </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-06-30&quot;</span>
-<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="nt">40291</span><span class="p">:</span>
-<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Mitigated</span><span class="nv"> </span><span class="s">by</span><span class="nv"> </span><span class="s">WAF</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">awaiting</span><span class="nv"> </span><span class="s">upstream</span><span class="nv"> </span><span class="s">patch&quot;</span>
-<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">      </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-09-01&quot;</span>
-<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>
-<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">  </span><span class="c1"># Set True to suppress non-zero exit codes when vulnerabilities are found.</span>
-<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="w">  </span><span class="c1"># Keep False in CI so pipelines fail on vulnerabilities.</span>
-<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">  </span><span class="nt">continue-on-vulnerability-error</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">False</span>
+<h2 id="generate-and-validate">Generate and Validate</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Generate a default policy file</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>safety<span class="w"> </span>generate<span class="w"> </span>policy_file
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Creates .safety-policy.yml in the current directory</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1"># Validate the policy file</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>safety<span class="w"> </span>validate<span class="w"> </span>policy_file
 </code></pre></div>
 <hr />
-<h2 id="schema-reference">Schema Reference</h2>
-<h3 id="version"><code>version</code></h3>
-<p>Must be <code>"2.0"</code> for the v2 schema.</p>
-<h3 id="securityignore-cvss-severity-below"><code>security.ignore-cvss-severity-below</code></h3>
-<p>A numeric threshold (float, 0–10). Vulnerabilities with a CVSS score <strong>below</strong> this value are ignored.</p>
+<h2 id="full-v3-schema">Full v3 Schema</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.0&#39;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">scanning-settings</span><span class="p">:</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">max-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">exclude</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span><span class="nt">include-files</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">system</span><span class="p">:</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="nt">report</span><span class="p">:</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="nt">auto-ignore-in-report</span><span class="p">:</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">      </span><span class="nt">python</span><span class="p">:</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="nt">environment-results</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="nt">unpinned-requirements</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">      </span><span class="nt">cvss-severity</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="nt">fail-scan-with-exit-code</span><span class="p">:</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">    </span><span class="nt">fail-on-any-of</span><span class="p">:</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">      </span><span class="nt">cvss-severity</span><span class="p">:</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="w">      </span><span class="nt">exploitability</span><span class="p">:</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="nt">security-updates</span><span class="p">:</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">    </span><span class="nt">auto-security-updates-limit</span><span class="p">:</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">patch</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="nt">installation</span><span class="p">:</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">  </span><span class="nt">default-action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">allow</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="w">  </span><span class="nt">audit-logging</span><span class="p">:</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="w">  </span><span class="nt">allow</span><span class="p">:</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="w">    </span><span class="nt">packages</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="w">    </span><span class="nt">vulnerabilities</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="w">  </span><span class="nt">deny</span><span class="p">:</span>
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a><span class="w">    </span><span class="nt">packages</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a><span class="w">    </span><span class="nt">vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a><span class="w">      </span><span class="nt">warning-on-any-of</span><span class="p">:</span>
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a><span class="w">        </span><span class="nt">cvss-severity</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a><span class="w">      </span><span class="nt">block-on-any-of</span><span class="p">:</span>
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a><span class="w">        </span><span class="nt">cvss-severity</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+</code></pre></div>
+<hr />
+<h2 id="key-reference">Key Reference</h2>
+<h3 id="scanning-settings"><code>scanning-settings</code></h3>
 <table>
 <thead>
 <tr>
-<th>Value</th>
-<th>Effect</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>0</code></td>
-<td>Report everything (default)</td>
-</tr>
-<tr>
-<td><code>4.0</code></td>
-<td>Ignore Low; report Medium, High, Critical</td>
-</tr>
-<tr>
-<td><code>7.0</code></td>
-<td>Ignore Low &amp; Medium; report High &amp; Critical</td>
-</tr>
-<tr>
-<td><code>9.0</code></td>
-<td>Report Critical only</td>
-</tr>
-</tbody>
-</table>
-<h3 id="securityignore-cvss-unknown-severity"><code>security.ignore-cvss-unknown-severity</code></h3>
-<p><code>False</code> — treat unknown-CVSS vulnerabilities as failures (recommended)<br />
-<code>True</code> — silently skip vulnerabilities with no CVSS score</p>
-<h3 id="securityignore-vulnerabilities"><code>security.ignore-vulnerabilities</code></h3>
-<p>Map of Safety vulnerability IDs to ignore entries.</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Required</th>
+<th>Key</th>
+<th>Type</th>
+<th>Default</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>reason</code></td>
-<td>Recommended</td>
-<td>Why this CVE is safe to ignore</td>
+<td><code>max-depth</code></td>
+<td>int</td>
+<td><code>6</code></td>
+<td>Maximum directory depth to scan</td>
 </tr>
 <tr>
-<td><code>expires</code></td>
-<td>Recommended</td>
-<td>ISO 8601 date (<code>YYYY-MM-DD</code>) after which the ignore should be reviewed</td>
+<td><code>exclude</code></td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Glob patterns to exclude from scanning</td>
+</tr>
+<tr>
+<td><code>include-files</code></td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Files to always include even if excluded</td>
+</tr>
+<tr>
+<td><code>system.targets</code></td>
+<td>list</td>
+<td><code>[]</code></td>
+<td>Additional system-level scan targets</td>
 </tr>
 </tbody>
 </table>
-<h3 id="securitycontinue-on-vulnerability-error"><code>security.continue-on-vulnerability-error</code></h3>
-<p><code>False</code> — exit with code <code>1</code> when vulnerabilities are found (recommended for CI)<br />
-<code>True</code> — always exit <code>0</code> even when vulnerabilities are found</p>
+<h3 id="reportdependency-vulnerabilities"><code>report.dependency-vulnerabilities</code></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>bool</td>
+<td>Enable dependency vulnerability reporting</td>
+</tr>
+<tr>
+<td><code>auto-ignore-in-report.python.environment-results</code></td>
+<td>bool</td>
+<td>Suppress results from the active venv</td>
+</tr>
+<tr>
+<td><code>auto-ignore-in-report.python.unpinned-requirements</code></td>
+<td>bool</td>
+<td>Suppress packages without pinned versions</td>
+</tr>
+<tr>
+<td><code>auto-ignore-in-report.cvss-severity</code></td>
+<td>list</td>
+<td>CVSS severity levels to suppress</td>
+</tr>
+</tbody>
+</table>
+<h3 id="fail-scan-with-exit-codedependency-vulnerabilities"><code>fail-scan-with-exit-code.dependency-vulnerabilities</code></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>bool</td>
+<td>Enable exit code 64 on threshold breaches</td>
+</tr>
+<tr>
+<td><code>fail-on-any-of.cvss-severity</code></td>
+<td>list</td>
+<td>CVSS levels that trigger failure: <code>critical</code>, <code>high</code>, <code>medium</code>, <code>low</code>, <code>info</code></td>
+</tr>
+<tr>
+<td><code>fail-on-any-of.exploitability</code></td>
+<td>list</td>
+<td>Exploitability levels that trigger failure</td>
+</tr>
+</tbody>
+</table>
+<h3 id="security-updatesdependency-vulnerabilities"><code>security-updates.dependency-vulnerabilities</code></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto-security-updates-limit</code></td>
+<td>list</td>
+<td>Version bump types allowed for <code>--apply-fixes</code>: <code>patch</code>, <code>minor</code>, <code>major</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="installation"><code>installation</code></h3>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default-action</code></td>
+<td>string</td>
+<td><code>allow</code> or <code>deny</code> — default for unmatched packages</td>
+</tr>
+<tr>
+<td><code>audit-logging.enabled</code></td>
+<td>bool</td>
+<td>Log installation events to Safety Platform</td>
+</tr>
+<tr>
+<td><code>allow.packages</code></td>
+<td>list</td>
+<td>Package names explicitly allowed</td>
+</tr>
+<tr>
+<td><code>allow.vulnerabilities</code></td>
+<td>map</td>
+<td>Vulnerability IDs allowed with reason + optional expiry</td>
+</tr>
+<tr>
+<td><code>deny.packages</code></td>
+<td>map</td>
+<td>Package names that must never be installed</td>
+</tr>
+<tr>
+<td><code>deny.vulnerabilities.warning-on-any-of.cvss-severity</code></td>
+<td>list</td>
+<td>CVSS levels that trigger a warning</td>
+</tr>
+<tr>
+<td><code>deny.vulnerabilities.block-on-any-of.cvss-severity</code></td>
+<td>list</td>
+<td>CVSS levels that block installation</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="using-the-policy-file">Using the Policy File</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Apply during a scan</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>safety<span class="w"> </span>check<span class="w"> </span>--policy-file<span class="w"> </span>.safety-policy.yml<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># Generate a fresh policy file</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>safety<span class="w"> </span>generate<span class="w"> </span>policy_file
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Review a saved JSON report</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>safety<span class="w"> </span>review<span class="w"> </span>--file<span class="w"> </span>reports/safety-report.json
+<h2 id="example-strict-production-policy">Example: Strict Production Policy</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3.0&#39;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">scanning-settings</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">max-depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">exclude</span><span class="p">:</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;tests/**&quot;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;docs/**&quot;</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nt">fail-scan-with-exit-code</span><span class="p">:</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="nt">fail-on-any-of</span><span class="p">:</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">      </span><span class="nt">cvss-severity</span><span class="p">:</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">critical</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">low</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="nt">installation</span><span class="p">:</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">  </span><span class="nt">default-action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">allow</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">  </span><span class="nt">allow</span><span class="p">:</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">    </span><span class="nt">vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">      </span><span class="nt">CVE-2024-12345</span><span class="p">:</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;False</span><span class="nv"> </span><span class="s">positive</span><span class="nv"> </span><span class="s">—</span><span class="nv"> </span><span class="s">Windows-only,</span><span class="nv"> </span><span class="s">mitigated</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">deployment&quot;</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-03-01&quot;</span>
 </code></pre></div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Commit <code>.safety-policy.yml</code> to version control so all team members and CI/CD pipelines use consistent ignore rules.</p>
-</div>
+<hr />
+<h2 id="v2-v3-migration">v2 → v3 Migration</h2>
+<table>
+<thead>
+<tr>
+<th>v2 Key</th>
+<th>v3 Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ignore-cvss-severity-below</code></td>
+<td><code>auto-ignore-in-report.cvss-severity</code></td>
+</tr>
+<tr>
+<td><code>continue-on-vulnerability-error</code></td>
+<td><code>fail-scan-with-exit-code.enabled: false</code></td>
+</tr>
+<tr>
+<td><code>--ignore CVE-xxx</code> CLI flag</td>
+<td><code>installation.allow.vulnerabilities</code></td>
+</tr>
+</tbody>
+</table>
 
 
 

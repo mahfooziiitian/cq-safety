@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -953,15 +953,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#safety-check" class="md-nav__link">
+  <a href="#global-options" class="md-nav__link">
     <span class="md-ellipsis">
       
-        safety check
+        Global Options
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="safety check">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#safety-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety scan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="safety scan">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -969,6 +980,67 @@
     <span class="md-ellipsis">
       
         Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#safety-auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="safety auth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth login
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth logout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth register
       
     </span>
   </a>
@@ -992,10 +1064,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#safety-review" class="md-nav__link">
+  <a href="#safety-validate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        safety review
+        safety validate
       
     </span>
   </a>
@@ -1003,21 +1075,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#safety-alert-deprecated" class="md-nav__link">
+  <a href="#safety-configure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        safety alert (Deprecated)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#commands-that-do-not-exist-in-v2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Commands that do NOT exist in v2
+        safety configure
       
     </span>
   </a>
@@ -1029,6 +1090,28 @@
     <span class="md-ellipsis">
       
         safety check-updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beta Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deprecated-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deprecated Commands
       
     </span>
   </a>
@@ -1134,15 +1217,26 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#safety-check" class="md-nav__link">
+  <a href="#global-options" class="md-nav__link">
     <span class="md-ellipsis">
       
-        safety check
+        Global Options
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="safety check">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#safety-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety scan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="safety scan">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1150,6 +1244,67 @@
     <span class="md-ellipsis">
       
         Examples
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#safety-auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="safety auth">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth login
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-logout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth logout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#safety-auth-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        safety auth register
       
     </span>
   </a>
@@ -1173,10 +1328,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#safety-review" class="md-nav__link">
+  <a href="#safety-validate" class="md-nav__link">
     <span class="md-ellipsis">
       
-        safety review
+        safety validate
       
     </span>
   </a>
@@ -1184,21 +1339,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#safety-alert-deprecated" class="md-nav__link">
+  <a href="#safety-configure" class="md-nav__link">
     <span class="md-ellipsis">
       
-        safety alert (Deprecated)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#commands-that-do-not-exist-in-v2" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Commands that do NOT exist in v2
+        safety configure
       
     </span>
   </a>
@@ -1210,6 +1354,28 @@
     <span class="md-ellipsis">
       
         safety check-updates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#beta-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beta Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deprecated-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deprecated Commands
       
     </span>
   </a>
@@ -1237,169 +1403,200 @@
 
 
 <h1 id="cli-reference">CLI Reference</h1>
-<p>Safety v2 is built around <code>safety check</code> as the primary command.</p>
-<hr />
-<h2 id="safety-check"><code>safety check</code></h2>
-<p>Scan packages for known vulnerabilities.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>check<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
-</code></pre></div>
+<h2 id="global-options">Global Options</h2>
+<p>These options apply to all Safety commands:</p>
 <table>
 <thead>
 <tr>
 <th>Option</th>
-<th>Default</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>-r &lt;file&gt;</code></td>
-<td>—</td>
-<td>Requirements file to check (repeatable)</td>
+<td><code>--key KEY</code></td>
+<td>API key for authentication</td>
 </tr>
 <tr>
-<td><code>--stdin</code></td>
-<td>off</td>
-<td>Read package list from stdin</td>
+<td><code>--stage STAGE</code></td>
+<td>Lifecycle stage: <code>development</code>, <code>cicd</code>, <code>production</code></td>
 </tr>
 <tr>
-<td><code>--full-report</code></td>
-<td>off</td>
-<td>Show full advisory text</td>
+<td><code>--proxy-host HOST</code></td>
+<td>Proxy hostname</td>
 </tr>
 <tr>
-<td><code>--short-report</code></td>
-<td>off</td>
-<td>Show short one-line summary</td>
+<td><code>--proxy-port PORT</code></td>
+<td>Proxy port</td>
 </tr>
 <tr>
-<td><code>--bare</code></td>
-<td>off</td>
-<td>Output only vulnerable package names</td>
+<td><code>--proxy-protocol PROTO</code></td>
+<td>Proxy protocol (<code>http</code> or <code>https</code>)</td>
 </tr>
 <tr>
-<td><code>--json</code></td>
-<td>off</td>
-<td>Output results as JSON array of arrays</td>
+<td><code>--version</code></td>
+<td>Show version and exit</td>
 </tr>
 <tr>
-<td><code>--ignore &lt;id&gt;</code></td>
-<td>—</td>
-<td>Ignore a vulnerability ID (repeatable)</td>
-</tr>
-<tr>
-<td><code>--key &lt;api-key&gt;</code></td>
-<td>—</td>
-<td>API key for daily DB updates</td>
-</tr>
-<tr>
-<td><code>--db &lt;path&gt;</code></td>
-<td>—</td>
-<td>Use a local vulnerability database</td>
-</tr>
-<tr>
-<td><code>--cache</code></td>
-<td>off</td>
-<td>Cache the vulnerability database</td>
-</tr>
-<tr>
-<td><code>--policy-file &lt;path&gt;</code></td>
-<td>—</td>
-<td>Apply a local v2 policy file</td>
-</tr>
-<tr>
-<td><code>--proxy-host &lt;host&gt;</code></td>
-<td>—</td>
-<td>HTTP proxy hostname</td>
-</tr>
-<tr>
-<td><code>--proxy-port &lt;port&gt;</code></td>
-<td>—</td>
-<td>HTTP proxy port</td>
-</tr>
-<tr>
-<td><code>--proxy-protocol &lt;proto&gt;</code></td>
-<td>https</td>
-<td>Proxy protocol</td>
+<td><code>--help</code></td>
+<td>Show help and exit</td>
 </tr>
 </tbody>
 </table>
-<h3 id="examples">Examples</h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Scan installed packages</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>safety<span class="w"> </span>check
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Scan a requirements file</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Scan from pip freeze</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>pip<span class="w"> </span>freeze<span class="w"> </span><span class="p">|</span><span class="w"> </span>safety<span class="w"> </span>check<span class="w"> </span>--stdin
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Full report</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>safety<span class="w"> </span>check<span class="w"> </span>--full-report<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># CI/CD with API key and JSON output</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>safety<span class="w"> </span>check<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>--json<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>&gt;<span class="w"> </span>report.json
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># Ignore a CVE</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>safety<span class="w"> </span>check<span class="w"> </span>--ignore<span class="w"> </span><span class="m">36546</span><span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="c1"># Use a policy file</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>safety<span class="w"> </span>check<span class="w"> </span>--policy-file<span class="w"> </span>.safety-policy.yml<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="c1"># Use local database</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>safety<span class="w"> </span>check<span class="w"> </span>--db<span class="w"> </span>/path/to/safety-db<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
-<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="c1"># Cache database for faster repeated runs</span>
-<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>safety<span class="w"> </span>check<span class="w"> </span>--cache<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</code></pre></div>
 <hr />
-<h2 id="safety-generate"><code>safety generate</code></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Generate a default v2 policy file</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>safety<span class="w"> </span>generate<span class="w"> </span>policy_file
+<h2 id="safety-scan"><code>safety scan</code></h2>
+<p>Scan Python packages for known vulnerabilities.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>scan<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
 </code></pre></div>
-<hr />
-<h2 id="safety-review"><code>safety review</code></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Review a saved JSON report</span>
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>safety<span class="w"> </span>review<span class="w"> </span>--file<span class="w"> </span>reports/safety-report.json
-</code></pre></div>
-<hr />
-<h2 id="safety-alert-deprecated"><code>safety alert</code> (Deprecated)</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># alert is deprecated — use Safety integrations instead</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>safety<span class="w"> </span>alert
-</code></pre></div>
-<hr />
-<h2 id="commands-that-do-not-exist-in-v2">Commands that do NOT exist in v2</h2>
 <table>
 <thead>
 <tr>
-<th>Command</th>
-<th>Note</th>
+<th>Option</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>safety scan</code></td>
-<td>v3 only</td>
+<td><code>--target PATH</code></td>
+<td>Directory to scan (default: current environment)</td>
 </tr>
 <tr>
-<td><code>safety auth</code></td>
-<td>v3 only — v2 uses API keys</td>
+<td><code>--output FORMAT</code></td>
+<td>Output format: <code>screen</code>, <code>json</code>, <code>html</code>, <code>text</code>, <code>spdx</code></td>
 </tr>
 <tr>
-<td><code>safety validate</code></td>
-<td>v3 only</td>
+<td><code>--detailed-output</code></td>
+<td>Show full vulnerability details</td>
 </tr>
 <tr>
-<td><code>safety configure</code></td>
-<td>v3 only</td>
+<td><code>--save-as FORMAT FILE</code></td>
+<td>Save report to file (repeatable)</td>
+</tr>
+<tr>
+<td><code>--policy-file PATH</code></td>
+<td>Path to policy file (default: <code>.safety-policy.yml</code>)</td>
+</tr>
+<tr>
+<td><code>--apply-fixes</code></td>
+<td>Automatically apply safe version upgrades</td>
+</tr>
+<tr>
+<td><code>--filter</code></td>
+<td>Filter results</td>
+</tr>
+<tr>
+<td><code>--help</code></td>
+<td>Show help and exit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="examples">Examples</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>safety<span class="w"> </span>scan
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>safety<span class="w"> </span>scan<span class="w"> </span>--detailed-output
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>safety<span class="w"> </span>scan<span class="w"> </span>--target<span class="w"> </span>./src<span class="w"> </span>--output<span class="w"> </span>json
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>safety<span class="w"> </span>scan<span class="w"> </span>--save-as<span class="w"> </span>json<span class="w"> </span>report.json<span class="w"> </span>--save-as<span class="w"> </span>html<span class="w"> </span>report.html
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>safety<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>--stage<span class="w"> </span>cicd<span class="w"> </span>scan<span class="w"> </span>--policy-file<span class="w"> </span>.safety-policy.yml
+</code></pre></div>
+<hr />
+<h2 id="safety-auth"><code>safety auth</code></h2>
+<p>Manage authentication with the Safety Platform.</p>
+<h3 id="safety-auth-login"><code>safety auth login</code></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </span><span class="o">[</span>--headless<span class="o">]</span>
+</code></pre></div>
+<p>Opens a browser to <a href="https://platform.safetycli.com">platform.safetycli.com</a> for login. Use <code>--headless</code> in SSH sessions.</p>
+<h3 id="safety-auth-logout"><code>safety auth logout</code></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>auth<span class="w"> </span><span class="nb">logout</span>
+</code></pre></div>
+<p>Removes the stored authentication token.</p>
+<h3 id="safety-auth-status"><code>safety auth status</code></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>status
+</code></pre></div>
+<p>Shows the current authentication status and token expiry.</p>
+<h3 id="safety-auth-register"><code>safety auth register</code></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>register
+</code></pre></div>
+<p>Create a new Safety Platform account from the CLI.</p>
+<hr />
+<h2 id="safety-generate"><code>safety generate</code></h2>
+<p>Generate configuration files.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>safety<span class="w"> </span>generate<span class="w"> </span>policy_file
+</code></pre></div>
+<p>Creates a default <code>.safety-policy.yml</code> in the current directory.</p>
+<hr />
+<h2 id="safety-validate"><code>safety validate</code></h2>
+<p>Validate configuration files.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>safety<span class="w"> </span>validate<span class="w"> </span>policy_file
+</code></pre></div>
+<p>Validates <code>.safety-policy.yml</code> against the v3 schema.</p>
+<hr />
+<h2 id="safety-configure"><code>safety configure</code></h2>
+<p>Configure Safety CLI settings.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>safety<span class="w"> </span>configure<span class="w"> </span>--proxy-host<span class="w"> </span>proxy.example.com<span class="w"> </span>--proxy-port<span class="w"> </span><span class="m">8080</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>safety<span class="w"> </span>configure<span class="w"> </span>--proxy-host<span class="w"> </span>proxy.example.com<span class="w"> </span>--proxy-protocol<span class="w"> </span>https
+</code></pre></div>
+<hr />
+<h2 id="safety-check-updates"><code>safety check-updates</code></h2>
+<p>Check if a newer version of Safety CLI is available.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>safety<span class="w"> </span>check-updates
+</code></pre></div>
+<hr />
+<h2 id="beta-commands">Beta Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>safety codebase</code></td>
+<td>Scan source code for security issues (beta)</td>
+</tr>
+<tr>
+<td><code>safety firewall</code></td>
+<td>Package firewall — block malicious packages at install time (beta)</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="safety-check-updates"><code>safety check-updates</code></h2>
-<p>Check if a newer version of Safety CLI is available:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>safety<span class="w"> </span>check-updates
-</code></pre></div>
+<h2 id="deprecated-commands">Deprecated Commands</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Status</th>
+<th>Replacement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>safety check</code></td>
+<td>Deprecated</td>
+<td><code>safety scan</code></td>
+</tr>
+<tr>
+<td><code>safety check -r requirements.txt</code></td>
+<td>Deprecated</td>
+<td><code>safety scan --target .</code></td>
+</tr>
+<tr>
+<td><code>safety check --ignore CVE-xxx</code></td>
+<td>Deprecated</td>
+<td>Policy file <code>installation.allow.vulnerabilities</code></td>
+</tr>
+<tr>
+<td><code>safety license</code></td>
+<td>Deprecated</td>
+<td><code>safety scan --output spdx</code></td>
+</tr>
+<tr>
+<td><code>safety alert</code></td>
+<td>Deprecated</td>
+<td>Platform alerts at platform.safetycli.com</td>
+</tr>
+</tbody>
+</table>
 
 
 

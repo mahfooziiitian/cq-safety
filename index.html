@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cq-safety" class="md-skip">
+        <a href="#safety-cli-3" class="md-skip">
           Skip to content
         </a>
       
@@ -432,10 +432,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-safety" class="md-nav__link">
+  <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why Safety?
+        Features
       
     </span>
   </a>
@@ -454,10 +454,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#this-project" class="md-nav__link">
+  <a href="#navigation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        This Project
+        Navigation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Links
       
     </span>
   </a>
@@ -1079,10 +1090,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-safety" class="md-nav__link">
+  <a href="#features" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why Safety?
+        Features
       
     </span>
   </a>
@@ -1101,10 +1112,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#this-project" class="md-nav__link">
+  <a href="#navigation" class="md-nav__link">
     <span class="md-ellipsis">
       
-        This Project
+        Navigation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Links
       
     </span>
   </a>
@@ -1131,15 +1153,10 @@
   
 
 
-<h1 id="cq-safety">cq-safety</h1>
-<p><strong>Python dependency vulnerability scanning with Safety v2.</strong></p>
-<p><a href="https://pyup.io/safety/">Safety</a> checks your Python packages against a curated database of known CVEs, helping you catch vulnerable dependencies before they reach production.</p>
+<h1 id="safety-cli-3">Safety CLI 3</h1>
+<p><strong>Safety CLI 3</strong> is a Python dependency security scanner by <a href="https://safetycli.com">safetycli.com</a>. It detects known vulnerabilities, enforces security policies, and integrates with <a href="https://platform.safetycli.com">platform.safetycli.com</a> for team dashboards and audit logging.</p>
 <hr />
-<h2 id="why-safety">Why Safety?</h2>
-<div class="admonition danger">
-<p class="admonition-title">A06:2021 — Vulnerable and Outdated Components</p>
-<p>The OWASP Top 10 lists using components with known vulnerabilities as one of the most critical web application security risks. Safety automates detection of these vulnerabilities in your Python supply chain.</p>
-</div>
+<h2 id="features">Features</h2>
 <table>
 <thead>
 <tr>
@@ -1149,60 +1166,66 @@
 </thead>
 <tbody>
 <tr>
-<td>🔍 <strong>CVE scanning</strong></td>
-<td>Checks packages against the Safety vulnerability database</td>
+<td><strong>Vulnerability scanning</strong></td>
+<td>Check all installed packages against the Safety database</td>
 </tr>
 <tr>
-<td>📄 <strong>Requirements file scan</strong></td>
-<td><code>safety check -r requirements.txt</code></td>
+<td><strong>Policy enforcement</strong></td>
+<td>Define severity thresholds and approved exceptions</td>
 </tr>
 <tr>
-<td>🔧 <strong>Policy files v2</strong></td>
-<td>Version 2.0 schema with severity thresholds and ignore lists</td>
+<td><strong>Auto-fix</strong></td>
+<td>Apply safe version upgrades automatically</td>
 </tr>
 <tr>
-<td>🔑 <strong>API key access</strong></td>
-<td>API key for CI/CD and commercial daily DB updates</td>
+<td><strong>Multi-format output</strong></td>
+<td>screen, JSON, HTML, plain text, SPDX SBOM</td>
 </tr>
 <tr>
-<td>🚀 <strong>CI/CD ready</strong></td>
-<td>Native support for GitHub Actions, GitLab CI, and pre-commit</td>
+<td><strong>CI/CD integration</strong></td>
+<td>GitHub Actions, GitLab CI, pre-commit hooks</td>
 </tr>
 <tr>
-<td>📊 <strong>Multiple output formats</strong></td>
-<td>JSON, bare, full-report, short-report</td>
+<td><strong>Platform integration</strong></td>
+<td>Dashboards, audit logs, team management</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="quick-example">Quick Example</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install Safety</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>safety
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Scan installed packages</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>safety<span class="w"> </span>check
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Authenticate (development)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>safety<span class="w"> </span>auth<span class="w"> </span>login
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Scan a requirements file</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Scan your environment</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>safety<span class="w"> </span>scan
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Scan from pip freeze</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>pip<span class="w"> </span>freeze<span class="w"> </span><span class="p">|</span><span class="w"> </span>safety<span class="w"> </span>check<span class="w"> </span>--stdin
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Scan with detailed output</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>safety<span class="w"> </span>scan<span class="w"> </span>--detailed-output
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># JSON output</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>safety<span class="w"> </span>check<span class="w"> </span>--json
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
-<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># CI/CD scan with API key</span>
-<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>safety<span class="w"> </span>check<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># CI/CD scan with API key</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>safety<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>--stage<span class="w"> </span>cicd<span class="w"> </span>scan<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span>--policy-file<span class="w"> </span>.safety-policy.yml<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span>--save-as<span class="w"> </span>json<span class="w"> </span>reports/safety-report.json
 </code></pre></div>
 <hr />
-<h2 id="this-project">This Project</h2>
-<p>This repository (<code>cq-safety</code>) is a <strong>code-quality reference project</strong> for the Safety v2 tool. It provides:</p>
+<h2 id="navigation">Navigation</h2>
 <ul>
-<li>A full tutorial covering installation through CI/CD integration</li>
-<li>Reusable GitHub Actions and GitLab CI snippets</li>
-<li>Policy file v2 templates for enterprise workflows</li>
+<li><strong>Getting Started</strong> — <a href="getting-started/installation/">Installation</a> · <a href="getting-started/quickstart/">Quickstart</a></li>
+<li><strong>Usage</strong> — <a href="usage/scanning/">Scanning</a> · <a href="usage/output-formats/">Output Formats</a> · <a href="usage/ignoring/">Ignoring Vulnerabilities</a> · <a href="usage/policy-files/">Policy Files</a></li>
+<li><strong>CI/CD</strong> — <a href="ci-cd/github-actions/">GitHub Actions</a> · <a href="ci-cd/gitlab-ci/">GitLab CI</a> · <a href="ci-cd/pre-commit/">Pre-commit</a></li>
+<li><strong>Reference</strong> — <a href="reference/cli/">CLI Reference</a> · <a href="reference/exit-codes/">Exit Codes</a> · <a href="reference/troubleshooting/">Troubleshooting</a></li>
 </ul>
-<p>Use the navigation to explore the docs.</p>
+<hr />
+<h2 id="links">Links</h2>
+<ul>
+<li><strong>Documentation:</strong> https://docs.safetycli.com</li>
+<li><strong>Platform:</strong> https://platform.safetycli.com</li>
+<li><strong>PyPI:</strong> https://pypi.org/project/safety/</li>
+<li><strong>GitHub:</strong> https://github.com/pyupio/safety</li>
+</ul>
 
 
 

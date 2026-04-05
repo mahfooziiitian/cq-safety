@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -1007,10 +1007,49 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#no-active-virtual-environment" class="md-nav__link">
+  <a href="#authentication-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        No Active Virtual Environment
+        Authentication Errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication Errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-packages-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Packages Found
       
     </span>
   </a>
@@ -1018,10 +1057,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#unable-to-load-vulnerability-database" class="md-nav__link">
+  <a href="#database-unreachable" class="md-nav__link">
     <span class="md-ellipsis">
       
-        "Unable to load vulnerability database"
+        Database Unreachable
       
     </span>
   </a>
@@ -1029,10 +1068,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#false-positives-ignore" class="md-nav__link">
+  <a href="#policy-validation-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        False Positives (--ignore)
+        Policy Validation Errors
       
     </span>
   </a>
@@ -1051,10 +1090,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#wrong-environment-being-scanned" class="md-nav__link">
+  <a href="#auto-fix-limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Wrong Environment Being Scanned
+        Auto-Fix Limitations
       
     </span>
   </a>
@@ -1062,21 +1101,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-key-not-working" class="md-nav__link">
+  <a href="#safety-check-not-working" class="md-nav__link">
     <span class="md-ellipsis">
       
-        API Key Not Working
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-help" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting Help
+        safety check Not Working
       
     </span>
   </a>
@@ -1126,10 +1154,49 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#no-active-virtual-environment" class="md-nav__link">
+  <a href="#authentication-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        No Active Virtual Environment
+        Authentication Errors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Authentication Errors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Development
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#no-packages-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        No Packages Found
       
     </span>
   </a>
@@ -1137,10 +1204,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#unable-to-load-vulnerability-database" class="md-nav__link">
+  <a href="#database-unreachable" class="md-nav__link">
     <span class="md-ellipsis">
       
-        "Unable to load vulnerability database"
+        Database Unreachable
       
     </span>
   </a>
@@ -1148,10 +1215,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#false-positives-ignore" class="md-nav__link">
+  <a href="#policy-validation-errors" class="md-nav__link">
     <span class="md-ellipsis">
       
-        False Positives (--ignore)
+        Policy Validation Errors
       
     </span>
   </a>
@@ -1170,10 +1237,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#wrong-environment-being-scanned" class="md-nav__link">
+  <a href="#auto-fix-limitations" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Wrong Environment Being Scanned
+        Auto-Fix Limitations
       
     </span>
   </a>
@@ -1181,21 +1248,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#api-key-not-working" class="md-nav__link">
+  <a href="#safety-check-not-working" class="md-nav__link">
     <span class="md-ellipsis">
       
-        API Key Not Working
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#getting-help" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Getting Help
+        safety check Not Working
       
     </span>
   </a>
@@ -1223,83 +1279,106 @@
 
 
 <h1 id="troubleshooting">Troubleshooting</h1>
-<h2 id="no-active-virtual-environment">No Active Virtual Environment</h2>
-<p>Safety v2 scans the <strong>currently installed packages</strong> by default (no <code>-r</code> flag). If the wrong environment is active, you'll get incorrect results.</p>
-<p>Ensure the correct virtual environment is activated:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>safety<span class="w"> </span>check
+<h2 id="authentication-errors">Authentication Errors</h2>
+<h3 id="development">Development</h3>
+<p><strong>Symptom:</strong> <code>AuthenticationError: Not authenticated</code></p>
+<p><strong>Fix:</strong> Run the browser login flow:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>login
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>safety<span class="w"> </span>auth<span class="w"> </span>status
 </code></pre></div>
-<p>Or scan a requirements file explicitly:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<p>If the browser doesn't open, use headless mode:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>login<span class="w"> </span>--headless
 </code></pre></div>
 <hr />
-<h2 id="unable-to-load-vulnerability-database">"Unable to load vulnerability database"</h2>
-<p>Safety cannot reach the remote database.</p>
-<p><strong>Use cached database:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--cache<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</code></pre></div></p>
-<p><strong>Use a local database:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--db<span class="w"> </span>/path/to/safety-db<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</code></pre></div></p>
-<p><strong>Check internet access:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>curl<span class="w"> </span>-I<span class="w"> </span>https://pyup.io
-</code></pre></div></p>
-<p><strong>Use a proxy:</strong>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--proxy-host<span class="w"> </span><span class="m">192</span>.168.0.1<span class="w"> </span>--proxy-port<span class="w"> </span><span class="m">8080</span><span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</code></pre></div></p>
+<h3 id="cicd">CI/CD</h3>
+<p><strong>Symptom:</strong> <code>AuthenticationError</code> in CI pipeline</p>
+<p><strong>Fix:</strong> Verify <code>SAFETY_API_KEY</code> is set and valid:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">echo</span><span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w">   </span><span class="c1"># Should print the key</span>
+</code></pre></div>
+<p>Ensure you pass it correctly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>--key<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SAFETY_API_KEY</span><span class="s2">&quot;</span><span class="w"> </span>--stage<span class="w"> </span>cicd<span class="w"> </span>scan
+</code></pre></div>
+<p>Check the key is active at <a href="https://platform.safetycli.com">platform.safetycli.com</a>.</p>
 <hr />
-<h2 id="false-positives-ignore">False Positives (<code>--ignore</code>)</h2>
-<p>If Safety flags a CVE that is not exploitable in your context:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Ignore via CLI flag</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>safety<span class="w"> </span>check<span class="w"> </span>--ignore<span class="w"> </span><span class="m">36546</span><span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Or add to policy file</span>
+<h2 id="no-packages-found">No Packages Found</h2>
+<p><strong>Symptom:</strong> <code>No packages were found</code> or empty scan results</p>
+<p><strong>Fix:</strong> Point Safety at your project directory:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--target<span class="w"> </span>.
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>safety<span class="w"> </span>scan<span class="w"> </span>--target<span class="w"> </span>/path/to/project
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># .safety-policy.yml</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2.0&quot;</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">security</span><span class="p">:</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">  </span><span class="nt">ignore-vulnerabilities</span><span class="p">:</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="nt">36546</span><span class="p">:</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">      </span><span class="nt">reason</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Not</span><span class="nv"> </span><span class="s">exploitable</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">our</span><span class="nv"> </span><span class="s">deployment&quot;</span>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">      </span><span class="nt">expires</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2025-06-30&quot;</span>
+<p>Ensure you're in the correct Python environment (activated venv or uv shell).</p>
+<hr />
+<h2 id="database-unreachable">Database Unreachable</h2>
+<p><strong>Symptom:</strong> <code>Exit code 66</code> — unable to fetch vulnerability database</p>
+<p><strong>Fix:</strong> Configure proxy settings:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>safety<span class="w"> </span>configure<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span>--proxy-host<span class="w"> </span>proxy.example.com<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>--proxy-port<span class="w"> </span><span class="m">8080</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span>--proxy-protocol<span class="w"> </span>http
 </code></pre></div>
+<p>Or set environment variables:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HTTP_PROXY</span><span class="o">=</span>http://proxy.example.com:8080
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HTTPS_PROXY</span><span class="o">=</span>http://proxy.example.com:8080
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>safety<span class="w"> </span>scan
+</code></pre></div>
+<hr />
+<h2 id="policy-validation-errors">Policy Validation Errors</h2>
+<p><strong>Symptom:</strong> <code>PolicyValidationError</code> or unexpected scan behaviour</p>
+<p><strong>Fix:</strong> Validate your policy file:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>safety<span class="w"> </span>validate<span class="w"> </span>policy_file
+</code></pre></div>
+<p>Common issues:
+- Missing <code>version: '3.0'</code> at the top of the file
+- Using v2 keys like <code>ignore-cvss-severity-below</code> (use <code>auto-ignore-in-report.cvss-severity</code> instead)
+- YAML indentation errors</p>
 <hr />
 <h2 id="slow-ci-scans">Slow CI Scans</h2>
-<p>Cache the Safety vulnerability database between runs:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>safety<span class="w"> </span>check<span class="w"> </span>--cache<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<p><strong>Symptom:</strong> Safety scan takes a long time in CI</p>
+<p><strong>Fix:</strong> Cache uv's download cache between CI runs.</p>
+<p><strong>GitHub Actions:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">astral-sh/setup-uv@v4</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;latest&quot;</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="nt">enable-cache</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="nt">cache-dependency-glob</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;uv.lock&quot;</span>
 </code></pre></div>
-<p>In GitHub Actions:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cache Safety data</span>
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/cache@v4</span>
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~/.safety</span>
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safety-${{ runner.os }}-${{ hashFiles(&#39;**/requirements*.txt&#39;) }}</span>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Safety check</span>
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">safety check --cache -r requirements.txt</span>
-</code></pre></div>
-<hr />
-<h2 id="wrong-environment-being-scanned">Wrong Environment Being Scanned</h2>
-<p>Pass the requirements file explicitly to control exactly what is scanned:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements-prod.txt
+<p><strong>GitLab CI:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">cache</span><span class="p">:</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">uv-$CI_COMMIT_REF_SLUG</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nt">paths</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.uv/</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="nt">variables</span><span class="p">:</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span><span class="nt">UV_CACHE_DIR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.uv</span>
 </code></pre></div>
 <hr />
-<h2 id="api-key-not-working">API Key Not Working</h2>
-<ul>
-<li>Verify the key is correct at <a href="https://pyup.io/account/api-key/">pyup.io/account/api-key/</a></li>
-<li>Ensure <code>SAFETY_API_KEY</code> is exported in the shell</li>
-<li>Pass it directly: <code>safety check --key your-key-here -r requirements.txt</code></li>
-</ul>
-<hr />
-<h2 id="getting-help">Getting Help</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>safety<span class="w"> </span>--help
-<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>safety<span class="w"> </span>check<span class="w"> </span>--help
+<h2 id="auto-fix-limitations">Auto-Fix Limitations</h2>
+<p><strong>Symptom:</strong> <code>--apply-fixes</code> does not update a vulnerable package</p>
+<p><strong>Causes:</strong>
+- No safe version exists within the allowed update range (patch-only by default)
+- The package is pinned to an exact version in a lock file
+- The fix requires a major version bump (not allowed by default)</p>
+<p><strong>Fix:</strong> Relax the auto-fix limit in your policy:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">security-updates</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">dependency-vulnerabilities</span><span class="p">:</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">auto-security-updates-limit</span><span class="p">:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">patch</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minor</span>
 </code></pre></div>
-<ul>
-<li><a href="https://pyup.io/safety/">Safety v2 documentation</a></li>
-<li><a href="https://github.com/pyupio/safety/issues">Safety GitHub Issues</a></li>
-</ul>
+<p>Or manually update the package:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;somepackage&gt;=2.1.0&quot;</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>uv<span class="w"> </span>lock
+</code></pre></div>
+<hr />
+<h2 id="safety-check-not-working"><code>safety check</code> Not Working</h2>
+<p><strong>Symptom:</strong> Old <code>safety check</code> command produces errors or unexpected output</p>
+<p><strong>Fix:</strong> <code>safety check</code> is deprecated in Safety CLI 3. Use <code>safety scan</code> instead:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Old (deprecated)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>safety<span class="w"> </span>check
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># New (v3)</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>safety<span class="w"> </span>scan
+</code></pre></div>
+<p>See the <a href="../cli/">CLI Reference</a> for all v3 commands.</p>
 
 
 
