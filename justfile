@@ -118,7 +118,7 @@ docs:
 
 # Serve docs locally with live-reload at http://127.0.0.1:8000
 docs-serve:
-    uv run mkdocs serve
+    uv run mkdocs serve --livereload
 
 # Remove the generated docs site directory
 docs-clean:
