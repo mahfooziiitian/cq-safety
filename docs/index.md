@@ -1,57 +1,57 @@
-# cq-safety
+# Safety CLI 3
 
-**Python dependency vulnerability scanning with Safety v2.**
-
-[Safety](https://pyup.io/safety/) checks your Python packages against a curated database of known CVEs, helping you catch vulnerable dependencies before they reach production.
+**Safety CLI 3** is a Python dependency security scanner by [safetycli.com](https://safetycli.com). It detects known vulnerabilities, enforces security policies, and integrates with [platform.safetycli.com](https://platform.safetycli.com) for team dashboards and audit logging.
 
 ---
 
-## Why Safety?
-
-!!! danger "A06:2021 — Vulnerable and Outdated Components"
-    The OWASP Top 10 lists using components with known vulnerabilities as one of the most critical web application security risks. Safety automates detection of these vulnerabilities in your Python supply chain.
+## Features
 
 | Feature | Description |
-|---|---|
-| 🔍 **CVE scanning** | Checks packages against the Safety vulnerability database |
-| 📄 **Requirements file scan** | `safety check -r requirements.txt` |
-| 🔧 **Policy files v2** | Version 2.0 schema with severity thresholds and ignore lists |
-| 🔑 **API key access** | API key for CI/CD and commercial daily DB updates |
-| 🚀 **CI/CD ready** | Native support for GitHub Actions, GitLab CI, and pre-commit |
-| 📊 **Multiple output formats** | JSON, bare, full-report, short-report |
+|---------|-------------|
+| **Vulnerability scanning** | Check all installed packages against the Safety database |
+| **Policy enforcement** | Define severity thresholds and approved exceptions |
+| **Auto-fix** | Apply safe version upgrades automatically |
+| **Multi-format output** | screen, JSON, HTML, plain text, SPDX SBOM |
+| **CI/CD integration** | GitHub Actions, GitLab CI, pre-commit hooks |
+| **Platform integration** | Dashboards, audit logs, team management |
 
 ---
 
 ## Quick Example
 
 ```bash
-# Install Safety
+# Install
 pip install safety
 
-# Scan installed packages
-safety check
+# Authenticate (development)
+safety auth login
 
-# Scan a requirements file
-safety check -r requirements.txt
+# Scan your environment
+safety scan
 
-# Scan from pip freeze
-pip freeze | safety check --stdin
-
-# JSON output
-safety check --json
+# Scan with detailed output
+safety scan --detailed-output
 
 # CI/CD scan with API key
-safety check --key $SAFETY_API_KEY -r requirements.txt
+safety --key $SAFETY_API_KEY --stage cicd scan \
+  --policy-file .safety-policy.yml \
+  --save-as json reports/safety-report.json
 ```
 
 ---
 
-## This Project
+## Navigation
 
-This repository (`cq-safety`) is a **code-quality reference project** for the Safety v2 tool. It provides:
+- **Getting Started** — [Installation](getting-started/installation.md) · [Quickstart](getting-started/quickstart.md)
+- **Usage** — [Scanning](usage/scanning.md) · [Output Formats](usage/output-formats.md) · [Ignoring Vulnerabilities](usage/ignoring.md) · [Policy Files](usage/policy-files.md)
+- **CI/CD** — [GitHub Actions](ci-cd/github-actions.md) · [GitLab CI](ci-cd/gitlab-ci.md) · [Pre-commit](ci-cd/pre-commit.md)
+- **Reference** — [CLI Reference](reference/cli.md) · [Exit Codes](reference/exit-codes.md) · [Troubleshooting](reference/troubleshooting.md)
 
-- A full tutorial covering installation through CI/CD integration
-- Reusable GitHub Actions and GitLab CI snippets
-- Policy file v2 templates for enterprise workflows
+---
 
-Use the navigation to explore the docs.
+## Links
+
+- **Documentation:** https://docs.safetycli.com
+- **Platform:** https://platform.safetycli.com
+- **PyPI:** https://pypi.org/project/safety/
+- **GitHub:** https://github.com/pyupio/safety

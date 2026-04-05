@@ -1,98 +1,100 @@
-# Scanning Options
+# Scanning
 
-## Primary Command: `safety check`
+## Global Flags
 
-```bash
-safety check [OPTIONS]
-```
-
----
-
-## Full Flag Reference
+These flags apply to all Safety commands:
 
 | Flag | Description |
 |------|-------------|
-| `-r <file>` | Check packages listed in a requirements file (repeatable) |
-| `--stdin` | Read package list from stdin (e.g., `pip freeze | safety check --stdin`) |
-| `--full-report` | Show full advisory text for each vulnerability |
-| `--short-report` | Show a short, one-line summary per vulnerability |
-| `--bare` | Output only vulnerable package names (one per line) |
-| `--json` | Output results in JSON format (array of arrays) |
-| `--ignore <id>` | Ignore a vulnerability by ID (repeatable) |
-| `--key <api-key>` | API key for daily DB updates |
-| `--db <path>` | Use a local vulnerability database directory |
-| `--cache` | Cache the vulnerability database locally (speeds up CI) |
-| `--policy-file <path>` | Apply a local v2 policy file |
-| `--proxy-host <host>` | HTTP proxy hostname |
-| `--proxy-port <port>` | HTTP proxy port |
-| `--proxy-protocol <proto>` | Proxy protocol (default: https) |
+| `--key KEY` | API key for authentication (CI/CD) |
+| `--stage STAGE` | Lifecycle stage: `development`, `cicd`, `production` |
+| `--proxy-host HOST` | Proxy hostname |
+| `--proxy-port PORT` | Proxy port |
+| `--proxy-protocol PROTO` | Proxy protocol (`http` or `https`) |
 
 ---
 
-## Common Scan Patterns
+## `safety scan` Options
 
-### Scan installed packages
 ```bash
-safety check
+safety scan [OPTIONS]
 ```
 
-### Scan a requirements file
+| Option | Type | Description |
+|--------|------|-------------|
+| `--target PATH` | path | Directory to scan (default: current environment) |
+| `--output FORMAT` | choice | Output format: `screen`, `json`, `html`, `text`, `spdx` |
+| `--detailed-output` | flag | Show full vulnerability details |
+| `--save-as FORMAT FILE` | pair | Save report to file (repeatable) |
+| `--policy-file PATH` | path | Policy file path (default: `.safety-policy.yml`) |
+| `--apply-fixes` | flag | Automatically apply safe version upgrades |
+| `--filter` | option | Filter results by severity or status |
+
+---
+
+## Common Patterns
+
+### Basic developer scan
+
 ```bash
-safety check -r requirements.txt
+safety scan --detailed-output
 ```
 
-### Scan multiple files
+### Save JSON and HTML reports
+
 ```bash
-safety check -r requirements.txt -r requirements-dev.txt
+safety scan \
+  --save-as json reports/safety.json \
+  --save-as html reports/safety.html \
+  --output screen
 ```
 
-### Scan from pip freeze
-```bash
-pip freeze | safety check --stdin
-```
+### Scan a specific directory
 
-### Full report with advisory text
 ```bash
-safety check --full-report -r requirements.txt
+safety scan --target /path/to/project --detailed-output
 ```
 
 ### CI/CD scan with API key
+
 ```bash
-safety check --key $SAFETY_API_KEY -r requirements.txt
+safety --key $SAFETY_API_KEY --stage cicd scan \
+  --policy-file .safety-policy.yml \
+  --save-as json reports/safety-report.json
 ```
 
-### JSON output
+### Use a custom policy file
+
 ```bash
-safety check --json -r requirements.txt
+safety scan --policy-file policies/strict.yml
 ```
 
-### Ignore a specific CVE
-```bash
-safety check --ignore 36546 -r requirements.txt
-```
+### Scan and apply fixes
 
-### Use a local vulnerability database
 ```bash
-safety check --db /path/to/safety-db -r requirements.txt
-```
-
-### Cache the database for faster CI
-```bash
-safety check --cache -r requirements.txt
-```
-
-### Scan with a policy file
-```bash
-safety check --policy-file .safety-policy.yml -r requirements.txt
+safety scan --apply-fixes
 ```
 
 ---
 
-## Using `uv run`
+## Scanning with uv
 
-If your project uses `uv`, prefix commands with `uv run`:
+When using [uv](https://docs.astral.sh/uv/), prefix Safety commands with `uv run`:
 
 ```bash
-uv run safety check -r requirements.txt
-uv run safety check --key $SAFETY_API_KEY --json -r requirements.txt
+uv run safety scan --detailed-output
+uv run safety --key $SAFETY_API_KEY --stage cicd scan
 ```
+
+---
+
+!!! warning "Deprecated: `safety check`"
+    `safety check` was the v2 scanning command. It is **deprecated in Safety CLI 3** and will be removed in a future release.
+
+    | Old (v2) | New (v3) |
+    |----------|----------|
+    | `safety check` | `safety scan` |
+    | `safety check -r requirements.txt` | `safety scan --target .` |
+    | `safety check --ignore CVE-xxx` | Policy file `installation.allow.vulnerabilities` |
+
+    Always use `safety scan` in new code.

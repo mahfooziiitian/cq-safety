@@ -1,123 +1,164 @@
 # GitHub Actions
 
-!!! tip "No requirements.txt? Use environment scanning"
-    If your project uses `uv` or `pyproject.toml` without a `requirements.txt`, omit the `-r` flag.
-    Safety v2 will scan all packages installed in the active environment.
+## Prerequisites
+
+1. Create an API key at [platform.safetycli.com](https://platform.safetycli.com) under **Settings → API Keys**.
+2. Add it as a repository secret named `SAFETY_API_KEY` in **Settings → Secrets and variables → Actions**.
 
 ---
 
-## Basic Workflow — Environment Scan (uv / pyproject.toml)
+## Basic Scan
 
 ```yaml
-# .github/workflows/security.yml
 name: Security Scan
 
 on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
-  safety:
+  safety-scan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@v4
-
-      - name: Set up Python
-        run: uv python install 3.11
-
-      - name: Install dependencies
-        run: uv sync --group dev
-
-      - name: Run Safety check
-        run: |
-          uv run safety check \
-            --key "$SAFETY_API_KEY" \
-            --policy-file .safety-policy.yml \
-            --full-report \
-            --save-json reports/safety-report.json
-        env:
-          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
-```
-
----
-
-## Basic Workflow — Requirements File (pip / requirements.txt)
-
-```yaml
-jobs:
-  safety:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v4
         with:
-          python-version: "3.11"
+          version: "latest"
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt safety
+      - run: uv python install 3.11
 
-      - name: Run Safety check
+      - run: uv sync --group dev
+
+      - name: Run Safety scan
         run: |
-          safety check \
-            --key "$SAFETY_API_KEY" \
-            -r requirements.txt \
-            --policy-file .safety-policy.yml \
-            --full-report
+          uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
+            --policy-file .safety-policy.yml
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 ```
 
 ---
 
-## With JSON + HTML Artifact (uv)
+## With Reports and Artifacts
 
 ```yaml
-      - name: Create reports directory
-        run: mkdir -p reports
+name: Security Scan
 
-      - name: Run Safety check
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  safety-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+
+      - run: uv python install 3.11
+
+      - run: uv sync --group dev
+
+      - run: mkdir -p reports
+
+      - name: Run Safety scan
         run: |
-          uv run safety check \
-            --key "$SAFETY_API_KEY" \
+          uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
             --policy-file .safety-policy.yml \
-            --full-report \
-            --save-json reports/safety-report.json
+            --save-as json reports/safety-report.json \
+            --save-as html reports/safety-report.html
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 
-      - name: Upload Safety reports
-        uses: actions/upload-artifact@v4
+      - name: Upload reports
         if: always()
+        uses: actions/upload-artifact@v4
         with:
-          name: safety-reports
+          name: safety-reports-${{ github.run_number }}
           path: reports/
           retention-days: 90
 ```
 
 ---
 
-## Scheduled Nightly Scan
+## Scheduled Daily Scan
 
-Catch newly published CVEs against your pinned dependencies:
+Catch newly published CVEs even when no code has changed:
 
 ```yaml
+name: Daily Security Scan
+
 on:
   schedule:
     - cron: "0 6 * * *"   # Daily at 06:00 UTC
-  push:
-    branches: [main]
   workflow_dispatch:
+
+jobs:
+  safety-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+      - run: uv python install 3.11
+      - run: uv sync --group dev
+      - run: mkdir -p reports
+      - name: Run Safety scan
+        run: |
+          uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
+            --policy-file .safety-policy.yml \
+            --save-as json reports/safety-report.json
+        env:
+          SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: daily-safety-report
+          path: reports/
+          retention-days: 30
 ```
 
 ---
 
-## Adding the API Key Secret
+## PR Annotation on Failure
 
-1. Go to **Settings → Secrets and variables → Actions**
-2. Click **New repository secret**
-3. Name: `SAFETY_API_KEY`, Value: your pyup.io API key from [pyup.io/account/api-key](https://pyup.io/account/api-key/)
+```yaml
+      - name: Annotate PR on failure
+        if: failure() && github.event_name == 'pull_request'
+        run: |
+          echo "## ❌ Safety Scan Failed" >> $GITHUB_STEP_SUMMARY
+          echo "Vulnerabilities found above policy threshold." >> $GITHUB_STEP_SUMMARY
+          echo "Run \`make scan\` locally to investigate." >> $GITHUB_STEP_SUMMARY
+```
+
+---
+
+## Caching uv
+
+Speed up CI by caching uv's download cache:
+
+```yaml
+      - uses: astral-sh/setup-uv@v4
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+```
+
+---
+
+## Secret Setup
+
+1. Navigate to your GitHub repository
+2. Go to **Settings → Secrets and variables → Actions**
+3. Click **New repository secret**
+4. Name: `SAFETY_API_KEY`, Value: your API key from [platform.safetycli.com](https://platform.safetycli.com)

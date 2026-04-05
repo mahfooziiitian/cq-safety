@@ -1,61 +1,76 @@
 # Ignoring Vulnerabilities
 
-Safety v2 provides two ways to ignore known false positives: the `--ignore` CLI flag and the policy file.
+Safety CLI 3 does **not** have a `--ignore` CLI flag. All vulnerability exceptions are managed through the **policy file** (`installation.allow.vulnerabilities`). This approach ensures exceptions are documented, version-controlled, and auditable.
 
 ---
 
-## `--ignore` CLI Flag
+## Policy File Exceptions
 
-Pass one or more vulnerability IDs to skip:
-
-```bash
-safety check --ignore 36546 -r requirements.txt
-
-# Ignore multiple CVEs
-safety check --ignore 36546 --ignore 40291 -r requirements.txt
-```
-
-This is suitable for one-off overrides. For persistent, team-wide ignores, use the policy file.
-
----
-
-## Policy File `ignore-vulnerabilities`
-
-Generate a default policy file:
-
-```bash
-safety generate policy_file
-# Creates .safety-policy.yml in the current directory
-```
-
-Then configure ignores under `security.ignore-vulnerabilities`:
+Add exceptions to your `.safety-policy.yml`:
 
 ```yaml
-# .safety-policy.yml
-version: "2.0"
-
-security:
-  ignore-cvss-severity-below: 0        # 0=all, 4=medium+, 7=high+, 9=critical only
-  ignore-cvss-unknown-severity: False
-  ignore-vulnerabilities:
-    36546:
-      reason: "Not exploitable — our app does not follow HTTP redirects"
-      expires: "2025-06-30"
-  continue-on-vulnerability-error: False
+installation:
+  allow:
+    vulnerabilities:
+      CVE-2024-12345:
+        reason: "False positive — only affects Windows builds"
+        expires: "2025-06-01"
+      CVE-2023-99999:
+        reason: "Accepted risk — no fix available, mitigated by network isolation"
 ```
 
-Apply the policy:
+Each entry requires:
 
-```bash
-safety check --policy-file .safety-policy.yml -r requirements.txt
+| Field | Required | Description |
+|-------|----------|-------------|
+| `reason` | Yes | Document why this exception is accepted |
+| `expires` | Recommended | Date when the exception should be reviewed |
+
+---
+
+## Auto-Ignore in Report
+
+The `auto-ignore-in-report` section suppresses certain result classes from the report entirely:
+
+```yaml
+report:
+  dependency-vulnerabilities:
+    auto-ignore-in-report:
+      python:
+        # Suppress results from the active virtual environment itself
+        environment-results: true
+        # Suppress packages without pinned versions
+        unpinned-requirements: true
+      # Suppress all vulnerabilities at these severity levels
+      cvss-severity: []
+```
+
+To suppress all `low` and `info` severity findings:
+
+```yaml
+cvss-severity:
+  - low
+  - info
 ```
 
 ---
 
 ## Best Practices
 
-- [ ] Always add a `reason` field for every ignored CVE in the policy file
-- [ ] Always add an `expires` date — re-evaluate when it passes
-- [ ] Never ignore `critical` severity without security team approval
-- [ ] Commit `.safety-policy.yml` to version control for team-wide consistency
-- [ ] Remove an ignore entry as soon as the package is upgraded past the affected version
+- [ ] **Document every exception** with a `reason` — vague reasons like "ignore" are not acceptable.
+- [ ] **Set an expiry date** (`expires`) for all exceptions so they are periodically reviewed.
+- [ ] **Commit the policy file** to version control so exceptions are tracked.
+- [ ] **Use `auto-ignore-in-report`** to suppress noise (e.g., unpinned transitive deps) rather than creating individual exceptions.
+- [ ] **Review exceptions in PRs** — treat security exceptions like code changes.
+- [ ] **Run `safety validate policy_file`** after editing `.safety-policy.yml` to catch syntax errors.
+- [ ] **Check the Safety Platform** audit log for a history of which exceptions were active during each scan.
+
+---
+
+## Migrating from v2
+
+| v2 | v3 |
+|----|-----|
+| `safety check --ignore CVE-xxx` | `installation.allow.vulnerabilities` in policy file |
+| `ignore-cvss-severity-below: 4.0` | `auto-ignore-in-report.cvss-severity: [low, info]` |
+| `continue-on-vulnerability-error: true` | `fail-scan-with-exit-code.enabled: false` |

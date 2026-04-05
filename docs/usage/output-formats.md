@@ -1,107 +1,132 @@
 # Output Formats
 
-Safety v2 supports four output formats.
+Safety CLI 3 supports five output formats, specified with `--output`:
 
 ---
 
-## Default (Human-readable Table)
+## Formats
+
+| Format | Flag | Use Case |
+|--------|------|----------|
+| `screen` | `--output screen` | Human-readable terminal output (default) |
+| `json` | `--output json` | Machine-readable, CI pipelines, scripting |
+| `html` | `--output html` | Reports for stakeholders and archiving |
+| `text` | `--output text` | Plain text logs and email reports |
+| `spdx` | `--output spdx` | Software Bill of Materials (SBOM) |
+
+---
+
+## Screen Format
+
+The default output format. Renders a structured, coloured report in the terminal:
 
 ```bash
-safety check -r requirements.txt
-```
-
-Output:
-
-```
-+==============================================================================+
-| REPORT                                                                       |
-| checked 42 packages, using free DB (updated once a month)                   |
-+============================+===========+==========================+==========+
-| package                    | installed | affected                 | ID       |
-+============================+===========+==========================+==========+
-| requests                   | 2.19.1    | <2.20.0                  | 36546    |
-+============================+===========+==========================+==========+
+safety scan --output screen
+# or simply:
+safety scan
 ```
 
 ---
 
-## Full Report
+## JSON Format
+
+Outputs a JSON object to stdout:
 
 ```bash
-safety check --full-report -r requirements.txt
+safety scan --output json
+safety scan --output json > reports/safety.json
 ```
 
-Includes the full advisory text for each vulnerability.
+### v3 JSON structure
 
----
-
-## Short Report
-
-```bash
-safety check --short-report -r requirements.txt
-```
-
-Shows a condensed one-line summary per vulnerability.
-
----
-
-## JSON
-
-```bash
-safety check --json -r requirements.txt
-# or save to a file
-safety check --json -r requirements.txt > safety-report.json
-```
-
-Best for CI/CD pipelines and programmatic processing.
-
-v2 JSON output is a **list of lists**. Each inner list has the structure:
-
-```
-[package_name, affected_range, installed_version, advisory_text, vuln_id]
-```
-
-Example:
 ```json
-[
-  [
-    "requests",
-    "<2.20.0",
-    "2.19.1",
-    "Requests before 2.20.0 sends an HTTP Authorization header to an http URI upon receiving a same-hostname https-to-http redirect...",
-    "36546"
-  ]
-]
+{
+  "vulnerabilities": [
+    {
+      "package_name": "requests",
+      "installed_version": "2.28.0",
+      "vulnerability_id": "CVE-2023-32681",
+      "severity": {
+        "cvss_v3": 6.1
+      },
+      "fixed_versions": ["2.31.0"],
+      "advisory": "Requests has a vulnerability..."
+    }
+  ],
+  "scan_metadata": {
+    "scan_id": "abc123",
+    "timestamp": "2024-01-15T10:00:00Z",
+    "packages_scanned": 42,
+    "vulnerabilities_found": 1
+  }
+}
 ```
 
-### Parsing in Python
+### Python parsing example
 
 ```python
 import json
 import subprocess
 
 result = subprocess.run(
-    ["safety", "check", "--json", "-r", "requirements.txt"],
+    ["safety", "scan", "--output", "json"],
     capture_output=True,
     text=True,
-    check=False,   # exit code 1 on vulnerabilities — handle manually
 )
-vulnerabilities = json.loads(result.stdout)
-for vuln in vulnerabilities:
-    package_name, affected_range, installed_version, advisory, vuln_id = vuln
-    print(f"{package_name} {installed_version} — {vuln_id} (affected: {affected_range})")
+data = json.loads(result.stdout)
+
+for vuln in data.get("vulnerabilities", []):
+    print(f"{vuln['package_name']} {vuln['installed_version']}")
+    print(f"  CVE: {vuln['vulnerability_id']}")
+    print(f"  CVSS: {vuln['severity']['cvss_v3']}")
+    print(f"  Fix: upgrade to {vuln['fixed_versions']}")
 ```
 
 ---
 
-## Bare
+## HTML Format
+
+Generates a self-contained HTML report:
 
 ```bash
-safety check --bare -r requirements.txt
+safety scan --output html --save-as html reports/safety.html
 ```
 
-Outputs only the names of vulnerable packages, one per line. Useful for piping into other tools:
+Open `reports/safety.html` in a browser to view the interactive report.
+
+---
+
+## Text Format
+
+Plain text output suitable for logs:
 
 ```bash
-safety check --bare -r requirements.txt | xargs echo "Vulnerable:"
+safety scan --output text
+safety scan --output text >> security.log
 ```
+
+---
+
+## SPDX Format (SBOM)
+
+Generates an [SPDX](https://spdx.dev/) Software Bill of Materials:
+
+```bash
+safety scan --output spdx
+safety scan --output spdx --save-as spdx reports/sbom.spdx
+```
+
+---
+
+## Saving Multiple Formats
+
+Use `--save-as` (repeatable) to save multiple formats simultaneously while still controlling what is displayed to stdout with `--output`:
+
+```bash
+safety scan \
+  --save-as json reports/safety.json \
+  --save-as html reports/safety.html \
+  --output screen
+```
+
+This saves a JSON report and HTML report to files, while printing the screen format to stdout.

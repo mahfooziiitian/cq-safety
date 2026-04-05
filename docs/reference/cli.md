@@ -1,109 +1,150 @@
 # CLI Reference
 
-Safety v2 is built around `safety check` as the primary command.
+## Global Options
+
+These options apply to all Safety commands:
+
+| Option | Description |
+|--------|-------------|
+| `--key KEY` | API key for authentication |
+| `--stage STAGE` | Lifecycle stage: `development`, `cicd`, `production` |
+| `--proxy-host HOST` | Proxy hostname |
+| `--proxy-port PORT` | Proxy port |
+| `--proxy-protocol PROTO` | Proxy protocol (`http` or `https`) |
+| `--version` | Show version and exit |
+| `--help` | Show help and exit |
 
 ---
 
-## `safety check`
+## `safety scan`
 
-Scan packages for known vulnerabilities.
+Scan Python packages for known vulnerabilities.
 
 ```bash
-safety check [OPTIONS]
+safety scan [OPTIONS]
 ```
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `-r <file>` | — | Requirements file to check (repeatable) |
-| `--stdin` | off | Read package list from stdin |
-| `--full-report` | off | Show full advisory text |
-| `--short-report` | off | Show short one-line summary |
-| `--bare` | off | Output only vulnerable package names |
-| `--json` | off | Output results as JSON array of arrays |
-| `--ignore <id>` | — | Ignore a vulnerability ID (repeatable) |
-| `--key <api-key>` | — | API key for daily DB updates |
-| `--db <path>` | — | Use a local vulnerability database |
-| `--cache` | off | Cache the vulnerability database |
-| `--policy-file <path>` | — | Apply a local v2 policy file |
-| `--proxy-host <host>` | — | HTTP proxy hostname |
-| `--proxy-port <port>` | — | HTTP proxy port |
-| `--proxy-protocol <proto>` | https | Proxy protocol |
+| Option | Description |
+|--------|-------------|
+| `--target PATH` | Directory to scan (default: current environment) |
+| `--output FORMAT` | Output format: `screen`, `json`, `html`, `text`, `spdx` |
+| `--detailed-output` | Show full vulnerability details |
+| `--save-as FORMAT FILE` | Save report to file (repeatable) |
+| `--policy-file PATH` | Path to policy file (default: `.safety-policy.yml`) |
+| `--apply-fixes` | Automatically apply safe version upgrades |
+| `--filter` | Filter results |
+| `--help` | Show help and exit |
 
 ### Examples
 
 ```bash
-# Scan installed packages
-safety check
-
-# Scan a requirements file
-safety check -r requirements.txt
-
-# Scan from pip freeze
-pip freeze | safety check --stdin
-
-# Full report
-safety check --full-report -r requirements.txt
-
-# CI/CD with API key and JSON output
-safety check --key $SAFETY_API_KEY --json -r requirements.txt > report.json
-
-# Ignore a CVE
-safety check --ignore 36546 -r requirements.txt
-
-# Use a policy file
-safety check --policy-file .safety-policy.yml -r requirements.txt
-
-# Use local database
-safety check --db /path/to/safety-db -r requirements.txt
-
-# Cache database for faster repeated runs
-safety check --cache -r requirements.txt
+safety scan
+safety scan --detailed-output
+safety scan --target ./src --output json
+safety scan --save-as json report.json --save-as html report.html
+safety --key $SAFETY_API_KEY --stage cicd scan --policy-file .safety-policy.yml
 ```
+
+---
+
+## `safety auth`
+
+Manage authentication with the Safety Platform.
+
+### `safety auth login`
+
+```bash
+safety auth login [--headless]
+```
+
+Opens a browser to [platform.safetycli.com](https://platform.safetycli.com) for login. Use `--headless` in SSH sessions.
+
+### `safety auth logout`
+
+```bash
+safety auth logout
+```
+
+Removes the stored authentication token.
+
+### `safety auth status`
+
+```bash
+safety auth status
+```
+
+Shows the current authentication status and token expiry.
+
+### `safety auth register`
+
+```bash
+safety auth register
+```
+
+Create a new Safety Platform account from the CLI.
 
 ---
 
 ## `safety generate`
 
+Generate configuration files.
+
 ```bash
-# Generate a default v2 policy file
 safety generate policy_file
 ```
 
+Creates a default `.safety-policy.yml` in the current directory.
+
 ---
 
-## `safety review`
+## `safety validate`
+
+Validate configuration files.
 
 ```bash
-# Review a saved JSON report
-safety review --file reports/safety-report.json
+safety validate policy_file
 ```
+
+Validates `.safety-policy.yml` against the v3 schema.
 
 ---
 
-## `safety alert` (Deprecated)
+## `safety configure`
+
+Configure Safety CLI settings.
 
 ```bash
-# alert is deprecated — use Safety integrations instead
-safety alert
+safety configure --proxy-host proxy.example.com --proxy-port 8080
+safety configure --proxy-host proxy.example.com --proxy-protocol https
 ```
-
----
-
-## Commands that do NOT exist in v2
-
-| Command | Note |
-|---------|------|
-| `safety scan` | v3 only |
-| `safety auth` | v3 only — v2 uses API keys |
-| `safety validate` | v3 only |
-| `safety configure` | v3 only |
 
 ---
 
 ## `safety check-updates`
 
-Check if a newer version of Safety CLI is available:
+Check if a newer version of Safety CLI is available.
 
 ```bash
 safety check-updates
 ```
+
+---
+
+## Beta Commands
+
+| Command | Description |
+|---------|-------------|
+| `safety codebase` | Scan source code for security issues (beta) |
+| `safety firewall` | Package firewall — block malicious packages at install time (beta) |
+
+---
+
+## Deprecated Commands
+
+| Command | Status | Replacement |
+|---------|--------|-------------|
+| `safety check` | Deprecated | `safety scan` |
+| `safety check -r requirements.txt` | Deprecated | `safety scan --target .` |
+| `safety check --ignore CVE-xxx` | Deprecated | Policy file `installation.allow.vulnerabilities` |
+| `safety license` | Deprecated | `safety scan --output spdx` |
+| `safety alert` | Deprecated | Platform alerts at platform.safetycli.com |

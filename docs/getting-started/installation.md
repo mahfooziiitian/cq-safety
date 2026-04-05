@@ -1,73 +1,66 @@
 # Installation
 
-## Requirements
-
-- Python **3.7+** (3.11+ recommended)
-- `pip` or `uv`
-
----
-
-## Install Safety v2
-
-=== "pip"
-
-    ```bash
-    pip install safety
-    ```
-
-=== "uv (recommended)"
-
-    ```bash
-    # Add as a dev dependency
-    uv add --dev safety
-
-    # Sync the environment
-    uv sync
-    ```
-
-=== "pipx (global tool)"
-
-    ```bash
-    pipx install safety
-    ```
-
----
-
-## Verify Installation
+## Install Safety CLI 3
 
 ```bash
+# pip
+pip install safety
+
+# uv (recommended for modern Python projects)
+uv add --dev safety
+
+# pipx (isolated global install)
+pipx install safety
+
+# Verify installation
 safety --version
-# safety, version 2.x.x
 ```
 
 ---
 
-## API Key Setup
+## Authentication
 
-Safety v2 uses an API key for CI/CD access and to unlock daily database updates.
+Safety CLI 3 requires authentication to access the vulnerability database. There are two modes:
 
-### Get an API Key
-
-Register for a free account and get your API key at [pyup.io/account/api-key/](https://pyup.io/account/api-key/).
-
-- **Free tier**: database updated monthly
-- **Commercial tier**: database updated daily
-
-### Configure the API Key
+### Development — Browser Login
 
 ```bash
-# Set as environment variable (recommended)
-export SAFETY_API_KEY=your-key-here
-
-# Or pass directly on the command line
-safety check --key your-key-here -r requirements.txt
+safety auth login
 ```
 
-!!! tip
-    Store the key as a repository secret (`SAFETY_API_KEY`) in GitHub or GitLab — never commit it to source control.
+This opens [platform.safetycli.com](https://platform.safetycli.com) in a browser. Sign in and the CLI stores a local token.
+
+```bash
+# Headless (SSH sessions, no browser available)
+safety auth login --headless
+
+# Check auth status
+safety auth status
+
+# Logout
+safety auth logout
+```
+
+### CI/CD — API Key
+
+Create an API key at [platform.safetycli.com](https://platform.safetycli.com) under **Settings → API Keys**.
+
+Store the key as a secret named `SAFETY_API_KEY` in your CI/CD system, then pass it via:
+
+```bash
+safety --key $SAFETY_API_KEY --stage cicd scan
+```
 
 ---
 
-## No Browser Login
+## Lifecycle Stages
 
-Safety v2 does **not** use browser-based authentication. Authentication is via API key only.
+The `--stage` flag tells Safety what context the scan is running in, adjusting output verbosity and reporting behaviour:
+
+| Stage | Flag | Use Case |
+|-------|------|----------|
+| `development` | `--stage development` | Local developer scans |
+| `cicd` | `--stage cicd` | Automated CI/CD pipelines |
+| `production` | `--stage production` | Production environment scans |
+
+The `development` stage is the default when using `safety auth login`. CI/CD pipelines should always use `--stage cicd`.

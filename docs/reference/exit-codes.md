@@ -1,69 +1,100 @@
 # Exit Codes
 
-Safety v2 uses the following exit codes, making it easy to integrate into shell scripts and CI/CD pipelines.
+Safety CLI 3 uses specific exit codes to communicate scan results to calling processes.
 
-| Code | Meaning |
-|------|---------|
-| `0` | ✅ No vulnerabilities found |
-| `1` | ❌ One or more vulnerabilities found |
-| `64` | ⚠️ Command-line usage error |
-| `65` | ⚠️ No packages found to scan |
-| `66` | ⚠️ Failed to fetch the vulnerability database |
+## Codes
 
-!!! tip "Controlling what causes a non-zero exit"
-    Use `security.ignore-cvss-severity-below` in your `.safety-policy.yml` to ignore low-severity findings.
-    ```yaml
-    version: "2.0"
-    security:
-      ignore-cvss-severity-below: 7  # Only fail on High (7+) and Critical (9+)
-      ignore-cvss-unknown-severity: False
-      continue-on-vulnerability-error: False
-    ```
+| Code | Name | Meaning |
+|------|------|---------|
+| `0` | Success | Scan passed — no actionable vulnerabilities above threshold |
+| `1` | Error | Unexpected error occurred |
+| `64` | Vulnerabilities found | One or more vulnerabilities exceed the policy threshold |
+| `65` | Configuration error | Policy file or scan configuration is invalid |
+| `66` | Database unreachable | Unable to connect to the Safety vulnerability database |
 
 ---
 
-## Shell Script Example
+## Policy-Controlled Thresholds
+
+The `fail-scan-with-exit-code` section in your policy file controls when exit code `64` is triggered:
+
+```yaml
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - critical
+        - high
+        - medium
+      exploitability:
+        - critical
+        - high
+        - medium
+```
+
+To allow the scan to always succeed (for reporting-only pipelines):
+
+```yaml
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: false
+```
+
+---
+
+## Shell Script Examples
+
+### Basic check
 
 ```bash
-#!/bin/bash
-set -e
-
-safety check --key "$SAFETY_API_KEY" -r requirements.txt --policy-file .safety-policy.yml
+safety scan
 EXIT_CODE=$?
 
 case $EXIT_CODE in
-  0)
-    echo "✅ No vulnerabilities found."
-    ;;
-  1)
-    echo "❌ Vulnerabilities detected — aborting deployment."
-    exit 1
-    ;;
-  66)
-    echo "⚠️  Could not reach Safety DB. Check network connectivity."
-    exit 1
-    ;;
+  0)  echo "✅ No vulnerabilities found" ;;
+  64) echo "❌ Vulnerabilities found — review required"; exit 64 ;;
+  65) echo "⚠️  Policy error — check .safety-policy.yml"; exit 65 ;;
+  66) echo "⚠️  Database unreachable — check connectivity"; exit 66 ;;
+  *)  echo "❌ Unexpected error (exit code: $EXIT_CODE)"; exit $EXIT_CODE ;;
 esac
 ```
 
----
+### Fail on critical only
 
-## Makefile Integration
+Set your policy to only fail on critical:
 
-```makefile
-.PHONY: security
-security:
-@safety check --key "$(SAFETY_API_KEY)" -r requirements.txt || (echo "Security check failed"; exit 1)
+```yaml
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - critical
+```
+
+```bash
+safety scan --policy-file .safety-policy-critical-only.yml || exit $?
 ```
 
 ---
 
-## GitHub Actions — Fail on Vulnerabilities
+## Makefile Examples
 
-```yaml
-- name: Run Safety check
-  run: safety check --key $SAFETY_API_KEY -r requirements.txt
-  env:
-    SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
-  # Step fails automatically when exit code is non-zero
+```makefile
+scan:
+uv run safety scan --detailed-output
+
+scan-ci:
+uv run safety --key $(SAFETY_API_KEY) --stage cicd scan \
+--policy-file .safety-policy.yml \
+--save-as json reports/safety-report.json
+
+scan-strict:
+@uv run safety scan --policy-file .safety-policy-strict.yml; \
+CODE=$$?; \
+if [ $$CODE -eq 64 ]; then \
+echo "Vulnerabilities found — check reports/"; \
+exit 64; \
+fi
 ```

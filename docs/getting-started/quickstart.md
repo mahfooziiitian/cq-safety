@@ -1,83 +1,88 @@
-# Quick Start
+# Quickstart
 
-## 1. Install Safety
+Get up and running with Safety CLI 3 in five steps.
+
+---
+
+## Step 1 — Authenticate
 
 ```bash
-pip install safety
-# or with uv:
-uv add --dev safety
+safety auth login
+```
+
+This opens a browser tab to [platform.safetycli.com](https://platform.safetycli.com). Log in with your account. The CLI stores a local token.
+
+```bash
+# Verify authentication succeeded
+safety auth status
 ```
 
 ---
 
-## 2. Run `safety check`
+## Step 2 — Run Your First Scan
 
 ```bash
-# Scan currently installed packages
-safety check
-
-# Scan a requirements file
-safety check -r requirements.txt
-
-# Scan from pip freeze output
-pip freeze | safety check --stdin
+safety scan
 ```
 
-Safety checks your packages against a curated database of known CVEs.
+Safety inventories all packages in the current Python environment and checks them against the Safety Vulnerability Database.
 
 ---
 
-## 3. Check a Requirements File
+## Step 3 — Detailed Output
 
 ```bash
-safety check -r requirements.txt
+safety scan --detailed-output
 ```
 
-You can pass multiple files:
-
-```bash
-safety check -r requirements.txt -r requirements-dev.txt
-```
+Shows the full description, CVE IDs, CVSS scores, affected versions, and fix recommendations for each finding.
 
 ---
 
-## 4. Read the Output
+## Step 4 — Read the Output
 
-**No vulnerabilities found:**
+The scan output shows:
 
-```
-No known security vulnerabilities found.
-```
+- **Package name** and installed version
+- **Vulnerability ID** (CVE or Safety ID)
+- **CVSS severity** (critical / high / medium / low / info)
+- **Fixed version** (the minimum safe version)
+- **Description** (with `--detailed-output`)
 
-**Vulnerability detected:**
+**Exit codes:**
 
-```
-+==============================================================================+
-| REPORT                                                                       |
-| checked 42 packages, using free DB (updated once a month)                   |
-+============================+===========+==========================+==========+
-| package                    | installed | affected                 | ID       |
-+============================+===========+==========================+==========+
-| requests                   | 2.19.1    | <2.20.0                  | 36546    |
-+============================+===========+==========================+==========+
-```
-
-See [Output Formats](../usage/output-formats.md) for JSON and bare options.
+| Code | Meaning |
+|------|---------|
+| `0` | No actionable vulnerabilities |
+| `64` | Vulnerabilities found above policy threshold |
+| `65` | Configuration or policy error |
+| `66` | Database unreachable |
 
 ---
 
-## 5. Fix Vulnerabilities
+## Step 5 — Auto-Fix or Manual Fix
 
-Upgrade the vulnerable package:
-
-```bash
-pip install --upgrade requests
-# or with uv:
-uv add "requests>=2.20.0"
-```
-
-Then re-run the scan to confirm the issue is resolved:
+### Auto-fix (recommended for patch updates)
 
 ```bash
-safety check -r requirements.txt
+safety scan --apply-fixes
 ```
+
+Safety updates `pyproject.toml` or `requirements.txt` to the minimum safe version. Then regenerate your lock file:
+
+```bash
+uv lock
+# or
+pip-compile
+```
+
+### Manual fix
+
+Update the vulnerable package in your dependency file and regenerate the lock:
+
+```bash
+uv add "somepackage>=2.1.0"
+uv lock
+```
+
+Review and commit the changes.

@@ -1,29 +1,34 @@
 # Pre-commit Hook
 
-Run Safety automatically before every commit to catch vulnerabilities early.
+Run Safety automatically before each commit to catch vulnerabilities early.
+
+!!! note
+    This hook calls `safety scan` directly. Do **not** use the `Lucas-C/pre-commit-hooks-safety` hook — it uses the deprecated `safety check` command.
 
 ---
 
-## Setup with `Lucas-C/pre-commit-hooks-safety` (Recommended for Safety v2)
+## Setup
 
 ### 1. Install pre-commit
 
 ```bash
 pip install pre-commit
-# or with uv:
+# or
 uv add --dev pre-commit
 ```
 
-### 2. Add the Safety hook to `.pre-commit-config.yaml`
+### 2. Add to `.pre-commit-config.yaml`
 
 ```yaml
-# .pre-commit-config.yaml
 repos:
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.3.3
+  - repo: local
     hooks:
-      - id: python-safety-dependencies-check
-        args: ["--short-report"]
+      - id: safety-scan
+        name: Safety vulnerability scan
+        entry: safety scan
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
 ```
 
 ### 3. Install the hooks
@@ -32,57 +37,69 @@ repos:
 pre-commit install
 ```
 
----
-
-## Running Manually
-
-```bash
-# Run Safety hook on all files
-pre-commit run python-safety-dependencies-check --all-files
-
-# Run all hooks
-pre-commit run --all-files
-```
+Now `safety scan` runs automatically before each commit.
 
 ---
 
-## With Policy File Args
+## With uv
 
-Pass extra arguments to `safety check` via the `args` list:
+If your project uses uv, use `uv run` in the entry:
 
 ```yaml
 repos:
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.3.3
+  - repo: local
     hooks:
-      - id: python-safety-dependencies-check
-        args: ["--policy-file", ".safety-policy.yml", "--full-report"]
+      - id: safety-scan
+        name: Safety vulnerability scan
+        entry: uv run safety scan
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
 ```
 
 ---
 
-## With API Key (CI environments)
+## CI Variant (with API Key)
+
+For CI environments where `safety auth login` is not available, use the API key:
 
 ```yaml
 repos:
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.3.3
+  - repo: local
     hooks:
-      - id: python-safety-dependencies-check
-        args: ["--key", "${SAFETY_API_KEY}", "--short-report"]
+      - id: safety-scan
+        name: Safety vulnerability scan
+        entry: bash -c 'uv run safety --key "$SAFETY_API_KEY" --stage cicd scan'
+        language: system
+        pass_filenames: false
 ```
+
+Set `SAFETY_API_KEY` in your CI environment variables.
 
 ---
 
-## Skipping the Hook (Emergency)
+## Skip the Hook
+
+To skip Safety for a specific commit:
 
 ```bash
-# Skip all hooks for one commit (use sparingly)
+SKIP=safety-scan git commit -m "chore: update docs"
+```
+
+Or to skip all hooks:
+
+```bash
 git commit --no-verify -m "emergency fix"
-
-# Skip only the safety hook
-SKIP=python-safety-dependencies-check git commit -m "emergency fix"
 ```
 
-!!! warning
-    Skipping hooks bypasses your security gate. Always follow up with a tracked issue.
+---
+
+## Run Manually
+
+```bash
+# Run all hooks on all files
+pre-commit run --all-files
+
+# Run only the safety hook
+pre-commit run safety-scan --all-files
+```

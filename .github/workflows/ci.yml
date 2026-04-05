@@ -1,4 +1,4 @@
-name: CI v2
+name: CI
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  # ── Lint & validate ─────────────────────────────────────────────────────────
+  # Lint & validate
   validate:
     name: Validate Config & Docs
     runs-on: ubuntu-latest
@@ -31,10 +31,13 @@ jobs:
       - name: Install dependencies
         run: uv sync --group dev
 
+      - name: Validate Safety policy file
+        run: uv run safety validate policy_file
+
       - name: Build MkDocs (strict)
         run: uv run mkdocs build --strict
 
-  # ── Security scan ───────────────────────────────────────────────────────────
+  # Security scan
   security:
     name: Security Scan
     runs-on: ubuntu-latest
@@ -58,13 +61,11 @@ jobs:
       - name: Create reports directory
         run: mkdir -p reports
 
-      - name: Run Safety check
+      - name: Run Safety scan
         run: |
-          uv run safety check \
-            --key "$SAFETY_API_KEY" \
+          uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
             --policy-file .safety-policy.yml \
-            --full-report \
-            --save-json reports/safety-report.json
+            --save-as json reports/safety-report.json
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 
@@ -76,7 +77,7 @@ jobs:
           path: reports/
           retention-days: 30
 
-  # ── Matrix: multiple Python versions ────────────────────────────────────────
+  # Matrix: multiple Python versions
   compatibility:
     name: Python ${{ matrix.python-version }} compatibility
     runs-on: ubuntu-latest
@@ -105,7 +106,7 @@ jobs:
       - name: Verify Safety CLI runs
         run: uv run safety --version
 
-  # ── Summary gate ────────────────────────────────────────────────────────────
+  # Summary gate
   ci-passed:
     name: CI Passed
     runs-on: ubuntu-latest

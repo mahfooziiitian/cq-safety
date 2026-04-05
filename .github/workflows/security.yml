@@ -1,10 +1,9 @@
-name: Security Scan v2
+name: Security Scan
 
 on:
   push:
     branches: [main]
     paths:
-      - "**.txt"
       - "**.toml"
       - "**.cfg"
       - "uv.lock"
@@ -13,7 +12,6 @@ on:
   pull_request:
     branches: [main]
     paths:
-      - "**.txt"
       - "**.toml"
       - "**.cfg"
       - "uv.lock"
@@ -21,8 +19,7 @@ on:
       - ".github/workflows/security.yml"
   schedule:
     - cron: "0 6 * * *"   # Daily at 06:00 UTC — catch newly published CVEs
-  workflow_dispatch:       # Allow manual runs from the Actions tab
-
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -50,20 +47,17 @@ jobs:
       - name: Create reports directory
         run: mkdir -p reports
 
-      - name: Run Safety check
+      - name: Run Safety scan
         id: safety
         run: |
-          # Scan the installed environment (no requirements.txt — project uses pyproject.toml + uv)
-          uv run safety check \
-            --key "$SAFETY_API_KEY" \
+          uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
             --policy-file .safety-policy.yml \
-            --full-report \
-            --save-json reports/safety-report.json
+            --save-as json reports/safety-report.json
         env:
           SAFETY_API_KEY: ${{ secrets.SAFETY_API_KEY }}
 
       - name: Upload scan reports
-        if: always()   # upload even when vulnerabilities are found
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: safety-reports-${{ github.run_number }}
@@ -79,7 +73,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Review the uploaded \`safety-reports\` artifact for details.**" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "To investigate:" >> $GITHUB_STEP_SUMMARY
+          echo "To investigate locally:" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
           echo "make scan" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY

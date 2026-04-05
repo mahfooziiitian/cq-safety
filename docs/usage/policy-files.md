@@ -1,108 +1,163 @@
-# Safety Policy Files (v2)
+# Policy Files
 
-Safety v2 uses a **version 2.0** policy schema to configure severity thresholds, ignored CVEs, and scan behaviour.
+Safety CLI 3 uses a YAML policy file (default: `.safety-policy.yml`) to configure scan behaviour, reporting, and failure thresholds.
 
 ---
 
-## Generate a Policy File
+## Generate and Validate
 
 ```bash
+# Generate a default policy file
 safety generate policy_file
 # Creates .safety-policy.yml in the current directory
-```
 
-Review an existing JSON report:
-
-```bash
-safety review --file reports/safety-report.json
+# Validate the policy file
+safety validate policy_file
 ```
 
 ---
 
-## Full v2 Policy File Reference
+## Full v3 Schema
 
 ```yaml
-# .safety-policy.yml
-# Docs: https://docs.pyup.io/docs/safety-20-policy-files
-version: "2.0"
+version: '3.0'
 
-security:
-  # Ignore vulnerabilities with CVSS score below this number (0–10).
-  # 0  = report everything (default)
-  # 4  = ignore Low; report Medium, High, Critical
-  # 7  = ignore Low & Medium; report High & Critical
-  # 9  = ignore all except Critical
-  ignore-cvss-severity-below: 0
+scanning-settings:
+  max-depth: 6
+  exclude: []
+  include-files: []
+  system:
+    targets: []
 
-  # Treat vulnerabilities with unknown CVSS score as failures
-  ignore-cvss-unknown-severity: False
+report:
+  dependency-vulnerabilities:
+    enabled: true
+    auto-ignore-in-report:
+      python:
+        environment-results: true
+        unpinned-requirements: true
+      cvss-severity: []
 
-  # Vulnerabilities to ignore — always include reason and expiry
-  ignore-vulnerabilities:
-    36546:
-      reason: "Not exploitable — no HTTP redirects in our deployment"
-      expires: "2025-06-30"
-    40291:
-      reason: "Mitigated by WAF — awaiting upstream patch"
-      expires: "2025-09-01"
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - critical
+        - high
+        - medium
+      exploitability:
+        - critical
+        - high
+        - medium
 
-  # Set True to suppress non-zero exit codes when vulnerabilities are found.
-  # Keep False in CI so pipelines fail on vulnerabilities.
-  continue-on-vulnerability-error: False
+security-updates:
+  dependency-vulnerabilities:
+    auto-security-updates-limit:
+      - patch
+
+installation:
+  default-action: allow
+  audit-logging:
+    enabled: true
+  allow:
+    packages: []
+    vulnerabilities: {}
+  deny:
+    packages: {}
+    vulnerabilities:
+      warning-on-any-of:
+        cvss-severity: []
+      block-on-any-of:
+        cvss-severity: []
 ```
 
 ---
 
-## Schema Reference
+## Key Reference
 
-### `version`
+### `scanning-settings`
 
-Must be `"2.0"` for the v2 schema.
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `max-depth` | int | `6` | Maximum directory depth to scan |
+| `exclude` | list | `[]` | Glob patterns to exclude from scanning |
+| `include-files` | list | `[]` | Files to always include even if excluded |
+| `system.targets` | list | `[]` | Additional system-level scan targets |
 
-### `security.ignore-cvss-severity-below`
+### `report.dependency-vulnerabilities`
 
-A numeric threshold (float, 0–10). Vulnerabilities with a CVSS score **below** this value are ignored.
+| Key | Type | Description |
+|-----|------|-------------|
+| `enabled` | bool | Enable dependency vulnerability reporting |
+| `auto-ignore-in-report.python.environment-results` | bool | Suppress results from the active venv |
+| `auto-ignore-in-report.python.unpinned-requirements` | bool | Suppress packages without pinned versions |
+| `auto-ignore-in-report.cvss-severity` | list | CVSS severity levels to suppress |
 
-| Value | Effect |
-|-------|--------|
-| `0` | Report everything (default) |
-| `4.0` | Ignore Low; report Medium, High, Critical |
-| `7.0` | Ignore Low & Medium; report High & Critical |
-| `9.0` | Report Critical only |
+### `fail-scan-with-exit-code.dependency-vulnerabilities`
 
-### `security.ignore-cvss-unknown-severity`
+| Key | Type | Description |
+|-----|------|-------------|
+| `enabled` | bool | Enable exit code 64 on threshold breaches |
+| `fail-on-any-of.cvss-severity` | list | CVSS levels that trigger failure: `critical`, `high`, `medium`, `low`, `info` |
+| `fail-on-any-of.exploitability` | list | Exploitability levels that trigger failure |
 
-`False` — treat unknown-CVSS vulnerabilities as failures (recommended)  
-`True` — silently skip vulnerabilities with no CVSS score
+### `security-updates.dependency-vulnerabilities`
 
-### `security.ignore-vulnerabilities`
+| Key | Type | Description |
+|-----|------|-------------|
+| `auto-security-updates-limit` | list | Version bump types allowed for `--apply-fixes`: `patch`, `minor`, `major` |
 
-Map of Safety vulnerability IDs to ignore entries.
+### `installation`
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `reason` | Recommended | Why this CVE is safe to ignore |
-| `expires` | Recommended | ISO 8601 date (`YYYY-MM-DD`) after which the ignore should be reviewed |
-
-### `security.continue-on-vulnerability-error`
-
-`False` — exit with code `1` when vulnerabilities are found (recommended for CI)  
-`True` — always exit `0` even when vulnerabilities are found
+| Key | Type | Description |
+|-----|------|-------------|
+| `default-action` | string | `allow` or `deny` — default for unmatched packages |
+| `audit-logging.enabled` | bool | Log installation events to Safety Platform |
+| `allow.packages` | list | Package names explicitly allowed |
+| `allow.vulnerabilities` | map | Vulnerability IDs allowed with reason + optional expiry |
+| `deny.packages` | map | Package names that must never be installed |
+| `deny.vulnerabilities.warning-on-any-of.cvss-severity` | list | CVSS levels that trigger a warning |
+| `deny.vulnerabilities.block-on-any-of.cvss-severity` | list | CVSS levels that block installation |
 
 ---
 
-## Using the Policy File
+## Example: Strict Production Policy
 
-```bash
-# Apply during a scan
-safety check --policy-file .safety-policy.yml -r requirements.txt
+```yaml
+version: '3.0'
 
-# Generate a fresh policy file
-safety generate policy_file
+scanning-settings:
+  max-depth: 6
+  exclude:
+    - "tests/**"
+    - "docs/**"
 
-# Review a saved JSON report
-safety review --file reports/safety-report.json
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - critical
+        - high
+        - medium
+        - low
+
+installation:
+  default-action: allow
+  allow:
+    vulnerabilities:
+      CVE-2024-12345:
+        reason: "False positive — Windows-only, mitigated in deployment"
+        expires: "2025-03-01"
 ```
 
-!!! tip
-    Commit `.safety-policy.yml` to version control so all team members and CI/CD pipelines use consistent ignore rules.
+---
+
+## v2 → v3 Migration
+
+| v2 Key | v3 Equivalent |
+|--------|---------------|
+| `ignore-cvss-severity-below` | `auto-ignore-in-report.cvss-severity` |
+| `continue-on-vulnerability-error` | `fail-scan-with-exit-code.enabled: false` |
+| `--ignore CVE-xxx` CLI flag | `installation.allow.vulnerabilities` |

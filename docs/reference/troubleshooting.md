@@ -1,121 +1,170 @@
 # Troubleshooting
 
-## No Active Virtual Environment
+## Authentication Errors
 
-Safety v2 scans the **currently installed packages** by default (no `-r` flag). If the wrong environment is active, you'll get incorrect results.
+### Development
 
-Ensure the correct virtual environment is activated:
+**Symptom:** `AuthenticationError: Not authenticated`
+
+**Fix:** Run the browser login flow:
 
 ```bash
-source .venv/bin/activate
-safety check
+safety auth login
+safety auth status
 ```
 
-Or scan a requirements file explicitly:
+If the browser doesn't open, use headless mode:
 
 ```bash
-safety check -r requirements.txt
+safety auth login --headless
 ```
 
 ---
 
-## "Unable to load vulnerability database"
+### CI/CD
 
-Safety cannot reach the remote database.
+**Symptom:** `AuthenticationError` in CI pipeline
 
-**Use cached database:**
+**Fix:** Verify `SAFETY_API_KEY` is set and valid:
+
 ```bash
-safety check --cache -r requirements.txt
+echo $SAFETY_API_KEY   # Should print the key
 ```
 
-**Use a local database:**
+Ensure you pass it correctly:
+
 ```bash
-safety check --db /path/to/safety-db -r requirements.txt
+safety --key "$SAFETY_API_KEY" --stage cicd scan
 ```
 
-**Check internet access:**
+Check the key is active at [platform.safetycli.com](https://platform.safetycli.com).
+
+---
+
+## No Packages Found
+
+**Symptom:** `No packages were found` or empty scan results
+
+**Fix:** Point Safety at your project directory:
+
 ```bash
-curl -I https://pyup.io
+safety scan --target .
+safety scan --target /path/to/project
 ```
 
-**Use a proxy:**
+Ensure you're in the correct Python environment (activated venv or uv shell).
+
+---
+
+## Database Unreachable
+
+**Symptom:** `Exit code 66` — unable to fetch vulnerability database
+
+**Fix:** Configure proxy settings:
+
 ```bash
-safety check --proxy-host 192.168.0.1 --proxy-port 8080 -r requirements.txt
+safety configure \
+  --proxy-host proxy.example.com \
+  --proxy-port 8080 \
+  --proxy-protocol http
+```
+
+Or set environment variables:
+
+```bash
+export HTTP_PROXY=http://proxy.example.com:8080
+export HTTPS_PROXY=http://proxy.example.com:8080
+safety scan
 ```
 
 ---
 
-## False Positives (`--ignore`)
+## Policy Validation Errors
 
-If Safety flags a CVE that is not exploitable in your context:
+**Symptom:** `PolicyValidationError` or unexpected scan behaviour
+
+**Fix:** Validate your policy file:
 
 ```bash
-# Ignore via CLI flag
-safety check --ignore 36546 -r requirements.txt
-
-# Or add to policy file
+safety validate policy_file
 ```
 
-```yaml
-# .safety-policy.yml
-version: "2.0"
-security:
-  ignore-vulnerabilities:
-    36546:
-      reason: "Not exploitable in our deployment"
-      expires: "2025-06-30"
-```
+Common issues:
+- Missing `version: '3.0'` at the top of the file
+- Using v2 keys like `ignore-cvss-severity-below` (use `auto-ignore-in-report.cvss-severity` instead)
+- YAML indentation errors
 
 ---
 
 ## Slow CI Scans
 
-Cache the Safety vulnerability database between runs:
+**Symptom:** Safety scan takes a long time in CI
 
-```bash
-safety check --cache -r requirements.txt
-```
+**Fix:** Cache uv's download cache between CI runs.
 
-In GitHub Actions:
+**GitHub Actions:**
 
 ```yaml
-- name: Cache Safety data
-  uses: actions/cache@v4
+- uses: astral-sh/setup-uv@v4
   with:
-    path: ~/.safety
-    key: safety-${{ runner.os }}-${{ hashFiles('**/requirements*.txt') }}
+    version: "latest"
+    enable-cache: true
+    cache-dependency-glob: "uv.lock"
+```
 
-- name: Run Safety check
-  run: safety check --cache -r requirements.txt
+**GitLab CI:**
+
+```yaml
+cache:
+  key: uv-$CI_COMMIT_REF_SLUG
+  paths:
+    - .uv/
+variables:
+  UV_CACHE_DIR: .uv
 ```
 
 ---
 
-## Wrong Environment Being Scanned
+## Auto-Fix Limitations
 
-Pass the requirements file explicitly to control exactly what is scanned:
+**Symptom:** `--apply-fixes` does not update a vulnerable package
+
+**Causes:**
+- No safe version exists within the allowed update range (patch-only by default)
+- The package is pinned to an exact version in a lock file
+- The fix requires a major version bump (not allowed by default)
+
+**Fix:** Relax the auto-fix limit in your policy:
+
+```yaml
+security-updates:
+  dependency-vulnerabilities:
+    auto-security-updates-limit:
+      - patch
+      - minor
+```
+
+Or manually update the package:
 
 ```bash
-safety check -r requirements.txt
-safety check -r requirements-prod.txt
+uv add "somepackage>=2.1.0"
+uv lock
 ```
 
 ---
 
-## API Key Not Working
+## `safety check` Not Working
 
-- Verify the key is correct at [pyup.io/account/api-key/](https://pyup.io/account/api-key/)
-- Ensure `SAFETY_API_KEY` is exported in the shell
-- Pass it directly: `safety check --key your-key-here -r requirements.txt`
+**Symptom:** Old `safety check` command produces errors or unexpected output
 
----
-
-## Getting Help
+**Fix:** `safety check` is deprecated in Safety CLI 3. Use `safety scan` instead:
 
 ```bash
-safety --help
-safety check --help
+# Old (deprecated)
+safety check
+
+# New (v3)
+safety scan
 ```
 
-- [Safety v2 documentation](https://pyup.io/safety/)
-- [Safety GitHub Issues](https://github.com/pyupio/safety/issues)
+See the [CLI Reference](cli.md) for all v3 commands.

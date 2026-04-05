@@ -1,73 +1,100 @@
-# justfile — task runner for cq-safety
-# Install just: https://just.systems
-# Usage: just [recipe]
-
+# justfile — task runner for cq-safety (Safety CLI v3)
 set dotenv-load := true
 set shell := ["bash", "-cu"]
 
 policy  := ".safety-policy.yml"
 reports := "reports"
 
-# List all available recipes
 [private]
 default:
     @just --list
-
-# ── Setup ──────────────────────────────────────────────────────────────────────
 
 # Install all dependencies including dev group
 install:
     uv sync --group dev
 
-# ── Scanning ───────────────────────────────────────────────────────────────────
+# Authenticate with Safety Platform (browser)
+auth:
+    uv run safety auth login
 
-# Scan installed packages (full report)
+# Authenticate headlessly (for CI with manual token)
+auth-headless:
+    uv run safety auth login --headless
+
+# Show authentication status
+auth-status:
+    uv run safety auth status
+
+# Logout from Safety Platform
+auth-logout:
+    uv run safety auth logout
+
+# Scan installed packages with detailed output
 scan:
-    uv run safety check --full-report --policy-file {{ policy }}
+    uv run safety scan --detailed-output
 
-# Scan a specific requirements file
-scan-file file:
-    uv run safety check -r {{ file }} --full-report --policy-file {{ policy }}
+# Scan a specific directory
+scan-target target:
+    uv run safety scan --target {{target}} --detailed-output
 
-# Scan for CI/CD, save JSON report (requires SAFETY_API_KEY in env or .env)
+# CI/CD scan (requires SAFETY_API_KEY)
 scan-ci:
     #!/usr/bin/env bash
     set -euo pipefail
     : "${SAFETY_API_KEY:?SAFETY_API_KEY must be set}"
-    mkdir -p {{ reports }}
-    uv run safety check \
-        --key "$SAFETY_API_KEY" \
-        --policy-file {{ policy }} \
-        --full-report \
-        --json > {{ reports }}/safety-report.json
+    mkdir -p {{reports}}
+    uv run safety --key "$SAFETY_API_KEY" --stage cicd scan \
+        --policy-file {{policy}} \
+        --save-as json {{reports}}/safety-report.json \
+        --save-as html {{reports}}/safety-report.html
+
+# Production scan
+scan-prod:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    : "${SAFETY_API_KEY:?SAFETY_API_KEY must be set}"
+    uv run safety --key "$SAFETY_API_KEY" --stage production scan \
+        --policy-file {{policy}}
+
+# Scan and apply available security fixes
+scan-fix:
+    uv run safety scan --apply-fixes
 
 # Scan and output JSON to stdout
 scan-json:
-    uv run safety check --json --policy-file {{ policy }}
+    uv run safety scan --output json
 
-# ── Policy ─────────────────────────────────────────────────────────────────────
-
-# Generate a default Safety v2 policy file
+# Generate a default Safety v3 policy file
 policy-generate:
     uv run safety generate policy_file
 
-# ── Reports ────────────────────────────────────────────────────────────────────
+# Validate the Safety policy file
+policy-validate:
+    uv run safety validate policy_file
 
-# Generate a full-text report saved to reports/safety-report.txt
+# Generate JSON + HTML reports and display on screen
 report:
     #!/usr/bin/env bash
     set -euo pipefail
-    mkdir -p {{ reports }}
-    uv run safety check --full-report --policy-file {{ policy }} \
-        > {{ reports }}/safety-report.txt
+    mkdir -p {{reports}}
+    uv run safety scan \
+        --save-as json {{reports}}/safety-report.json \
+        --save-as html {{reports}}/safety-report.html \
+        --output screen
 
-# ── Docs ───────────────────────────────────────────────────────────────────────
+# Generate SPDX SBOM report
+sbom:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p {{reports}}
+    uv run safety scan --output spdx \
+        --save-as spdx {{reports}}/sbom.spdx
 
-# Build the MkDocs documentation site (strict mode)
+# Build the MkDocs documentation site
 docs:
     uv run mkdocs build --strict
 
-# Serve docs locally with live-reload at http://127.0.0.1:8000
+# Serve docs locally at http://127.0.0.1:8000
 docs-serve:
     uv run mkdocs serve
 
@@ -75,17 +102,15 @@ docs-serve:
 docs-clean:
     rm -rf site/
 
-# ── Maintenance ────────────────────────────────────────────────────────────────
-
-# Update all dependencies to latest compatible versions
+# Update all dependencies
 update:
     uv lock --upgrade
     uv sync --group dev
 
-# Check if a newer version of Safety CLI is available
+# Check if a newer Safety CLI version is available
 check-updates:
     uv run safety check-updates
 
-# Remove all generated files (reports and docs site)
+# Remove all generated files
 clean: docs-clean
-    rm -rf {{ reports }}/
+    rm -rf {{reports}}/
