@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -529,10 +529,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-safety-cli-3" class="md-nav__link">
+  <a href="#install-safety-v2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install Safety CLI 3
+        Install Safety v2
       
     </span>
   </a>
@@ -551,22 +551,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#authentication" class="md-nav__link">
+  <a href="#api-key-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Authentication
+        API Key Setup
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Authentication">
+    <nav class="md-nav" aria-label="API Key Setup">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#development-browser-based-oauth" class="md-nav__link">
+  <a href="#get-an-api-key" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Development (browser-based OAuth)
+        Get an API Key
       
     </span>
   </a>
@@ -574,10 +574,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cicd-api-key" class="md-nav__link">
+  <a href="#configure-the-api-key" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CI/CD (API key)
+        Configure the API Key
       
     </span>
   </a>
@@ -590,10 +590,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lifecycle-stages" class="md-nav__link">
+  <a href="#no-browser-login" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Lifecycle Stages
+        No Browser Login
       
     </span>
   </a>
@@ -1145,10 +1145,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-safety-cli-3" class="md-nav__link">
+  <a href="#install-safety-v2" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Install Safety CLI 3
+        Install Safety v2
       
     </span>
   </a>
@@ -1167,22 +1167,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#authentication" class="md-nav__link">
+  <a href="#api-key-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Authentication
+        API Key Setup
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Authentication">
+    <nav class="md-nav" aria-label="API Key Setup">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#development-browser-based-oauth" class="md-nav__link">
+  <a href="#get-an-api-key" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Development (browser-based OAuth)
+        Get an API Key
       
     </span>
   </a>
@@ -1190,10 +1190,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cicd-api-key" class="md-nav__link">
+  <a href="#configure-the-api-key" class="md-nav__link">
     <span class="md-ellipsis">
       
-        CI/CD (API key)
+        Configure the API Key
       
     </span>
   </a>
@@ -1206,10 +1206,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#lifecycle-stages" class="md-nav__link">
+  <a href="#no-browser-login" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Lifecycle Stages
+        No Browser Login
       
     </span>
   </a>
@@ -1243,16 +1243,16 @@
 <li><code>pip</code> or <code>uv</code></li>
 </ul>
 <hr />
-<h2 id="install-safety-cli-3">Install Safety CLI 3</h2>
+<h2 id="install-safety-v2">Install Safety v2</h2>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">pip</label><label for="__tabbed_1_2">uv (recommended)</label><label for="__tabbed_1_3">pipx (global tool)</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;safety&gt;=3.0&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>safety
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Add as a dev dependency</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>add<span class="w"> </span>--dev<span class="w"> </span><span class="s2">&quot;safety&gt;=3.0&quot;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>uv<span class="w"> </span>add<span class="w"> </span>--dev<span class="w"> </span>safety
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Sync the environment</span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>uv<span class="w"> </span>sync
@@ -1267,73 +1267,31 @@
 <hr />
 <h2 id="verify-installation">Verify Installation</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>--version
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># safety, version 3.7.x</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># safety, version 2.x.x</span>
 </code></pre></div>
 <hr />
-<h2 id="authentication">Authentication</h2>
-<p>Safety v3 introduces two authentication modes:</p>
-<h3 id="development-browser-based-oauth">Development (browser-based OAuth)</h3>
-<p>For local development, authenticate once with your Safety Platform account:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>login
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># Opens https://platform.safetycli.com in your browser</span>
+<h2 id="api-key-setup">API Key Setup</h2>
+<p>Safety v2 uses an API key for CI/CD access and to unlock daily database updates.</p>
+<h3 id="get-an-api-key">Get an API Key</h3>
+<p>Register for a free account and get your API key at <a href="https://pyup.io/account/api-key/">pyup.io/account/api-key/</a>.</p>
+<ul>
+<li><strong>Free tier</strong>: database updated monthly</li>
+<li><strong>Commercial tier</strong>: database updated daily</li>
+</ul>
+<h3 id="configure-the-api-key">Configure the API Key</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Set as environment variable (recommended)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SAFETY_API_KEY</span><span class="o">=</span>your-key-here
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Check status</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>safety<span class="w"> </span>auth<span class="w"> </span>status
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="c1"># Log out</span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>safety<span class="w"> </span>auth<span class="w"> </span><span class="nb">logout</span>
-</code></pre></div>
-<p>Register for a free account at <a href="https://platform.safetycli.com">platform.safetycli.com</a>.</p>
-<h3 id="cicd-api-key">CI/CD (API key)</h3>
-<p>For automated pipelines, use an API key passed as a global flag or environment variable:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Environment variable (recommended)</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SAFETY_API_KEY</span><span class="o">=</span>your-key-here
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># Or pass directly</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>safety<span class="w"> </span>--key<span class="w"> </span>your-key-here<span class="w"> </span>--stage<span class="w"> </span>cicd<span class="w"> </span>scan
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Or pass directly on the command line</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>safety<span class="w"> </span>check<span class="w"> </span>--key<span class="w"> </span>your-key-here<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Store the key as a repository secret (<code>SAFETY_API_KEY</code>) in GitHub or GitLab — never commit it to source control.</p>
 </div>
 <hr />
-<h2 id="lifecycle-stages">Lifecycle Stages</h2>
-<p>Safety v3 introduces a <code>--stage</code> global flag to label scans:</p>
-<table>
-<thead>
-<tr>
-<th>Stage</th>
-<th>Use Case</th>
-<th>Auth Required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>development</code></td>
-<td>Local dev (default)</td>
-<td><code>safety auth login</code></td>
-</tr>
-<tr>
-<td><code>cicd</code></td>
-<td>CI/CD pipelines</td>
-<td><code>--key</code> or <code>SAFETY_API_KEY</code></td>
-</tr>
-<tr>
-<td><code>production</code></td>
-<td>Production systems</td>
-<td><code>--key</code> or <code>SAFETY_API_KEY</code></td>
-</tr>
-</tbody>
-</table>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Development scan (uses browser auth)</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>safety<span class="w"> </span>scan
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># CI/CD scan (uses API key)</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>safety<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>--stage<span class="w"> </span>cicd<span class="w"> </span>scan
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Production scan</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>safety<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>--stage<span class="w"> </span>production<span class="w"> </span>scan
-</code></pre></div>
+<h2 id="no-browser-login">No Browser Login</h2>
+<p>Safety v2 does <strong>not</strong> use browser-based authentication. Authentication is via API key only.</p>
 
 
 

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -1132,13 +1132,8 @@
 
 
 <h1 id="cq-safety">cq-safety</h1>
-<p><strong>Python dependency vulnerability scanning with Safety CLI 3.</strong></p>
-<p><a href="https://docs.safetycli.com">Safety CLI 3</a> checks your Python packages against a curated database of known CVEs, helping you catch vulnerable dependencies before they reach production.</p>
-<div class="admonition warning">
-<p class="admonition-title">Safety v3 — Breaking Changes</p>
-<p><code>safety check</code> is <strong>deprecated</strong> as of Safety 3 and was unsupported after 1 May 2024.
-The new primary command is <strong><code>safety scan</code></strong>. All docs here target Safety ≥ 3.0.</p>
-</div>
+<p><strong>Python dependency vulnerability scanning with Safety v2.</strong></p>
+<p><a href="https://pyup.io/safety/">Safety</a> checks your Python packages against a curated database of known CVEs, helping you catch vulnerable dependencies before they reach production.</p>
 <hr />
 <h2 id="why-safety">Why Safety?</h2>
 <div class="admonition danger">
@@ -1158,16 +1153,16 @@ The new primary command is <strong><code>safety scan</code></strong>. All docs h
 <td>Checks packages against the Safety vulnerability database</td>
 </tr>
 <tr>
-<td>📁 <strong>Project directory scan</strong></td>
-<td>Scans your entire project tree, not just one file</td>
+<td>📄 <strong>Requirements file scan</strong></td>
+<td><code>safety check -r requirements.txt</code></td>
 </tr>
 <tr>
-<td>🔧 <strong>Policy files v3</strong></td>
-<td>Version 3.0 schema with fail thresholds, auto-ignore, and firewall rules</td>
+<td>🔧 <strong>Policy files v2</strong></td>
+<td>Version 2.0 schema with severity thresholds and ignore lists</td>
 </tr>
 <tr>
-<td>🔐 <strong>Auth-based access</strong></td>
-<td>Browser-based OAuth login or API key for CI/CD</td>
+<td>🔑 <strong>API key access</strong></td>
+<td>API key for CI/CD and commercial daily DB updates</td>
 </tr>
 <tr>
 <td>🚀 <strong>CI/CD ready</strong></td>
@@ -1175,42 +1170,37 @@ The new primary command is <strong><code>safety scan</code></strong>. All docs h
 </tr>
 <tr>
 <td>📊 <strong>Multiple output formats</strong></td>
-<td>JSON, HTML, SPDX, text, and screen output</td>
-</tr>
-<tr>
-<td>🔨 <strong>Auto-fix</strong></td>
-<td><code>--apply-fixes</code> updates requirements.txt to safe versions</td>
-</tr>
-<tr>
-<td>🔥 <strong>Safety Firewall</strong></td>
-<td>[Beta] Block malicious packages at install time</td>
+<td>JSON, bare, full-report, short-report</td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="quick-example">Quick Example</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install Safety</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;safety&gt;=3.0&quot;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>pip<span class="w"> </span>install<span class="w"> </span>safety
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Authenticate (development — one-time setup)</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>safety<span class="w"> </span>auth<span class="w"> </span>login
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Scan installed packages</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>safety<span class="w"> </span>check
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Scan your project directory</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>safety<span class="w"> </span>scan
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Scan a requirements file</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Scan with JSON output</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>safety<span class="w"> </span>scan<span class="w"> </span>--output<span class="w"> </span>json
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Scan from pip freeze</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>pip<span class="w"> </span>freeze<span class="w"> </span><span class="p">|</span><span class="w"> </span>safety<span class="w"> </span>check<span class="w"> </span>--stdin
 <a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># CI/CD scan with API key</span>
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>safety<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>--stage<span class="w"> </span>cicd<span class="w"> </span>scan
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># JSON output</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>safety<span class="w"> </span>check<span class="w"> </span>--json
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># CI/CD scan with API key</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>safety<span class="w"> </span>check<span class="w"> </span>--key<span class="w"> </span><span class="nv">$SAFETY_API_KEY</span><span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </code></pre></div>
 <hr />
 <h2 id="this-project">This Project</h2>
-<p>This repository (<code>cq-safety</code>) is a <strong>code-quality reference project</strong> for the Safety CLI 3 tool. It provides:</p>
+<p>This repository (<code>cq-safety</code>) is a <strong>code-quality reference project</strong> for the Safety v2 tool. It provides:</p>
 <ul>
 <li>A full tutorial covering installation through CI/CD integration</li>
 <li>Reusable GitHub Actions and GitLab CI snippets</li>
-<li>Policy file v3 templates for enterprise workflows</li>
+<li>Policy file v2 templates for enterprise workflows</li>
 </ul>
 <p>Use the navigation to explore the docs.</p>
 

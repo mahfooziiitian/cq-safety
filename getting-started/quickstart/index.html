@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Python dependency vulnerability scanning with Safety CLI 3">
+        <meta name="description" content="Python dependency vulnerability scanning with Safety v2">
       
       
         <meta name="author" content="cq-safety contributors">
@@ -546,10 +546,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-authenticate" class="md-nav__link">
+  <a href="#1-install-safety" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Authenticate
+        1. Install Safety
       
     </span>
   </a>
@@ -557,10 +557,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-scan-your-project" class="md-nav__link">
+  <a href="#2-run-safety-check" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Scan Your Project
+        2. Run safety check
       
     </span>
   </a>
@@ -568,10 +568,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-detailed-output" class="md-nav__link">
+  <a href="#3-check-a-requirements-file" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Detailed Output
+        3. Check a Requirements File
       
     </span>
   </a>
@@ -590,10 +590,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-auto-fix-vulnerabilities" class="md-nav__link">
+  <a href="#5-fix-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Auto-Fix Vulnerabilities
+        5. Fix Vulnerabilities
       
     </span>
   </a>
@@ -1106,10 +1106,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-authenticate" class="md-nav__link">
+  <a href="#1-install-safety" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Authenticate
+        1. Install Safety
       
     </span>
   </a>
@@ -1117,10 +1117,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-scan-your-project" class="md-nav__link">
+  <a href="#2-run-safety-check" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Scan Your Project
+        2. Run safety check
       
     </span>
   </a>
@@ -1128,10 +1128,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-detailed-output" class="md-nav__link">
+  <a href="#3-check-a-requirements-file" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Detailed Output
+        3. Check a Requirements File
       
     </span>
   </a>
@@ -1150,10 +1150,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-auto-fix-vulnerabilities" class="md-nav__link">
+  <a href="#5-fix-vulnerabilities" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Auto-Fix Vulnerabilities
+        5. Fix Vulnerabilities
       
     </span>
   </a>
@@ -1181,67 +1181,56 @@
 
 
 <h1 id="quick-start">Quick Start</h1>
-<h2 id="1-authenticate">1. Authenticate</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Development (browser login)</label><label for="__tabbed_1_2">CI/CD (API key)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>safety<span class="w"> </span>auth<span class="w"> </span>login
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># Opens platform.safetycli.com in your browser</span>
+<h2 id="1-install-safety">1. Install Safety</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>safety
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># or with uv:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>uv<span class="w"> </span>add<span class="w"> </span>--dev<span class="w"> </span>safety
 </code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SAFETY_API_KEY</span><span class="o">=</span>your-key-here
-</code></pre></div>
-</div>
-</div>
-</div>
 <hr />
-<h2 id="2-scan-your-project">2. Scan Your Project</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Scan the current directory (default)</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>safety<span class="w"> </span>scan
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Scan a specific directory</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>safety<span class="w"> </span>scan<span class="w"> </span>--target<span class="w"> </span>/path/to/project
+<h2 id="2-run-safety-check">2. Run <code>safety check</code></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Scan currently installed packages</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>safety<span class="w"> </span>check
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Scan a requirements file</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Scan from pip freeze output</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>pip<span class="w"> </span>freeze<span class="w"> </span><span class="p">|</span><span class="w"> </span>safety<span class="w"> </span>check<span class="w"> </span>--stdin
 </code></pre></div>
-<p>Safety v3 scans your <strong>entire project directory</strong> — it auto-discovers <code>requirements.txt</code>, <code>pyproject.toml</code>, <code>Pipfile</code>, and other dependency files.</p>
+<p>Safety checks your packages against a curated database of known CVEs.</p>
 <hr />
-<h2 id="3-detailed-output">3. Detailed Output</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--detailed-output
+<h2 id="3-check-a-requirements-file">3. Check a Requirements File</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div>
+<p>You can pass multiple files:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt<span class="w"> </span>-r<span class="w"> </span>requirements-dev.txt
 </code></pre></div>
 <hr />
 <h2 id="4-read-the-output">4. Read the Output</h2>
 <p><strong>No vulnerabilities found:</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>  Safety Report
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  ─────────────
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>  Scanned 0 vulnerabilities in 42 packages.
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>  No known security vulnerabilities found.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>No known security vulnerabilities found.
 </code></pre></div>
-<p><strong>Vulnerability detected (screen output):</strong></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>  Safety Report
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  ─────────────
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  → requests 2.19.1
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    CVE-2018-18074 (CVSS 9.8 Critical)
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    Affected: &lt;2.20.0
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    Fix: Upgrade to requests&gt;=2.20.0
+<p><strong>Vulnerability detected:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>+==============================================================================+
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>| REPORT                                                                       |
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>| checked 42 packages, using free DB (updated once a month)                   |
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>+============================+===========+==========================+==========+
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>| package                    | installed | affected                 | ID       |
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>+============================+===========+==========================+==========+
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>| requests                   | 2.19.1    | &lt;2.20.0                  | 36546    |
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>+============================+===========+==========================+==========+
 </code></pre></div>
-<p>See <a href="../../usage/output-formats/">Output Formats</a> for JSON, HTML, and SPDX options.</p>
+<p>See <a href="../../usage/output-formats/">Output Formats</a> for JSON and bare options.</p>
 <hr />
-<h2 id="5-auto-fix-vulnerabilities">5. Auto-Fix Vulnerabilities</h2>
-<p>Safety v3 can patch your <code>requirements.txt</code> files automatically:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>safety<span class="w"> </span>scan<span class="w"> </span>--apply-fixes
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><code>--apply-fixes</code> currently supports <code>requirements.txt</code> files only.</p>
-</div>
-<p>Or upgrade manually:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>requests
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># or with uv:</span>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;requests&gt;=2.20.0&quot;</span>
+<h2 id="5-fix-vulnerabilities">5. Fix Vulnerabilities</h2>
+<p>Upgrade the vulnerable package:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>requests
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="c1"># or with uv:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>uv<span class="w"> </span>add<span class="w"> </span><span class="s2">&quot;requests&gt;=2.20.0&quot;</span>
 </code></pre></div>
 <p>Then re-run the scan to confirm the issue is resolved:</p>
-<p>```bash
-safety scan</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>safety<span class="w"> </span>check<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div>
 
 
 
